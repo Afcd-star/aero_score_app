@@ -1,0 +1,46 @@
+chore(repo): punto de partida con deuda declarada en events, scoring, teams y shared
+
+Ubicacion en el plan: genesis del repositorio, antes de la capa dos de
+admin. No es un frente de refactor, es el snapshot que da red de
+restauracion a las doce sesiones de saneamiento sin versionar.
+
+Que se hace, con numeros: un commit que captura el arbol completo de
+lib tras cerrar la capa uno de dominio de admin y auth. Tres
+correcciones de culpa del lead muertas con evidencia, dos renombrados
+de fromString a fromStorage probados por grep vacio y un caso unknown
+en theme_helpers probado por grep en la linea 73. Un gitignore
+corregido que tapa build anidado, gradle y local.properties. Un README
+de bitacora honesta. Docs de intencion con deuda de catalogo y
+validacion de color pendiente.
+
+Por que: llevar doce sesiones refactorizando sin repositorio es
+negligencia operativa, el proximo error de reemplazo o de generacion
+seria irreversible. El baseline nace con los tres errores del lead
+muertos con dato, no con fe, para no incrustar mi culpa como punto de
+partida.
+
+Que NO se toca: events, scoring, teams y shared conservan su deuda de
+severity 8 declarada, no saneada, el informe tecnico mentia al marcar
+events estable y se corrige aparte. competitor form sheet en admin
+conserva su nullable roto porque va a mudarse a competitors, no se
+arregla en admin. Los usecases de admin no existen en disco y se crean
+en capa dos. No se abre shared ni se crea AeroEmptyState ni
+AeroModulePlaceholder. En el genesis del repo el add global es
+excepcion justificada a la regla de add explicito, porque no hay
+historial ni frentes hurfanos que arrastrar, esa regla aplica a
+commits incrementales.
+
+Que valida el gate: dart analyze sin severity 8 en admin, auth y core,
+build runner con generados sincronizados, grep de fromString vacio y
+grep de unknown presente en theme helpers. flutter test pendiente
+porque no hay pruebas, declarado como deuda, no como gate verde. No
+hay pase visual en este paso porque el baseline no introduce superficie
+visible nueva.
+
+Notas de riesgo: el color slate de unknown no se valida en interfaz
+hasta el renderizado del chip de rol en auth, registrado con vencimiento
+en docs de intencion. El guard de rutas es basico por prefijo y se
+sustituye por permisos dinamicos al cerrar la capa de datos de roles.
+El registro de rol desconocido es solo de depuracion y necesita puerto
+de log o coleccion de auditoria. El push publica el baseline, antes del
+push la enmienda es libre, despues no se reescribe historia.

@@ -1,0 +1,1460 @@
+﻿=== ARCHIVO: lib\src\features\admin\domain\types.dart ===
+// lib/src/features/admin/domain/types.dart
+import 'package:flutter/material.dart';
+
+/// Tipos compartidos para la feature Admin
+/// ✅ Single Source of Truth para enums y tipos de dominio
+
+/// Secciones disponibles en el dashboard de administración
+enum AdminSection {
+  home,
+  teams,
+  events,
+  competitors,
+  rules,
+  settings,  // ✅ Configuración (NO 'roles')
+}
+
+/// Extensiones útiles para AdminSection
+extension AdminSectionX on AdminSection {
+  String get pathName => name; // Para GoRouter: '/admin/${section.pathName}'
+  
+  String get label => switch (this) {
+    AdminSection.home => 'Inicio',
+    AdminSection.teams => 'Equipos',
+    AdminSection.events => 'Eventos',
+    AdminSection.competitors => 'Competidores',
+    AdminSection.rules => 'Reglamento',
+    AdminSection.settings => 'Configuración',
+  };
+  
+  IconData get icon => switch (this) {
+    AdminSection.home => Icons.home_rounded,
+    AdminSection.teams => Icons.people_rounded,
+    AdminSection.events => Icons.event_rounded,
+    AdminSection.competitors => Icons.person_rounded,
+    AdminSection.rules => Icons.description_rounded,
+    AdminSection.settings => Icons.settings_rounded,
+  };
+}
+
+=== ARCHIVO: lib\src\features\admin\domain\entities\activity_item_entity.dart ===
+// lib/src/features/admin/domain/entities/activity_item_entity.dart
+enum ActivityAction { created, updated, deleted }
+enum ActivityEntityType { team, event, competitor, user }
+
+class ActivityItemEntity {
+
+  const ActivityItemEntity({
+    required this.id,
+    required this.name,
+    required this.action,
+    required this.entityType,
+    required this.timestamp,
+  });
+  final String id;
+  final String name;
+  final ActivityAction action;
+  final ActivityEntityType entityType;
+  final DateTime timestamp;
+
+  /// Texto legible para la UI
+  String get actionLabel => switch (action) {
+    ActivityAction.created => 'creado',
+    ActivityAction.updated => 'actualizado',
+    ActivityAction.deleted => 'eliminado',
+  };
+
+  String get entityTypeLabel => switch (entityType) {
+    ActivityEntityType.team => 'Equipo',
+    ActivityEntityType.event => 'Evento',
+    ActivityEntityType.competitor => 'Competidor',
+    ActivityEntityType.user => 'Usuario',
+  };
+
+  String get iconLabel => switch (entityType) {
+    ActivityEntityType.team => '👥',
+    ActivityEntityType.event => '🏆',
+    ActivityEntityType.competitor => '🤸',
+    ActivityEntityType.user => '👤',
+  };
+}
+
+=== ARCHIVO: lib\src\features\admin\domain\entities\admin_stats_entity.dart ===
+// lib/src/features/admin/domain/entities/admin_stats_entity.dart
+class AdminStats {    // ✅ CUARTO: eventos que no han ocurrido
+
+  const AdminStats({
+    required this.activeUsers,
+    required this.totalCompetitors,
+    required this.totalTeams,
+    required this.upcomingEvents,
+  });
+  final int activeUsers;       // ✅ PRIMERO: usuarios activos
+  final int totalCompetitors;  // ✅ SEGUNDO: total competidores
+  final int totalTeams;        // ✅ TERCERO: total equipos
+  final int upcomingEvents;
+}
+
+=== ARCHIVO: lib\src\features\admin\domain\repositories\admin_repository.dart ===
+// lib/src/features/admin/domain/repositories/admin_repository.dart
+import 'package:aero_score_app/src/core/error/failures.dart';
+import 'package:aero_score_app/src/features/admin/domain/entities/activity_item_entity.dart';
+import 'package:aero_score_app/src/features/admin/domain/entities/admin_stats_entity.dart';
+import 'package:aero_score_app/src/features/auth/domain/entities/user_entity.dart';
+import 'package:aero_score_app/src/features/auth/domain/entities/user_role.dart';
+import 'package:either_dart/either.dart';
+
+/// Contrato de repositorio para operaciones ADMINISTRATIVAS TRANSVERSALES.
+/// ❌ NO incluir CRUD de entidades que ya tienen su propio módulo feature.
+/// ✅ Solo: métricas agregadas, gestión de usuarios globales, config del sistema.
+abstract class AdminRepository {
+  // ═════════════════════════════════════════════════════════════
+  // ESTADÍSTICAS DEL DASHBOARD (operación transversal real)
+  // ═════════════════════════════════════════════════════════════
+  Future<Either<Failure, AdminStats>> getDashboardStats();
+
+  // ═════════════════════════════════════════════════════════════
+  // GESTIÓN DE USUARIOS GLOBALES (no de entidades de dominio)
+  // ═════════════════════════════════════════════════════════════
+  Future<Either<Failure, List<UserEntity>>> getUsersPendingApproval();
+  Future<Either<Failure, void>> updateUserRole(String userId, UserRole newRole);
+
+  // ═════════════════════════════════════════════════════════════
+  // ACTIVIDAD RECIENTE (operación real)
+  // ═════════════════════════════════════════════════════════════
+  Future<Either<Failure, List<ActivityItemEntity>>> getRecentActivity({int limit = 5});
+
+  // ═════════════════════════════════════════════════════════════
+  // UTILIDADES
+  // ═════════════════════════════════════════════════════════════
+  Future<void> logout();
+}
+
+=== ARCHIVO: lib\src\features\admin\data\repositories\admin_repository_impl.dart ===
+// lib/src/features/admin/data/repositories/admin_repository_impl.dart
+import 'package:aero_score_app/src/core/config/environment.dart';
+import 'package:aero_score_app/src/core/error/failures.dart';
+import 'package:aero_score_app/src/features/admin/domain/entities/activity_item_entity.dart';
+import 'package:aero_score_app/src/features/admin/domain/entities/admin_stats_entity.dart';
+import 'package:aero_score_app/src/features/admin/domain/repositories/admin_repository.dart';
+import 'package:aero_score_app/src/features/auth/domain/entities/user_entity.dart';
+import 'package:aero_score_app/src/features/auth/domain/entities/user_role.dart';
+import 'package:either_dart/either.dart';
+import 'package:pocketbase/pocketbase.dart';
+
+/// Repositorio de datos para el panel de administración.
+class AdminRepositoryImpl implements AdminRepository {
+  /// Crea una implementación con el cliente de PocketBase.
+  AdminRepositoryImpl(AppEnvironment env)
+      : _client = PocketBase(env.pbUrl);
+
+  final PocketBase _client;
+
+  // ✅ MANTENER: Operaciones transversales reales
+  @override
+  Future<Either<Failure, AdminStats>> getDashboardStats() async {
+    try {
+      // ✅ Ejecutar todas las queries en paralelo
+      final results = await Future.wait([
+        _client.collection('users').getList(
+          filter: 'status = "Active"',
+          perPage: 1,
+        ),
+        _client.collection('competitors').getList(
+          perPage: 1,
+        ),
+        _client.collection('teams').getList(
+          perPage: 1,
+        ),
+        _client.collection('events').getList(
+          filter:
+              'date > "${DateTime.now().toIso8601String()}"',
+          perPage: 1,
+        ),
+      ]);
+
+      return Right(
+        AdminStats(
+          activeUsers: results[0].totalItems,
+          totalCompetitors: results[1].totalItems,
+          totalTeams: results[2].totalItems,
+          upcomingEvents: results[3].totalItems,
+        ),
+      );
+    } on ClientException catch (error) {
+      final Object? responseMessage = error.response['message'];
+      final message = responseMessage is String
+          ? responseMessage
+          : error.toString();
+      return Left(ServerFailure(message: message));
+    } on Exception catch (error) {
+      return Left(
+        ServerFailure(
+          message: 'Error al obtener estadísticas: $error',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserEntity>>>
+      getUsersPendingApproval() async {
+    try {
+      final result = await _client.collection('users').getList(
+        filter: 'status="Pending Approval" || role="Viewer"',
+        sort: '-created',
+      );
+
+      final users = result.items.map((record) {
+        final roleValue = record.getStringValue('role');
+        final statusValue = record.getStringValue('status');
+        final createdValue = record.getStringValue('created');
+
+        return UserEntity(
+          id: record.id,
+          username: record.getStringValue('username'),
+          email: record.getStringValue('email'),
+          firstName: record.getStringValue('firstName'),
+          lastName: record.getStringValue('lastName'),
+          role: UserRole.values.firstWhere(
+            (value) => value.value == roleValue,
+            orElse: () => UserRole.viewer,
+          ),
+          status:
+              statusValue.isEmpty ? 'Pending Approval' : statusValue,
+          created: DateTime.tryParse(createdValue) ?? DateTime.now(),
+        );
+      }).toList();
+
+      return Right(users);
+    } on ClientException catch (error) {
+      final Object? responseMessage = error.response['message'];
+      final errorMessage = responseMessage is String
+          ? responseMessage
+          : error.toString();
+      return Left(
+        ServerFailure(
+          message: 'Error al cargar usuarios: $errorMessage',
+        ),
+      );
+    } on Exception catch (error) {
+      return Left(
+        ServerFailure(
+          message: 'Error inesperado: $error',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUserRole(
+    String userId,
+    UserRole newRole,
+  ) async {
+    try {
+      await _client.collection('users').update(
+        userId,
+        body: {
+          'role': newRole.value,
+          'status': 'Active',
+        },
+      );
+      return const Right<Failure, void>(null);
+    } on ClientException catch (error) {
+      final Object? responseMessage = error.response['message'];
+      final errorMessage = responseMessage is String
+          ? responseMessage
+          : error.toString();
+      return Left(
+        ServerFailure(
+          message: 'Error al asignar rol: $errorMessage',
+        ),
+      );
+    } on Exception catch (error) {
+      return Left(
+        ServerFailure(
+          message: 'Error inesperado: $error',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ActivityItemEntity>>>
+      getRecentActivity({
+    int limit = 5,
+  }) async {
+    try {
+      // ✅ Consultar las últimas actualizaciones en paralelo
+      final results = await Future.wait([
+        _client.collection('teams').getList(
+          sort: '-updated',
+          perPage: limit,
+        ),
+        _client.collection('events').getList(
+          sort: '-updated',
+          perPage: limit,
+        ),
+        _client.collection('competitors').getList(
+          sort: '-updated',
+          perPage: limit,
+        ),
+      ]);
+
+      final activities = <ActivityItemEntity>[];
+      const creationWindow = Duration(seconds: 2);
+
+      // ✅ Procesar equipos
+      for (final record in results[0].items) {
+        final created =
+            DateTime.parse(record.getStringValue('created'));
+        final updated =
+            DateTime.parse(record.getStringValue('updated'));
+        final isCreated =
+            created.isAfter(updated.subtract(creationWindow));
+
+        activities.add(
+          ActivityItemEntity(
+            id: record.id,
+            name: record.getStringValue('name'),
+            action:
+                isCreated
+                    ? ActivityAction.created
+                    : ActivityAction.updated,
+            entityType: ActivityEntityType.team,
+            timestamp: updated,
+          ),
+        );
+      }
+
+      // ✅ Procesar eventos
+      for (final record in results[1].items) {
+        final created =
+            DateTime.parse(record.getStringValue('created'));
+        final updated =
+            DateTime.parse(record.getStringValue('updated'));
+        final isCreated =
+            created.isAfter(updated.subtract(creationWindow));
+
+        activities.add(
+          ActivityItemEntity(
+            id: record.id,
+            name: record.getStringValue('name'),
+            action:
+                isCreated
+                    ? ActivityAction.created
+                    : ActivityAction.updated,
+            entityType: ActivityEntityType.event,
+            timestamp: updated,
+          ),
+        );
+      }
+
+      // ✅ Procesar competidores
+      for (final record in results[2].items) {
+        final created =
+            DateTime.parse(record.getStringValue('created'));
+        final updated =
+            DateTime.parse(record.getStringValue('updated'));
+        final isCreated =
+            created.isAfter(updated.subtract(creationWindow));
+        final firstName = record.getStringValue('firstName');
+        final lastName = record.getStringValue('lastName');
+
+        activities.add(
+          ActivityItemEntity(
+            id: record.id,
+            name: '$firstName $lastName'.trim(),
+            action:
+                isCreated
+                    ? ActivityAction.created
+                    : ActivityAction.updated,
+            entityType: ActivityEntityType.competitor,
+            timestamp: updated,
+          ),
+        );
+      }
+
+      // ✅ Ordenar por timestamp descendente y limitar
+      activities.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+      return Right(activities.take(limit).toList());
+    } on ClientException catch (error) {
+      final Object? responseMessage = error.response['message'];
+      final message = responseMessage is String
+          ? responseMessage
+          : error.toString();
+      return Left(ServerFailure(message: message));
+    } on Exception catch (error) {
+      return Left(
+        ServerFailure(
+          message: 'Error al obtener actividad reciente: $error',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    _client.authStore.clear();
+  }
+
+  // ❌ ELIMINAR: createTeam, getTeams, updateTeam,
+  // createCompetitor y operaciones similares.
+  // ✅ Esas operaciones viven en features/teams/,
+  // features/competitors/ y otras features.
+}
+
+
+=== ARCHIVO: lib\src\features\admin\data\di\admin_providers.dart ===
+// lib/src/features/admin/data/di/admin_providers.dart
+import 'package:aero_score_app/src/core/config/environment.dart';
+import 'package:aero_score_app/src/features/admin/data/repositories/admin_repository_impl.dart';
+import 'package:aero_score_app/src/features/admin/domain/entities/activity_item_entity.dart';
+import 'package:aero_score_app/src/features/admin/domain/entities/admin_stats_entity.dart';
+import 'package:aero_score_app/src/features/admin/domain/repositories/admin_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/// ✅ Repository provider para lógica administrativa transversal
+final adminRepositoryProvider = Provider<AdminRepository>((ref) {
+  const env = AppEnvironment.devEmulator; // O ref.watch(environmentProvider)
+  return AdminRepositoryImpl(env);
+});
+
+/// ✅ Provider para métricas del dashboard admin (NO para CRUD de entidades)
+final adminDashboardStatsProvider = FutureProvider<AdminStats>((ref) async {
+  final repo = ref.watch(adminRepositoryProvider);
+  final result = await repo.getDashboardStats();
+  
+  return result.fold(
+    (failure) => throw Exception(failure.message),
+    (stats) => stats,
+  );
+});
+
+/// ✅ Provider de estado UI: filtro de equipo seleccionado (para vistas admin)
+class SelectedTeamIdNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void selectTeam(String? teamId) {
+    state = teamId;
+  }
+
+  void clearSelection() {
+    state = null;
+  }
+}
+
+/// ✅ Provider de estado UI: filtro de equipo seleccionado (para vistas admin)
+final selectedTeamIdProvider = NotifierProvider<SelectedTeamIdNotifier, String?>(
+  SelectedTeamIdNotifier.new,
+);
+
+/// ✅ Provider de actividad reciente (últimas 5 acciones)
+final recentActivityProvider = FutureProvider<List<ActivityItemEntity>>((ref) async {
+  final repo = ref.watch(adminRepositoryProvider);
+  final result = await repo.getRecentActivity();
+  
+  return result.fold(
+    (failure) => throw Exception(failure.message),
+    (activities) => activities,
+  );
+});
+
+/// ❌ NO AGREGAR: teamsProvider, competitorsProvider, eventsProvider
+/// ✅ Esos viven en sus módulos: features/teams/, features/competitors/, features/events/
+
+=== ARCHIVO: lib\src\features\admin\presentation\providers\admin_dashboard_provider.dart ===
+// lib/src/features/admin/presentation/providers/admin_dashboard_provider.dart
+import 'package:aero_score_app/src/features/admin/domain/types.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/// ✅ Estado UI del dashboard admin (NO carga datos, solo gestiona navegación)
+class AdminDashboardState {
+
+  const AdminDashboardState({
+    this.activeSection = AdminSection.home,
+    this.isSyncing = false,
+  });
+  final AdminSection activeSection;
+  final bool isSyncing;
+
+  AdminDashboardState copyWith({
+    AdminSection? activeSection,
+    bool? isSyncing,
+  }) => AdminDashboardState(
+    activeSection: activeSection ?? this.activeSection,
+    isSyncing: isSyncing ?? this.isSyncing,
+  );
+}
+
+class AdminDashboardNotifier extends Notifier<AdminDashboardState> {
+  AdminDashboardNotifier();
+
+  @override
+  AdminDashboardState build() => const AdminDashboardState();
+
+  void setActiveSection(AdminSection section) {
+    state = state.copyWith(activeSection: section);
+  }
+
+  void setSyncing(bool value) {
+    state = state.copyWith(isSyncing: value);
+  }
+
+  Future<void> syncData() async {
+    state = state.copyWith(isSyncing: true);
+    
+    await Future.delayed(const Duration(seconds: 2));
+    
+    state = state.copyWith(isSyncing: false);
+  }
+
+  Future<Map<String, int>> getStats() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    
+    return {
+      'events': 15,
+      'teams': 8,
+      'competitors': 120,
+    };
+  }
+}
+
+=== ARCHIVO: lib\src\features\admin\presentation\views\admin_dashboard_view.dart ===
+// lib/src/features/admin/presentation/views/admin_dashboard_view.dart
+import 'dart:async';
+
+import 'package:aero_score_app/src/core/theme/app_colors.dart';
+import 'package:aero_score_app/src/core/theme/text_styles.dart';
+import 'package:aero_score_app/src/features/admin/domain/types.dart';
+import 'package:aero_score_app/src/features/admin/presentation/views/sections/home_section.dart';
+import 'package:aero_score_app/src/features/admin/presentation/views/sections/rules_section.dart';
+import 'package:aero_score_app/src/features/admin/presentation/views/sections/settings_section.dart';
+import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
+import 'package:aero_score_app/src/features/auth/domain/entities/user_entity.dart';
+import 'package:aero_score_app/src/features/auth/presentation/providers/auth_notifier.dart';
+import 'package:aero_score_app/src/features/competitors/presentation/views/competitors_section.dart';
+import 'package:aero_score_app/src/features/events/presentation/views/events_section.dart';
+import 'package:aero_score_app/src/features/teams/presentation/views/teams_section.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_background.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+/// Vista principal del panel de administración.
+class AdminDashboardView extends ConsumerStatefulWidget {
+  /// Crea la vista del panel de administración.
+  const AdminDashboardView({super.key});
+
+  @override
+  ConsumerState<AdminDashboardView> createState() =>
+      _AdminDashboardViewState();
+}
+
+class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
+  AdminSection _activeSection = AdminSection.home;
+  bool _showMenu = false;
+  bool _isInitialized = false;
+
+  // ✅ Sidebar Items (6 items: Configuración incluida, Pool eliminada)
+  final List<Map<String, dynamic>> _menuItems = [
+    {
+      'section': AdminSection.home,
+      'icon': Icons.home,
+      'label': 'Inicio',
+      'color': AppColors.fuchsia,
+    },
+    {
+      'section': AdminSection.events,
+      'icon': Icons.event,
+      'label': 'Eventos',
+      'color': Colors.green,
+    },
+    {
+      'section': AdminSection.teams,
+      'icon': Icons.people,
+      'label': 'Equipos',
+      'color': Colors.blue,
+    },
+    {
+      'section': AdminSection.competitors,
+      'icon': Icons.person,
+      'label': 'Competidores',
+      'color': Colors.pink,
+    },
+    {
+      'section': AdminSection.rules,
+      'icon': Icons.description,
+      'label': 'Reglamento',
+      'color': Colors.orange,
+    },
+    {
+      'section': AdminSection.settings,
+      'icon': Icons.settings,
+      'label': 'Configuración',
+      'color': Colors.grey,
+    },
+  ];
+
+  // ✅ Bottom Nav Items (4 items: Pool eliminada)
+  final List<Map<String, dynamic>> _bottomNavItems = [
+    {
+      'section': AdminSection.home,
+      'icon': Icons.home_rounded,
+      'label': 'Inicio',
+    },
+    {
+      'section': AdminSection.events,
+      'icon': Icons.event_rounded,
+      'label': 'Eventos',
+    },
+    {
+      'section': AdminSection.teams,
+      'icon': Icons.groups_rounded,
+      'label': 'Equipos',
+    },
+    {
+      'section': AdminSection.rules,
+      'icon': Icons.description_rounded,
+      'label': 'Reglamento',
+    },
+  ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // ✅ Sincronizar sección activa con la ruta actual
+    if (!_isInitialized) {
+      final location = GoRouterState.of(context).uri.path;
+      _updateSectionFromRoute(location);
+      _isInitialized = true;
+    }
+  }
+
+  void _updateSectionFromRoute(String location) {
+    // Extraer la sección de la ruta: /admin/teams -> teams
+    final parts = location.split('/');
+    if (parts.length > 2 && parts[1] == 'admin') {
+      final sectionName = parts[2];
+      if (sectionName.isNotEmpty) {
+        final section = AdminSection.values.firstWhere(
+          (s) => s.name == sectionName,
+          orElse: () => AdminSection.home,
+        );
+        setState(() => _activeSection = section);
+      }
+    }
+  }
+
+  // ✅ Navegación unificada
+  void _navigateTo(AdminSection section, {bool closeMenu = false}) {
+    setState(() => _activeSection = section);
+    if (closeMenu) setState(() => _showMenu = false);
+    context.go('/admin/${section.name}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+    final user = switch (authState) {
+      AuthSuccess(:final user) => user,
+      _ => null,
+    };
+    final location = GoRouterState.of(context).uri.path;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _updateSectionFromRoute(location);
+      }
+    });
+
+    return Scaffold(
+      backgroundColor: AppColors.backgroundBase,
+      body: Stack(
+        children: [
+          // ✅ CORRECCIÓN: Pasar el contenido principal como child
+          AeroBackground(
+            isDashboard: true,
+            // ✅ Contenido principal envuelto en SafeArea
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  _buildHeader(context, user),
+                  Expanded(child: _buildContent()),
+                  _buildBottomNavigation(context),
+                ],
+              ),
+            ),
+          ),
+
+          // ✅ Overlay del Menú Lateral
+          if (_showMenu) _buildSideMenu(context, user),
+        ],
+      ),
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // UI BUILDERS
+  // ═══════════════════════════════════════════════════════════
+
+  Widget _buildHeader(BuildContext context, UserEntity? user) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.fuchsia, Color(0xFF8B00FF)],
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Menú Hamburguesa
+          IconButton(
+            icon: const Icon(Icons.menu_rounded, color: Colors.white),
+            onPressed: () => setState(() => _showMenu = true),
+          ),
+
+          // Logo y Usuario
+          Column(
+            children: [
+              Text(
+                'AeroScore',
+                style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              Text(
+                'Panel de Administración',
+                style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
+              ),
+            ],
+          ),
+
+          // Logout
+          IconButton(
+            icon: const Icon(Icons.logout_rounded, color: Colors.white),
+            onPressed: () {
+              unawaited(
+                ref.read(authProvider.notifier).logout(),
+              );
+              context.go('/login');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    // Switch optimizado para renderizado de secciones
+    return switch (_activeSection) {
+      AdminSection.home => const HomeSection(),
+      AdminSection.teams => const TeamsSection(),
+      AdminSection.events => const EventsSection(),
+      AdminSection.competitors => const CompetitorsSection(),
+      AdminSection.rules => const RulesSection(),
+      AdminSection.settings => const SettingsSection(),
+    };
+  }
+
+  Widget _buildBottomNavigation(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: const Border(
+          top: BorderSide(color: Color(0xFFEEEEEE)),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: _bottomNavItems.map((item) {
+          final section = item['section'] as AdminSection;
+          final isActive = _activeSection == section;
+          return _buildBottomNavItem(
+            context,
+            icon: item['icon'] as IconData,
+            label: item['label'] as String,
+            section: section,
+            isActive: isActive,
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildBottomNavItem(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required AdminSection section,
+    required bool isActive,
+  }) {
+    return GestureDetector(
+      onTap: () => _navigateTo(section),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: isActive ? AppColors.fuchsia : Colors.grey.shade600,
+            size: 24,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: AppTextStyles.baseTextTheme.labelSmall?.copyWith(
+              color: isActive ? AppColors.fuchsia : Colors.grey.shade600,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSideMenu(BuildContext context, UserEntity? user) {
+    return Stack(
+      children: [
+        // Fondo oscuro para cerrar menú
+        GestureDetector(
+          onTap: () => setState(() => _showMenu = false),
+          child: Container(color: Colors.black.withValues(alpha: 0.5)),
+        ),
+        // Panel lateral
+        Positioned(
+          left: 0,
+          top: 0,
+          bottom: 0,
+          child: Container(
+            width: 280,
+            color: Colors.white,
+            child: Column(
+              children: [
+                // Header del Sidebar
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [AppColors.fuchsia, AppColors.coral],
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(24),
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'AS',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            user!.fullName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const Text(
+                            'Administrador',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+
+                // Lista de Items
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    children: _menuItems.map((item) {
+                      final section = item['section'] as AdminSection;
+                      final isActive = _activeSection == section;
+                      return GestureDetector(
+                        onTap: () =>
+                            _navigateTo(section, closeMenu: true),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 2,
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            gradient: isActive
+                                ? const LinearGradient(
+                                    colors: [
+                                      AppColors.fuchsia,
+                                      Color(0xFF8B00FF),
+                                    ],
+                                  )
+                                : null,
+                            borderRadius: BorderRadius.circular(8),
+                            color: isActive
+                                ? null
+                                : Colors.transparent,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                item['icon'] as IconData,
+                                color: isActive
+                                    ? Colors.white
+                                    : item['color'] as Color,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                item['label'] as String,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: isActive
+                                      ? Colors.white
+                                      : Colors.grey.shade700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+                // Logout en Sidebar
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(
+                    Icons.logout,
+                    color: Colors.redAccent,
+                  ),
+                  title: const Text(
+                    'Cerrar sesión',
+                    style: TextStyle(color: Colors.redAccent),
+                  ),
+                  onTap: () {
+                    unawaited(
+                      ref.read(authProvider.notifier).logout(),
+                    );
+                    context.go('/login');
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+=== ARCHIVO: lib\src\features\admin\presentation\views\sections\admin_dashboard_header.dart ===
+// lib/src/features/admin/presentation/widgets/admin_dashboard_header.dart
+
+import 'package:aero_score_app/src/core/theme/app_colors.dart';
+import 'package:aero_score_app/src/core/theme/text_styles.dart';
+// TODOVINCULAR CON EL HOME SECTION
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class AdminDashboardHeader extends StatelessWidget {
+
+  const AdminDashboardHeader({
+    required this.stats, required this.isSyncing, required this.onRefresh, super.key,
+  });
+  final AsyncValue<Map<String, int>> stats;
+  final bool isSyncing;
+  final VoidCallback onRefresh;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.cardDark : Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: isDark ? AppColors.borderDark : AppColors.borderLight,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          // Stats cards
+          Expanded(
+            child: stats.when(
+              loading: () => const SizedBox(
+                height: 60,
+                child: LinearProgressIndicator(),
+              ),
+              error: (e, _) => Text(
+                'Error: $e',
+                style: const TextStyle(color: AppColors.destructiveLight),
+              ),
+              data: (data) => Row(
+                children: [
+                  _buildStatChip('Equipos', data['totalTeams'] ?? 0, Icons.groups),
+                  const SizedBox(width: 16),
+                  _buildStatChip('Competidores', data['totalCompetitors'] ?? 0, Icons.person),
+                  const SizedBox(width: 16),
+                  _buildStatChip('Eventos', data['totalEvents'] ?? 0, Icons.event),
+                ],
+              ),
+            ),
+          ),
+          
+          // Botón refresh
+          IconButton(
+            icon: Icon(
+              isSyncing ? Icons.refresh : Icons.refresh,
+              color: AppColors.fuchsia,
+            ),
+            onPressed: isSyncing ? null : onRefresh,
+            tooltip: 'Actualizar datos',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatChip(String label, int value, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.fuchsia.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.fuchsia.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: AppColors.fuchsia),
+          const SizedBox(width: 6),
+          Text(
+            '$value $label',
+            style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(
+              color: AppColors.fuchsia,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+=== ARCHIVO: lib\src\features\admin\presentation\views\sections\home_section.dart ===
+// lib/src/features/admin/presentation/views/sections/home_section.dart
+import 'package:aero_score_app/src/core/theme/app_colors.dart';
+import 'package:aero_score_app/src/core/theme/text_styles.dart';
+import 'package:aero_score_app/src/features/admin/data/di/admin_providers.dart';
+import 'package:aero_score_app/src/features/admin/domain/entities/activity_item_entity.dart';
+import 'package:aero_score_app/src/features/admin/domain/entities/admin_stats_entity.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/admin/admin_quick_action.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/admin/admin_stats_card.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/admin/section_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+
+class HomeSection extends ConsumerWidget {
+  const HomeSection({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
+    const headerTextPrimary = AppColors.textPrimary;
+    final headerTextSecondary = AppColors.textPrimary.withValues(alpha: 0.7);
+    
+    final cardTextPrimary = theme.colorScheme.onSurface;
+    final cardTextSecondary = theme.colorScheme.onSurfaceVariant;
+    final cardBg = theme.colorScheme.surfaceContainer;
+    final borderColor = theme.colorScheme.outline;
+    
+    final statsAsync = ref.watch(adminDashboardStatsProvider);
+    final activityAsync = ref.watch(recentActivityProvider);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '¡Bienvenido, Administrador!',
+            style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
+              color: headerTextPrimary,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Resumen del sistema AeroScore',
+            style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+              color: headerTextSecondary,
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // ✅ Stats en orden: Usuarios activos, Competidores, Equipos, Próximos eventos
+          statsAsync.when(
+            loading: () => _buildStatsSkeleton(cardBg, borderColor),
+            error: (err, _) => _buildStatsError(err.toString(), theme.colorScheme.error),
+            data: (stats) => _buildStatsGrid(context, stats),
+          ),
+          const SizedBox(height: 24),
+
+          SectionCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Acciones Rápidas',
+                  style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
+                    color: cardTextPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AdminQuickAction(
+                        label: 'Nuevo Equipo',
+                        icon: Icons.people_outline,
+                        gradientColor: AppColors.fuchsia,
+                        gradientColorEnd: AppColors.glowViolet.withValues(alpha: 0.7),
+                        onTap: () => context.go('/admin/teams'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: AdminQuickAction(
+                        label: 'Ver Eventos',
+                        icon: Icons.event_outlined,
+                        gradientColor: isDark ? AppColors.successDark : AppColors.successLight,
+                        gradientColorEnd: (isDark ? AppColors.roleCoachDark : AppColors.roleCoachLight).withValues(alpha: 0.7),
+                        onTap: () => context.go('/admin/events'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // ✅ Actividad reciente REAL desde providers
+          _buildRecentActivity(context, activityAsync, cardBg, borderColor, cardTextPrimary, cardTextSecondary),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatsSkeleton(Color cardBg, Color borderColor) {
+    return Column(
+      children: [
+        _buildStatCardSkeleton(cardBg, borderColor),
+        const SizedBox(height: 12),
+        _buildStatCardSkeleton(cardBg, borderColor),
+        const SizedBox(height: 12),
+        _buildStatCardSkeleton(cardBg, borderColor),
+        const SizedBox(height: 12),
+        _buildStatCardSkeleton(cardBg, borderColor),
+      ],
+    );
+  }
+
+  // ✅ SIN glow, solo fondo sólido
+  Widget _buildStatCardSkeleton(Color cardBg, Color borderColor) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: borderColor),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 80,
+                height: 12,
+                color: borderColor.withValues(alpha: 0.5),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                width: 40,
+                height: 28,
+                color: borderColor.withValues(alpha: 0.5),
+              ),
+            ],
+          ),
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: borderColor.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatsError(String error, Color errorColor) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: errorColor.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: errorColor.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.error_outline, color: errorColor, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Error al cargar estadísticas: $error',
+              style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+                color: errorColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ✅ Orden correcto: Usuarios activos, Competidores, Equipos, Próximos eventos
+  Widget _buildStatsGrid(BuildContext context, AdminStats stats) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    return Column(
+      children: [
+        // 1. Usuarios activos
+        AdminStatsCard(
+          label: 'Usuarios Activos',
+          value: '${stats.activeUsers}',
+          icon: Icons.person_outline,
+          accentColor: isDark ? AppColors.successDark : AppColors.successLight,
+        ),
+        const SizedBox(height: 12),
+        // 2. Total competidores
+        AdminStatsCard(
+          label: 'Competidores',
+          value: '${stats.totalCompetitors}',
+          icon: Icons.emoji_events_outlined,
+          accentColor: AppColors.coral,
+        ),
+        const SizedBox(height: 12),
+        // 3. Total equipos
+        AdminStatsCard(
+          label: 'Equipos',
+          value: '${stats.totalTeams}',
+          icon: Icons.people_outline,
+          accentColor: AppColors.fuchsia,
+        ),
+        const SizedBox(height: 12),
+        // 4. Próximos eventos
+        AdminStatsCard(
+          label: 'Próximos Eventos',
+          value: '${stats.upcomingEvents}',
+          icon: Icons.event_available_outlined,
+          accentColor: isDark ? AppColors.destructiveDark : AppColors.destructiveLight,
+        ),
+      ],
+    );
+  }
+
+  // ✅ Actividad reciente REAL con AsyncValue
+  Widget _buildRecentActivity(
+    BuildContext context,
+    AsyncValue<List<ActivityItemEntity>> activityAsync,
+    Color cardBg,
+    Color borderColor,
+    Color textPrimary,
+    Color textSecondary,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: borderColor),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Actividad Reciente',
+            style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
+              color: textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          activityAsync.when(
+            loading: () => const Center(
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: CircularProgressIndicator(color: AppColors.fuchsia),
+              ),
+            ),
+            error: (err, _) => Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  'Error al cargar actividad: $err',
+                  style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+                    color: textSecondary,
+                  ),
+                ),
+              ),
+            ),
+            data: (activities) {
+              if (activities.isEmpty) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      'No hay actividad reciente',
+                      style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+                        color: textSecondary,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return Column(
+                children: activities.map((activity) => _buildActivityItem(
+                  activity, textPrimary, textSecondary,
+                )).toList(),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActivityItem(
+    ActivityItemEntity activity,
+    Color textPrimary,
+    Color textSecondary,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.fuchsia.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.fuchsia.withValues(alpha: 0.3)),
+            ),
+            child: Center(
+              child: Text(
+                activity.iconLabel,
+                style: const TextStyle(fontSize: 18),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+                      color: textPrimary,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: activity.name,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      TextSpan(
+                        text: ' ${activity.actionLabel}',
+                        style: const TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  _formatTimestamp(activity.timestamp),
+                  style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
+                    color: textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// ✅ Formatea timestamp a texto legible en español
+  String _formatTimestamp(DateTime timestamp) {
+    final now = DateTime.now();
+    final diff = now.difference(timestamp);
+
+    if (diff.inMinutes < 1) return 'Ahora mismo';
+    if (diff.inMinutes < 60) return 'Hace ${diff.inMinutes} min';
+    if (diff.inHours < 24) return 'Hace ${diff.inHours} h';
+    if (diff.inDays < 7) return 'Hace ${diff.inDays} día${diff.inDays > 1 ? 's' : ''}';
+    
+    return DateFormat('dd/MM/yyyy').format(timestamp);
+  }
+}
+

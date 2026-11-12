@@ -16,11 +16,11 @@ mixin _$RoleConfigEntity {
 
 /// Identificador del registro de rol.
  String get id;/// Nombre del rol, alineado con el valor de almacenamiento
-/// del campo de rol en la colección de usuarios.
+/// del campo de rol en la coleccion de usuarios.
  String get roleName;/// Conjunto de capacidades que otorga este rol.
  Set<RolePermission> get permissions;/// Estado operativo del rol.
- RoleStatus get status;/// Momento de creación del registro.
- DateTime get created;/// Momento de última actualización del registro.
+ RoleStatus get status;/// Momento de creacion del registro.
+ DateTime get created;/// Momento de ultima actualizacion del registro.
  DateTime get updated;
 /// Create a copy of RoleConfigEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -224,7 +224,7 @@ class _RoleConfigEntity extends RoleConfigEntity {
 /// Identificador del registro de rol.
 @override final  String id;
 /// Nombre del rol, alineado con el valor de almacenamiento
-/// del campo de rol en la colección de usuarios.
+/// del campo de rol en la coleccion de usuarios.
 @override final  String roleName;
 /// Conjunto de capacidades que otorga este rol.
  final  Set<RolePermission> _permissions;
@@ -237,9 +237,9 @@ class _RoleConfigEntity extends RoleConfigEntity {
 
 /// Estado operativo del rol.
 @override final  RoleStatus status;
-/// Momento de creación del registro.
+/// Momento de creacion del registro.
 @override final  DateTime created;
-/// Momento de última actualización del registro.
+/// Momento de ultima actualizacion del registro.
 @override final  DateTime updated;
 
 /// Create a copy of RoleConfigEntity

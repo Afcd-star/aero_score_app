@@ -16,9 +16,9 @@ mixin _$ActivityItemEntity {
 
 /// Identificador de la entidad afectada.
  String get id;/// Nombre o etiqueta descriptiva de la entidad.
- String get name;/// Acción sufrida por la entidad.
+ String get name;/// Accion sufrida por la entidad.
  ActivityAction get action;/// Tipo de entidad afectada.
- ActivityEntityType get entityType;/// Momento en que ocurrió la acción.
+ ActivityEntityType get entityType;/// Momento en que ocurrio la accion.
  DateTime get timestamp;
 /// Create a copy of ActivityItemEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -222,11 +222,11 @@ class _ActivityItemEntity extends ActivityItemEntity {
 @override final  String id;
 /// Nombre o etiqueta descriptiva de la entidad.
 @override final  String name;
-/// Acción sufrida por la entidad.
+/// Accion sufrida por la entidad.
 @override final  ActivityAction action;
 /// Tipo de entidad afectada.
 @override final  ActivityEntityType entityType;
-/// Momento en que ocurrió la acción.
+/// Momento en que ocurrio la accion.
 @override final  DateTime timestamp;
 
 /// Create a copy of ActivityItemEntity

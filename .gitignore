@@ -64,3 +64,5 @@ app.*.map.json
 # repo y no requieren exclusion. Si algun dia se integra el backend en
 # el mismo repo, excluir pb_data/ y seed_data.json aqui porque el seed
 # contiene credenciales de prueba.
+# Archivo temporal de mensaje de commit, no versionar
+commitmsg.txt

@@ -1,5 +1,4 @@
 // lib/src/features/admin/data/repositories/admin_repository_impl.dart
-import 'package:aero_score_app/src/core/config/environment.dart';
 import 'package:aero_score_app/src/core/error/failures.dart';
 import 'package:aero_score_app/src/features/admin/data/models/activity_item_dto.dart';
 import 'package:aero_score_app/src/features/admin/domain/entities/activity_item_entity.dart';
@@ -16,13 +15,11 @@ import 'package:pocketbase/pocketbase.dart';
 /// retorno de `getList`, accede `.items` y `.totalItems`, y extrae el
 /// mapa con `record.toJson()`.
 class AdminRepositoryImpl implements AdminRepository {
-  /// Crea la implementacion con el entorno de PocketBase.
+  /// Crea la implementacion con el cliente de PocketBase inyectado.
   ///
-  /// Deuda de capa tres: la convencion de produccion inyecta el cliente
-  /// `PocketBase` ya construido, no el entorno. Se unifica al reescribir
-  /// el provider con anotaciones, para no romper el consumidor actual.
-  AdminRepositoryImpl(AppEnvironment env)
-      : _client = PocketBase(env.pbUrl);
+  /// El cliente llega ya construido y con la sesion restaurada desde
+  /// el proveedor global, igual que en el repositorio de competidores.
+  AdminRepositoryImpl(this._client);
 
   final PocketBase _client;
 

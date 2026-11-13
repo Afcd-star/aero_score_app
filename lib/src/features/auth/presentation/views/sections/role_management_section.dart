@@ -109,7 +109,7 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
               Text(
                 'Asignar permisos a usuarios registrados',
                 style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
-                  color: AppColors.textSecondary,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
@@ -120,47 +120,63 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
   }
 
   Widget _buildSearchBar(RoleManagementNotifier notifier) {
+    final scheme = Theme.of(context).colorScheme;
+
     return TextField(
       controller: _searchCtrl,
-      style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(color: AppColors.textPrimary),
+      style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+        color: scheme.onSurface,
+      ),
       decoration: InputDecoration(
         hintText: 'Buscar por nombre, email o username...',
-        hintStyle: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(color: AppColors.textPrimary.withValues(alpha: 0.7)),
-        prefixIcon: Icon(Icons.search, color: AppColors.textPrimary.withValues(alpha: 0.7)),
+        hintStyle: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+          color: scheme.onSurfaceVariant,
+        ),
+        prefixIcon: Icon(Icons.search, color: scheme.onSurfaceVariant),
         filled: true,
-        fillColor: AppColors.surfaceBase, // Fondo oscuro consistente
+        fillColor: scheme.surfaceContainerHighest,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.borderSubtle),
+          borderSide: BorderSide(color: scheme.outlineVariant),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.borderSubtle),
+          borderSide: BorderSide(color: scheme.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.fuchsia, width: 2),
+          borderSide: const BorderSide(
+            color: AppColors.fuchsia,
+            width: 2,
+          ),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
       ),
     );
   }
 
   Widget _buildErrorState(String error, VoidCallback onRetry) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.red.withValues(alpha: 0.1),
+        color: scheme.errorContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+        border: Border.all(color: scheme.error),
       ),
       child: Column(
         children: [
-          Icon(Icons.error_outline, color: Colors.red.shade300, size: 32),
+          Icon(Icons.error_outline, color: scheme.error, size: 32),
           const SizedBox(height: 8),
           Text(
             'Error: $error',
-            style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(color: Colors.red.shade300),
+            style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+              color: scheme.onErrorContainer,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
@@ -168,7 +184,7 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
             onPressed: onRetry,
             icon: const Icon(Icons.refresh, size: 18),
             label: const Text('Reintentar'),
-            style: TextButton.styleFrom(foregroundColor: Colors.red.shade300),
+            style: TextButton.styleFrom(foregroundColor: scheme.error),
           ),
         ],
       ),
@@ -176,25 +192,29 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
   }
 
   Widget _buildEmptyState(bool isSearching) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: AppColors.backgroundLight,
+        color: scheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.borderSubtle),
+        border: Border.all(color: scheme.outlineVariant),
       ),
       child: Column(
         children: [
           Icon(
             isSearching ? Icons.search_off : Icons.person_off,
             size: 48,
-            color:AppColors.textOnWhite.withValues(alpha: 0.7),
+            color: scheme.onSurfaceVariant,
           ),
           const SizedBox(height: 12),
           Text(
-            isSearching ? 'No se encontraron resultados' : 'No hay usuarios registrados',
+            isSearching
+                ? 'No se encontraron resultados'
+                : 'No hay usuarios registrados',
             style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-              color: AppColors.textOnWhite.withValues(alpha: 0.7),
+              color: scheme.onSurfaceVariant,
             ),
             textAlign: TextAlign.center,
           ),

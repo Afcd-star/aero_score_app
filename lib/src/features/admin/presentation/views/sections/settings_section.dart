@@ -1,25 +1,35 @@
 // lib/src/features/admin/presentation/views/sections/settings_section.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
-import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
-import 'package:aero_score_app/src/features/auth/presentation/views/sections/role_management_section.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/section_card.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.dart';
+import 'package:aero_score_app/src/features/auth/presentation/views/'
+    'sections/role_management_section.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/admin/'
+    'section_card.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
+    'aero_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+/// Seccion de configuracion del panel de administracion.
+///
+/// Monta la gestion de roles, que pertenece a autenticacion, y el
+/// resto de preferencias del sistema. Superficies y textos salen del
+/// esquema de tema para ser legibles en claro y en oscuro.
 class SettingsSection extends ConsumerWidget {
+  /// Crea la seccion de configuracion.
   const SettingsSection({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final scheme = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ✅ CARD BLANCA ENVOLVENTE (consistente con otras secciones)
           SectionCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,23 +37,18 @@ class SettingsSection extends ConsumerWidget {
               children: [
                 _buildHeader(context),
                 const SizedBox(height: 24),
-
-                // ✅ Gestión de Roles (ya migrada a Riverpod)
                 const RoleManagementSection(),
                 const SizedBox(height: 24),
                 const Divider(height: 1, thickness: 1),
                 const SizedBox(height: 24),
-
-                // ✅ Otras Configuraciones
                 Text(
                   'Otras Configuraciones',
-                  style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
-                    color: AppColors.textPrimary,
+                  style: text.titleMedium?.copyWith(
+                    color: scheme.onSurface,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 16),
-
                 _buildSettingItem(
                   context,
                   icon: Icons.person_outline,
@@ -73,16 +78,12 @@ class SettingsSection extends ConsumerWidget {
                   onTap: () => _showComingSoon(context, 'Idioma'),
                 ),
                 const SizedBox(height: 32),
-
-                // ✅ Cierre de Sesión (conexión Riverpod segura)
                 SizedBox(
                   width: double.infinity,
                   child: AeroButton(
                     label: 'Cerrar Sesión',
                     onPressed: () async {
-                      // ✅ Invalida sesión y limpia tokens
                       await ref.read(authProvider.notifier).logout();
-                      // ✅ Navega solo si el widget aún está montado
                       if (context.mounted) {
                         context.go('/login');
                       }
@@ -100,15 +101,16 @@ class SettingsSection extends ConsumerWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+
     return Row(
       children: [
         Container(
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Colors.grey, Colors.grey],
-            ),
+            color: Colors.grey,
             borderRadius: BorderRadius.circular(24),
           ),
           child: const Icon(Icons.settings_outlined, color: Colors.white),
@@ -120,14 +122,15 @@ class SettingsSection extends ConsumerWidget {
             children: [
               Text(
                 'Configuración',
-                style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
+                style: text.titleLarge?.copyWith(
+                  color: scheme.onSurface,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Text(
                 'Administración general del sistema',
-                style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
+                style: text.bodyMedium?.copyWith(
+                  color: scheme.onSurfaceVariant,
                 ),
               ),
             ],
@@ -144,6 +147,9 @@ class SettingsSection extends ConsumerWidget {
     required String subtitle,
     required VoidCallback onTap,
   }) {
+    final scheme = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: InkWell(
@@ -152,14 +158,9 @@ class SettingsSection extends ConsumerWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            // Fallback seguro si AppColors.mutedLight/Dark no existen en tu tema actual
-            color: Theme.of(context).brightness == Brightness.dark
-                ? AppColors.surfaceElevated
-                : Colors.grey.shade50,
+            color: scheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
-            ),
+            border: Border.all(color: scheme.outlineVariant),
           ),
           child: Row(
             children: [
@@ -181,16 +182,16 @@ class SettingsSection extends ConsumerWidget {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.baseTextTheme.titleSmall?.copyWith(
-                        color: AppColors.textPrimary,
+                      style: text.titleSmall?.copyWith(
+                        color: scheme.onSurface,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       subtitle,
-                      style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
+                      style: text.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -198,7 +199,7 @@ class SettingsSection extends ConsumerWidget {
               ),
               Icon(
                 Icons.chevron_right,
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
+                color: scheme.onSurfaceVariant,
                 size: 20,
               ),
             ],
@@ -212,9 +213,10 @@ class SettingsSection extends ConsumerWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$feature (Próximamente)'),
-        backgroundColor: AppColors.mutedDark,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         duration: const Duration(seconds: 1),
       ),
     );

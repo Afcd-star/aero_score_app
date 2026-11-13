@@ -90,9 +90,13 @@ class AppColors {
   static const Color roleCoachLight = Color(0xFF14B8A6);
   static const Color roleOrganizerLight = Color(0xFF22C55E);
   static const Color roleViewerLight = Color(0xFF6B7280);
+
   // Rol desconocido o no catalogado. Escala slate para separarlo
-  // del gris de espectador y señalar anomalía de datos.
-  static const Color roleUnknownLight = Color(0xFF94A3B8);
+  // del gris de espectador y señalar anomalia de datos. En claro se
+  // oscurece y en oscuro se aclara, que es la direccion correcta
+  // para texto sobre la superficie de cada modo.
+  static const Color roleUnknownLight = Color(0xFF475569);
+
   static const Color roleAdminDark = Color(0xFFDC2626);
   static const Color roleJudgePrincipalDark = Color(0xFFD97706);
   static const Color roleJudgeADark = Color(0xFF2563EB);
@@ -100,9 +104,11 @@ class AppColors {
   static const Color roleJudgeEDark = Color(0xFF4F46E5);
   static const Color roleCoachDark = Color(0xFF0D9488);
   static const Color roleOrganizerDark = Color(0xFF16A34A);
-  static const Color roleViewerDark = Color(0xFF4B5563);
-  // Rol desconocido o no catalogado en modo oscuro.
-  static const Color roleUnknownDark = Color(0xFF64748B);
+  static const Color roleViewerDark = Color(0xFF9CA3AF);
+
+  // Rol desconocido o no catalogado en modo oscuro, mas claro que
+  // el gris de espectador para que no se confundan.
+  static const Color roleUnknownDark = Color(0xFFCBD5E1);
 
   // ═════════════════════════════════════════════════════════════
   // FACULTADES (UCI)

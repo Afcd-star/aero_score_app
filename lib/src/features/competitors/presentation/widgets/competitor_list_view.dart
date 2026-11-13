@@ -1,4 +1,4 @@
-// lib/src/features/admin/presentation/widgets/competitor_list_view.dart
+// lib/src/features/competitors/presentation/widgets/competitor_list_view.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/features/competitors/data/di/competitors_providers.dart';

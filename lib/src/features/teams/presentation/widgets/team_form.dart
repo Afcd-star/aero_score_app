@@ -1,7 +1,7 @@
 // lib/src/features/teams/presentation/widgets/team_form.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
-import 'package:aero_score_app/src/features/admin/presentation/providers/coach_provider.dart';
+import 'package:aero_score_app/src/features/auth/presentation/providers/coach_provider.dart';
 import 'package:aero_score_app/src/features/competitors/presentation/providers/competitor_selector_provider.dart';
 import 'package:aero_score_app/src/features/teams/data/di/teams_providers.dart';
 import 'package:aero_score_app/src/features/teams/domain/entities/team_entity.dart';

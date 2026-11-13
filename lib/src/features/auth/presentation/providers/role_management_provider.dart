@@ -1,4 +1,4 @@
-// lib/src/features/admin/presentation/providers/role_management_provider.dart
+// lib/src/features/auth/presentation/providers/role_management_provider.dart
 import 'dart:async';
 
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';

@@ -1,7 +1,7 @@
-// lib/src/features/admin/presentation/widgets/coach_selector_modal.dart
+// lib/src/features/teams/presentation/widgets/coach_selector_modal.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
-import 'package:aero_score_app/src/features/admin/presentation/providers/coach_provider.dart';
+import 'package:aero_score_app/src/features/auth/presentation/providers/coach_provider.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

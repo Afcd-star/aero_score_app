@@ -1,10 +1,10 @@
-// lib/src/features/admin/presentation/providers/coach_provider.dart
+// lib/src/features/auth/presentation/providers/coach_provider.dart
 import 'package:aero_score_app/src/core/di/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Modelo simple para coach
-// lib/src/features/admin/presentation/providers/coach_provider.dart
+// lib/src/features/auth/presentation/providers/coach_provider.dart
 
 class CoachInfo {   // ✅ Email opcional (privado)
 

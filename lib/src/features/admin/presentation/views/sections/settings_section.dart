@@ -1,8 +1,8 @@
 // lib/src/features/admin/presentation/views/sections/settings_section.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
-import 'package:aero_score_app/src/features/admin/presentation/views/sections/role_management_section.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
+import 'package:aero_score_app/src/features/auth/presentation/views/sections/role_management_section.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/admin/section_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.dart';
 import 'package:flutter/material.dart';

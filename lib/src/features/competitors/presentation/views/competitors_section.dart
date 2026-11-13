@@ -4,14 +4,14 @@ import 'dart:async';
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/features/'
-    'admin/presentation/widgets/competitor_form_sheet.dart';
-import 'package:aero_score_app/src/features/'
-    'admin/presentation/widgets/competitor_list_view.dart';
-import 'package:aero_score_app/src/features/'
     'competitors/data/di/competitors_providers.dart';
 import 'package:aero_score_app/src/features/'
     'competitors/presentation/providers/'
     'competitor_form_notifier.dart';
+import 'package:aero_score_app/src/features/'
+    'competitors/presentation/widgets/competitor_form_sheet.dart';
+import 'package:aero_score_app/src/features/'
+    'competitors/presentation/widgets/competitor_list_view.dart';
 import 'package:aero_score_app/src/shared/'
     'presentation/widgets/admin/section_card.dart';
 import 'package:aero_score_app/src/shared/'

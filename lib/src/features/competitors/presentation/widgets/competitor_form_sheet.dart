@@ -1,4 +1,4 @@
-// lib/src/features/admin/presentation/widgets/competitor_form_sheet.dart
+// lib/src/features/competitors/presentation/widgets/competitor_form_sheet.dart
 import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
@@ -138,9 +138,7 @@ class _CompetitorFormSheetState extends ConsumerState<CompetitorFormSheet> {
             children: [
               Expanded(
                 child: Text(
-                  isEditing
-                      ? 'Editar Competidor'
-                      : 'Nuevo Competidor',
+                  isEditing ? 'Editar Competidor' : 'Nuevo Competidor',
                   style: titleStyle?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -249,8 +247,7 @@ class _CompetitorFormSheetState extends ConsumerState<CompetitorFormSheet> {
                             label: '${i + 1}°',
                           ),
                         ),
-                        onChanged: (v) =>
-                            setState(() => _academicYear = v),
+                        onChanged: (v) => setState(() => _academicYear = v),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -330,9 +327,7 @@ class _CompetitorFormSheetState extends ConsumerState<CompetitorFormSheet> {
     }
 
     // ✅ Validar que los selects tengan valor
-    if (_sex == null ||
-        _academicYear == null ||
-        _category == null) {
+    if (_sex == null || _academicYear == null || _category == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -347,37 +342,42 @@ class _CompetitorFormSheetState extends ConsumerState<CompetitorFormSheet> {
     final formState = ref.read(competitorFormProvider);
 
     // ✅ Dividir fullName en firstName y lastName
-    final (firstName, lastName) =
-        _splitFullName(_fullNameController.text);
+    final (firstName, lastName) = _splitFullName(_fullNameController.text);
     final nationalId = _ciController.text.trim();
     final solapin = _solapinController.text.trim();
 
     if (isEditing) {
       final existing = formState.draft;
-      await ref.read(competitorFormProvider.notifier).updateCompetitor(
-        CompetitorEntity(
-          id: existing.id,
-          firstName: firstName,
-          lastName: lastName,
-          nationalId: nationalId,
-          solapin: solapin.isEmpty ? null : solapin,
-          sex: _sex!,
-          academicYear: _academicYear!,
-          category: _category!,
-          teamId: _teamId,
-        ),
-      );
+      if (existing != null) {
+          await ref
+            .read(competitorFormProvider.notifier)
+            .updateCompetitor(
+              CompetitorEntity(
+                id: existing.id,
+                firstName: firstName,
+                lastName: lastName,
+                nationalId: nationalId,
+                solapin: solapin.isEmpty ? null : solapin,
+                sex: _sex!,
+                academicYear: _academicYear!,
+                category: _category!,
+                teamId: _teamId,
+              ),
+            );
+        }
     } else {
-      await ref.read(competitorFormProvider.notifier).createCompetitor(
-        firstName: firstName,
-        lastName: lastName,
-        nationalId: nationalId,
-        solapin: solapin.isEmpty ? null : solapin,
-        sex: _sex!,
-        academicYear: _academicYear!,
-        category: _category!,
-        teamId: _teamId,
-      );
+      await ref
+          .read(competitorFormProvider.notifier)
+          .createCompetitor(
+            firstName: firstName,
+            lastName: lastName,
+            nationalId: nationalId,
+            solapin: solapin.isEmpty ? null : solapin,
+            sex: _sex!,
+            academicYear: _academicYear!,
+            category: _category!,
+            teamId: _teamId,
+          );
     }
   }
 }

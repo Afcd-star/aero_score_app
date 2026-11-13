@@ -1,12 +1,12 @@
 // lib/src/features/auth/data/di/auth_providers.dart
 import 'package:aero_score_app/src/core/di/dependency_injection.dart';
-import 'package:aero_score_app/src/features/admin/presentation/providers/role_management_provider.dart';
 import 'package:aero_score_app/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:aero_score_app/src/features/auth/data/repositories/user_repository_impl.dart';
 import 'package:aero_score_app/src/features/auth/domain/entities/user_entity.dart';
 import 'package:aero_score_app/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:aero_score_app/src/features/auth/domain/repositories/user_repository.dart';
 import 'package:aero_score_app/src/features/auth/presentation/providers/auth_notifier.dart';
+import 'package:aero_score_app/src/features/auth/presentation/providers/role_management_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// ✅ Repository provider: UserRepository (scope: auth)

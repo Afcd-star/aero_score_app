@@ -60,30 +60,3 @@ final FutureProvider<List<ActivityItemEntity>> recentActivityProvider =
     (activities) => activities,
   );
 });
-
-/// Estado de seleccion de equipo para las vistas del panel.
-///
-/// Deuda de capa cuatro: este estado de interfaz vive hoy en la capa
-/// de inyeccion de datos; se reubica a presentacion junto con sus
-/// consumidores cuando se audite la presentacion del panel.
-class SelectedTeamIdNotifier extends Notifier<String?> {
-  @override
-  String? build() => null;
-
-  /// Selecciona el equipo activo del filtro.
-  void selectTeam(String? teamId) {
-    state = teamId;
-  }
-
-  /// Limpia la seleccion de equipo.
-  void clearSelection() {
-    state = null;
-  }
-}
-
-/// Proveedor del filtro de equipo seleccionado.
-final NotifierProvider<SelectedTeamIdNotifier, String?>
-    selectedTeamIdProvider =
-    NotifierProvider<SelectedTeamIdNotifier, String?>(
-  SelectedTeamIdNotifier.new,
-);

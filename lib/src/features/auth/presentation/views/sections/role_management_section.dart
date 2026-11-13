@@ -1,9 +1,9 @@
-// lib/src/features/admin/presentation/views/sections/role_management_section.dart
+// lib/src/features/auth/presentation/views/sections/role_management_section.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
-import 'package:aero_score_app/src/features/admin/presentation/providers/role_management_provider.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
 import 'package:aero_score_app/src/features/auth/domain/entities/user_role.dart';
+import 'package:aero_score_app/src/features/auth/presentation/providers/role_management_provider.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/admin/role_assignment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

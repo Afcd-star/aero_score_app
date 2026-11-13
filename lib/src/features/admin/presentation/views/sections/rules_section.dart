@@ -4,47 +4,71 @@ import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/admin/section_card.dart';
 import 'package:flutter/material.dart';
 
-/// Datos estáticos del reglamento (mover a archivo de configuración si crece)
+/// Seccion tipada del reglamento estatico.
+class _RuleSection {
+  /// Crea la seccion con titulo, degradado e items.
+  const _RuleSection({
+    required this.title,
+    required this.gradientColors,
+    required this.items,
+  });
+
+  /// Titulo visible de la seccion.
+  final String title;
+
+  /// Colores del degradado de fondo.
+  final List<Color> gradientColors;
+
+  /// Lineas de texto de la seccion.
+  final List<String> items;
+}
+
+/// Datos estaticos del reglamento.
+///
+/// Deuda registrada: cuando exista coleccion de reglamento en el
+/// backend, estos datos pasan a un repositorio y la seccion deja
+/// de ser estatica.
 class _RulesData {
-  static const List<Map<String, dynamic>> sections = [
-    {
-      'title': 'Normas Generales',
-      'gradient': [AppColors.fuchsia, Color(0xFF8B00FF)],
-      'items': [
-        'Los competidores deben presentarse 30 minutos antes del evento',
+  static const List<_RuleSection> sections = <_RuleSection>[
+    _RuleSection(
+      title: 'Normas Generales',
+      gradientColors: [AppColors.fuchsia, Color(0xFF8B00FF)],
+      items: [
+        'Los competidores deben presentarse 30 minutos antes '
+        'del evento',
         'El vestuario debe cumplir con las normas de la federación',
         'Cada presentación tiene un tiempo máximo de 2 minutos',
         'No se permite el uso de elementos no autorizados',
       ],
-    },
-    {
-      'title': 'Sistema de Puntuación',
-      'gradient': [Colors.blue, Colors.blueAccent],
-      'items': [
+    ),
+    _RuleSection(
+      title: 'Sistema de Puntuación',
+      gradientColors: [Colors.blue, Colors.blueAccent],
+      items: [
         'Ejecución técnica: 40%',
         'Expresión artística: 30%',
         'Dificultad: 30%',
       ],
-    },
-    {
-      'title': 'Categorías',
-      'gradient': [Colors.green, Colors.greenAccent],
-      'items': [
+    ),
+    _RuleSection(
+      title: 'Categorías',
+      gradientColors: [Colors.green, Colors.greenAccent],
+      items: [
         'Juvenil: 12-15 años',
         'Senior: 16-18 años',
         'Elite: 19+ años',
       ],
-    },
-    {
-      'title': 'Penalizaciones',
-      'gradient': [Colors.red, Colors.deepOrange],
-      'items': [
-        'Salida fuera del tapiz: -0.3 puntos',
-        'Caída del aparato: -0.5 puntos',
-        'Vestuario incorrecto: -0.3 puntos',
-        'Exceso de tiempo: -0.3 puntos por cada 5 segundos',
+    ),
+    _RuleSection(
+      title: 'Penalizaciones',
+      gradientColors: [Colors.red, Colors.deepOrange],
+      items: [
+        'Salida fuera del tapiz: \u002D0.3 puntos',
+        'Caída del aparato: \u002D0.5 puntos',
+        'Vestuario incorrecto: \u002D0.3 puntos',
+        'Exceso de tiempo: \u002D0.3 puntos por cada 5 segundos',
       ],
-    },
+    ),
   ];
 }
 
@@ -106,13 +130,14 @@ class RulesSection extends StatelessWidget {
                 ..._RulesData.sections.asMap().entries.map((entry) {
                   final index = entry.key;
                   final section = entry.value;
+                  final isLast = index == _RulesData.sections.length - 1;
                   return Padding(
-                    padding: EdgeInsets.only(bottom: index < _RulesData.sections.length - 1 ? 16 : 0),
+                    padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
                     child: _buildSectionCard(
                       context,
-                      title: section['title'] as String,
-                      gradientColors: section['gradient'] as List<Color>,
-                      items: section['items'] as List<String>,
+                      title: section.title,
+                      gradientColors: section.gradientColors,
+                      items: section.items,
                     ),
                   );
                 }),

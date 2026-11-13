@@ -3,24 +3,57 @@ import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
-import 'package:aero_score_app/src/features/admin/domain/types.dart';
-import 'package:aero_score_app/src/features/admin/presentation/views/sections/home_section.dart';
-import 'package:aero_score_app/src/features/admin/presentation/views/sections/rules_section.dart';
-import 'package:aero_score_app/src/features/admin/presentation/views/sections/settings_section.dart';
+import 'package:aero_score_app/src/features/admin/domain/admin_section.dart';
+import 'package:aero_score_app/src/features/admin/presentation/'
+    'admin_section_ui.dart';
+import 'package:aero_score_app/src/features/admin/presentation/views/'
+    'sections/home_section.dart';
+import 'package:aero_score_app/src/features/admin/presentation/views/'
+    'sections/rules_section.dart';
+import 'package:aero_score_app/src/features/admin/presentation/views/'
+    'sections/settings_section.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
-import 'package:aero_score_app/src/features/auth/domain/entities/user_entity.dart';
-import 'package:aero_score_app/src/features/auth/presentation/providers/auth_notifier.dart';
-import 'package:aero_score_app/src/features/competitors/presentation/views/competitors_section.dart';
-import 'package:aero_score_app/src/features/events/presentation/views/events_section.dart';
-import 'package:aero_score_app/src/features/teams/presentation/views/teams_section.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_background.dart';
+import 'package:aero_score_app/src/features/auth/domain/entities/'
+    'user_entity.dart';
+import 'package:aero_score_app/src/features/auth/presentation/providers/'
+    'auth_notifier.dart';
+import 'package:aero_score_app/src/features/competitors/presentation/views/'
+    'competitors_section.dart';
+import 'package:aero_score_app/src/features/events/presentation/views/'
+    'events_section.dart';
+import 'package:aero_score_app/src/features/teams/presentation/views/'
+    'teams_section.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
+    'aero_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Vista principal del panel de administración.
+/// Secciones del menu lateral, en su orden de aparicion.
+const List<AdminSection> _menuSections = <AdminSection>[
+  AdminSection.home,
+  AdminSection.events,
+  AdminSection.teams,
+  AdminSection.competitors,
+  AdminSection.rules,
+  AdminSection.settings,
+];
+
+/// Secciones de la barra inferior, en su orden de aparicion.
+const List<AdminSection> _bottomSections = <AdminSection>[
+  AdminSection.home,
+  AdminSection.events,
+  AdminSection.teams,
+  AdminSection.rules,
+];
+
+/// Vista principal del panel de administracion.
+///
+/// La seccion activa se deriva de la ruta en cada construccion, asi que
+/// el enrutador es la unica fuente de verdad. El unico estado local es
+/// la apertura del menu lateral, que es efimero y no navega.
 class AdminDashboardView extends ConsumerStatefulWidget {
-  /// Crea la vista del panel de administración.
+  /// Crea la vista del panel de administracion.
   const AdminDashboardView({super.key});
 
   @override
@@ -29,106 +62,36 @@ class AdminDashboardView extends ConsumerStatefulWidget {
 }
 
 class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
-  AdminSection _activeSection = AdminSection.home;
   bool _showMenu = false;
-  bool _isInitialized = false;
 
-  // ✅ Sidebar Items (6 items: Configuración incluida, Pool eliminada)
-  final List<Map<String, dynamic>> _menuItems = [
-    {
-      'section': AdminSection.home,
-      'icon': Icons.home,
-      'label': 'Inicio',
-      'color': AppColors.fuchsia,
-    },
-    {
-      'section': AdminSection.events,
-      'icon': Icons.event,
-      'label': 'Eventos',
-      'color': Colors.green,
-    },
-    {
-      'section': AdminSection.teams,
-      'icon': Icons.people,
-      'label': 'Equipos',
-      'color': Colors.blue,
-    },
-    {
-      'section': AdminSection.competitors,
-      'icon': Icons.person,
-      'label': 'Competidores',
-      'color': Colors.pink,
-    },
-    {
-      'section': AdminSection.rules,
-      'icon': Icons.description,
-      'label': 'Reglamento',
-      'color': Colors.orange,
-    },
-    {
-      'section': AdminSection.settings,
-      'icon': Icons.settings,
-      'label': 'Configuración',
-      'color': Colors.grey,
-    },
-  ];
-
-  // ✅ Bottom Nav Items (4 items: Pool eliminada)
-  final List<Map<String, dynamic>> _bottomNavItems = [
-    {
-      'section': AdminSection.home,
-      'icon': Icons.home_rounded,
-      'label': 'Inicio',
-    },
-    {
-      'section': AdminSection.events,
-      'icon': Icons.event_rounded,
-      'label': 'Eventos',
-    },
-    {
-      'section': AdminSection.teams,
-      'icon': Icons.groups_rounded,
-      'label': 'Equipos',
-    },
-    {
-      'section': AdminSection.rules,
-      'icon': Icons.description_rounded,
-      'label': 'Reglamento',
-    },
-  ];
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // ✅ Sincronizar sección activa con la ruta actual
-    if (!_isInitialized) {
-      final location = GoRouterState.of(context).uri.path;
-      _updateSectionFromRoute(location);
-      _isInitialized = true;
-    }
-  }
-
-  void _updateSectionFromRoute(String location) {
-    // Extraer la sección de la ruta: /admin/teams -> teams
+  /// Deduce la seccion activa desde la ruta actual.
+  AdminSection _sectionFromRoute(String location) {
     final parts = location.split('/');
     if (parts.length > 2 && parts[1] == 'admin') {
-      final sectionName = parts[2];
-      if (sectionName.isNotEmpty) {
-        final section = AdminSection.values.firstWhere(
-          (s) => s.name == sectionName,
-          orElse: () => AdminSection.home,
-        );
-        setState(() => _activeSection = section);
+      for (final section in AdminSection.values) {
+        if (section.pathName == parts[2]) {
+          return section;
+        }
       }
     }
+    return AdminSection.home;
   }
 
-  // ✅ Navegación unificada
+  /// Navega a la seccion indicada y cierra el menu si se solicita.
   void _navigateTo(AdminSection section, {bool closeMenu = false}) {
-    setState(() => _activeSection = section);
-    if (closeMenu) setState(() => _showMenu = false);
-    context.go('/admin/${section.name}');
+    if (closeMenu) {
+      setState(() => _showMenu = false);
+    }
+    context.go('/admin/${section.pathName}');
+  }
+
+  /// Cierra la sesion y navega al login solo cuando el cierre termina.
+  Future<void> _signOut() async {
+    await ref.read(authProvider.notifier).logout();
+    if (!mounted) {
+      return;
+    }
+    context.go('/login');
   }
 
   @override
@@ -138,62 +101,48 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
       AuthSuccess(:final user) => user,
       _ => null,
     };
-    final location = GoRouterState.of(context).uri.path;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _updateSectionFromRoute(location);
-      }
-    });
+    final activeSection = _sectionFromRoute(
+      GoRouterState.of(context).uri.path,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.backgroundBase,
       body: Stack(
         children: [
-          // ✅ CORRECCIÓN: Pasar el contenido principal como child
           AeroBackground(
             isDashboard: true,
-            // ✅ Contenido principal envuelto en SafeArea
             child: SafeArea(
               bottom: false,
               child: Column(
                 children: [
-                  _buildHeader(context, user),
-                  Expanded(child: _buildContent()),
-                  _buildBottomNavigation(context),
+                  _buildHeader(),
+                  Expanded(child: _buildContent(activeSection)),
+                  _buildBottomNavigation(activeSection),
                 ],
               ),
             ),
           ),
-
-          // ✅ Overlay del Menú Lateral
-          if (_showMenu) _buildSideMenu(context, user),
+          if (_showMenu) _buildSideMenu(user, activeSection),
         ],
       ),
     );
   }
 
-  // ═══════════════════════════════════════════════════════════
-  // UI BUILDERS
-  // ═══════════════════════════════════════════════════════════
-
-  Widget _buildHeader(BuildContext context, UserEntity? user) {
+  Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.fuchsia, Color(0xFF8B00FF)],
+          colors: [AppColors.fuchsia, AppColors.glowViolet],
         ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Menú Hamburguesa
           IconButton(
             icon: const Icon(Icons.menu_rounded, color: Colors.white),
             onPressed: () => setState(() => _showMenu = true),
           ),
-
-          // Logo y Usuario
           Column(
             children: [
               Text(
@@ -212,25 +161,17 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
               ),
             ],
           ),
-
-          // Logout
           IconButton(
             icon: const Icon(Icons.logout_rounded, color: Colors.white),
-            onPressed: () {
-              unawaited(
-                ref.read(authProvider.notifier).logout(),
-              );
-              context.go('/login');
-            },
+            onPressed: () => unawaited(_signOut()),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildContent() {
-    // Switch optimizado para renderizado de secciones
-    return switch (_activeSection) {
+  Widget _buildContent(AdminSection section) {
+    return switch (section) {
       AdminSection.home => const HomeSection(),
       AdminSection.teams => const TeamsSection(),
       AdminSection.events => const EventsSection(),
@@ -240,7 +181,7 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
     };
   }
 
-  Widget _buildBottomNavigation(BuildContext context) {
+  Widget _buildBottomNavigation(AdminSection activeSection) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
@@ -258,43 +199,33 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: _bottomNavItems.map((item) {
-          final section = item['section'] as AdminSection;
-          final isActive = _activeSection == section;
+        children: _bottomSections.map((section) {
           return _buildBottomNavItem(
-            context,
-            icon: item['icon'] as IconData,
-            label: item['label'] as String,
             section: section,
-            isActive: isActive,
+            isActive: activeSection == section,
           );
         }).toList(),
       ),
     );
   }
 
-  Widget _buildBottomNavItem(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
+  Widget _buildBottomNavItem({
     required AdminSection section,
     required bool isActive,
   }) {
+    final color =
+        isActive ? AppColors.fuchsia : Colors.grey.shade600;
     return GestureDetector(
       onTap: () => _navigateTo(section),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            color: isActive ? AppColors.fuchsia : Colors.grey.shade600,
-            size: 24,
-          ),
+          Icon(section.iconRounded, color: color, size: 24),
           const SizedBox(height: 4),
           Text(
-            label,
+            section.label,
             style: AppTextStyles.baseTextTheme.labelSmall?.copyWith(
-              color: isActive ? AppColors.fuchsia : Colors.grey.shade600,
+              color: color,
               fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
             ),
           ),
@@ -303,15 +234,13 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
     );
   }
 
-  Widget _buildSideMenu(BuildContext context, UserEntity? user) {
+  Widget _buildSideMenu(UserEntity? user, AdminSection activeSection) {
     return Stack(
       children: [
-        // Fondo oscuro para cerrar menú
         GestureDetector(
           onTap: () => setState(() => _showMenu = false),
           child: Container(color: Colors.black.withValues(alpha: 0.5)),
         ),
-        // Panel lateral
         Positioned(
           left: 0,
           top: 0,
@@ -321,17 +250,20 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
             color: Colors.white,
             child: Column(
               children: [
-                // Header del Sidebar
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Row(
                     children: [
+                      // Monograma de la aplicacion, no avatar de usuario.
                       Container(
                         width: 48,
                         height: 48,
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [AppColors.fuchsia, AppColors.coral],
+                            colors: [
+                              AppColors.fuchsia,
+                              AppColors.coral,
+                            ],
                           ),
                           borderRadius: BorderRadius.all(
                             Radius.circular(24),
@@ -353,7 +285,7 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            user!.fullName,
+                            user?.fullName ?? 'Usuario',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
@@ -372,65 +304,17 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
                   ),
                 ),
                 const Divider(height: 1),
-
-                // Lista de Items
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    children: _menuItems.map((item) {
-                      final section = item['section'] as AdminSection;
-                      final isActive = _activeSection == section;
-                      return GestureDetector(
-                        onTap: () =>
-                            _navigateTo(section, closeMenu: true),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 2,
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            gradient: isActive
-                                ? const LinearGradient(
-                                    colors: [
-                                      AppColors.fuchsia,
-                                      Color(0xFF8B00FF),
-                                    ],
-                                  )
-                                : null,
-                            borderRadius: BorderRadius.circular(8),
-                            color: isActive
-                                ? null
-                                : Colors.transparent,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                item['icon'] as IconData,
-                                color: isActive
-                                    ? Colors.white
-                                    : item['color'] as Color,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 12),
-                              Text(
-                                item['label'] as String,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: isActive
-                                      ? Colors.white
-                                      : Colors.grey.shade700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                    children: _menuSections.map((section) {
+                      return _buildMenuItem(
+                        section: section,
+                        isActive: activeSection == section,
                       );
                     }).toList(),
                   ),
                 ),
-
-                // Logout en Sidebar
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(
@@ -441,18 +325,52 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
                     'Cerrar sesión',
                     style: TextStyle(color: Colors.redAccent),
                   ),
-                  onTap: () {
-                    unawaited(
-                      ref.read(authProvider.notifier).logout(),
-                    );
-                    context.go('/login');
-                  },
+                  onTap: () => unawaited(_signOut()),
                 ),
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildMenuItem({
+    required AdminSection section,
+    required bool isActive,
+  }) {
+    return GestureDetector(
+      onTap: () => _navigateTo(section, closeMenu: true),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          gradient: isActive
+              ? const LinearGradient(
+                  colors: [AppColors.fuchsia, AppColors.glowViolet],
+                )
+              : null,
+          borderRadius: BorderRadius.circular(8),
+          color: isActive ? null : Colors.transparent,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              section.iconOutlined,
+              color: isActive ? Colors.white : section.accentColor,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Text(
+              section.label,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: isActive ? Colors.white : Colors.grey.shade700,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

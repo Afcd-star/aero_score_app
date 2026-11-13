@@ -12,22 +12,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+/// Seccion de inicio del panel de administracion.
+///
+/// Muestra el saludo, las metricas agregadas del sistema, las acciones
+/// rapidas y la actividad reciente.
 class HomeSection extends ConsumerWidget {
+  /// Crea la seccion de inicio del panel.
   const HomeSection({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     const headerTextPrimary = AppColors.textPrimary;
     final headerTextSecondary = AppColors.textPrimary.withValues(alpha: 0.7);
-    
+
     final cardTextPrimary = theme.colorScheme.onSurface;
     final cardTextSecondary = theme.colorScheme.onSurfaceVariant;
     final cardBg = theme.colorScheme.surfaceContainer;
     final borderColor = theme.colorScheme.outline;
-    
+
     final statsAsync = ref.watch(adminDashboardStatsProvider);
     final activityAsync = ref.watch(recentActivityProvider);
 
@@ -51,11 +56,11 @@ class HomeSection extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-
-          // ✅ Stats en orden: Usuarios activos, Competidores, Equipos, Próximos eventos
+          
           statsAsync.when(
             loading: () => _buildStatsSkeleton(cardBg, borderColor),
-            error: (err, _) => _buildStatsError(err.toString(), theme.colorScheme.error),
+            error: (err, _) =>
+                _buildStatsError(err.toString(), theme.colorScheme.error),
             data: (stats) => _buildStatsGrid(context, stats),
           ),
           const SizedBox(height: 24),
@@ -79,7 +84,9 @@ class HomeSection extends ConsumerWidget {
                         label: 'Nuevo Equipo',
                         icon: Icons.people_outline,
                         gradientColor: AppColors.fuchsia,
-                        gradientColorEnd: AppColors.glowViolet.withValues(alpha: 0.7),
+                        gradientColorEnd: AppColors.glowViolet.withValues(
+                          alpha: 0.7,
+                        ),
                         onTap: () => context.go('/admin/teams'),
                       ),
                     ),
@@ -88,8 +95,14 @@ class HomeSection extends ConsumerWidget {
                       child: AdminQuickAction(
                         label: 'Ver Eventos',
                         icon: Icons.event_outlined,
-                        gradientColor: isDark ? AppColors.successDark : AppColors.successLight,
-                        gradientColorEnd: (isDark ? AppColors.roleCoachDark : AppColors.roleCoachLight).withValues(alpha: 0.7),
+                        gradientColor: isDark
+                            ? AppColors.successDark
+                            : AppColors.successLight,
+                        gradientColorEnd:
+                            (isDark
+                                    ? AppColors.roleCoachDark
+                                    : AppColors.roleCoachLight)
+                                .withValues(alpha: 0.7),
                         onTap: () => context.go('/admin/events'),
                       ),
                     ),
@@ -101,7 +114,14 @@ class HomeSection extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ✅ Actividad reciente REAL desde providers
-          _buildRecentActivity(context, activityAsync, cardBg, borderColor, cardTextPrimary, cardTextSecondary),
+          _buildRecentActivity(
+            context,
+            activityAsync,
+            cardBg,
+            borderColor,
+            cardTextPrimary,
+            cardTextSecondary,
+          ),
         ],
       ),
     );
@@ -187,10 +207,11 @@ class HomeSection extends ConsumerWidget {
     );
   }
 
-  // ✅ Orden correcto: Usuarios activos, Competidores, Equipos, Próximos eventos
+  /// Construye las metricas en orden fijo: usuarios activos,
+  /// competidores, equipos y proximos eventos.
   Widget _buildStatsGrid(BuildContext context, AdminStats stats) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Column(
       children: [
         // 1. Usuarios activos
@@ -222,7 +243,9 @@ class HomeSection extends ConsumerWidget {
           label: 'Próximos Eventos',
           value: '${stats.upcomingEvents}',
           icon: Icons.event_available_outlined,
-          accentColor: isDark ? AppColors.destructiveDark : AppColors.destructiveLight,
+          accentColor: isDark
+              ? AppColors.destructiveDark
+              : AppColors.destructiveLight,
         ),
       ],
     );
@@ -289,9 +312,15 @@ class HomeSection extends ConsumerWidget {
               }
 
               return Column(
-                children: activities.map((activity) => _buildActivityItem(
-                  activity, textPrimary, textSecondary,
-                )).toList(),
+                children: activities
+                    .map(
+                      (activity) => _buildActivityItem(
+                        activity,
+                        textPrimary,
+                        textSecondary,
+                      ),
+                    )
+                    .toList(),
               );
             },
           ),
@@ -315,7 +344,9 @@ class HomeSection extends ConsumerWidget {
             decoration: BoxDecoration(
               color: AppColors.fuchsia.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.fuchsia.withValues(alpha: 0.3)),
+              border: Border.all(
+                color: AppColors.fuchsia.withValues(alpha: 0.3),
+              ),
             ),
             child: Center(
               child: Text(
@@ -368,8 +399,10 @@ class HomeSection extends ConsumerWidget {
     if (diff.inMinutes < 1) return 'Ahora mismo';
     if (diff.inMinutes < 60) return 'Hace ${diff.inMinutes} min';
     if (diff.inHours < 24) return 'Hace ${diff.inHours} h';
-    if (diff.inDays < 7) return 'Hace ${diff.inDays} día${diff.inDays > 1 ? 's' : ''}';
-    
+    if (diff.inDays < 7) {
+      return 'Hace ${diff.inDays} día${diff.inDays > 1 ? 's' : ''}';
+    }
+
     return DateFormat('dd/MM/yyyy').format(timestamp);
   }
 }

@@ -71,13 +71,18 @@ class _RulesData {
   ];
 }
 
+/// Seccion de reglamento de la competicion.
+///
+/// Presenta las normas en tarjetas tipadas. El contenido es estatico
+/// hasta que exista una coleccion de reglamento en el backend.
 class RulesSection extends StatelessWidget {
+  /// Crea la seccion de reglamento.
   const RulesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -110,9 +115,10 @@ class RulesSection extends StatelessWidget {
                         children: [
                           Text(
                             'Reglamento',
-                            style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                            style: AppTextStyles.baseTextTheme.titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
                           ),
                           Text(
                             'Normas y regulaciones de la competición',
@@ -155,13 +161,14 @@ class RulesSection extends StatelessWidget {
     required List<Color> gradientColors,
     required List<String> items,
   }) {
-    
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         // ✅ Aplicar opacidad alpha 0.7 al gradiente para fondo sutil
         gradient: LinearGradient(
-          colors: gradientColors.map((color) => color.withValues(alpha: 0.65)).toList(),
+          colors: gradientColors
+              .map((color) => color.withValues(alpha: 0.65))
+              .toList(),
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
@@ -179,31 +186,33 @@ class RulesSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          ...items.map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '•',
-                      style: TextStyle(
-                        color: gradientColors.first,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+          ...items.map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '•',
+                    style: TextStyle(
+                      color: gradientColors.first,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      item,
+                      style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+                        height: 1.4,
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        item,
-                        style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-                          height: 1.4,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

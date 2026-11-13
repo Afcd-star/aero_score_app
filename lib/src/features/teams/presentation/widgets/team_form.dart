@@ -63,8 +63,8 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
 
     if (draft.competitorIds.isNotEmpty) {
       setState(() {
-        _selectedCompetitorIds.clear();
-        _selectedCompetitorIds.addAll(draft.competitorIds);
+        _selectedCompetitorIds..clear()
+        ..addAll(draft.competitorIds);
       });
     }
     setState(() => _selectedCoachId = draft.coachId);
@@ -94,7 +94,7 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
         setState(() => _selectedFile = file);
         _showSuccess('Planilla cargada: ${file.name}');
       }
-    } catch (e) {
+    } on Exception catch (e) {
       _showError('Error al seleccionar archivo: $e');
     }
   }
@@ -109,8 +109,8 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
         initialSelectedIds: _selectedCompetitorIds,
         onConfirm: (selectedIds) {
           setState(() {
-            _selectedCompetitorIds.clear();
-            _selectedCompetitorIds.addAll(selectedIds);
+            _selectedCompetitorIds..clear()
+            ..addAll(selectedIds);
           });
           if (context.mounted) Navigator.pop(context);
         },
@@ -179,6 +179,10 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
     try {
       if (state.isEditing) {
         final existing = state.draft;
+        if (existing == null) {
+          _showError('No hay equipo en edición');
+          return;
+        }
         final updatedTeam = existing.copyWith(
           name: _nameCtrl.text.trim(),
           university: _universityCtrl.text.trim(),
@@ -204,7 +208,7 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
       if (!mounted) return;
       _showSuccess(state.isEditing ? 'Equipo actualizado correctamente' : 'Equipo creado correctamente');
       widget.onSuccess?.call();
-    } catch (e) {
+    } on Exception catch (e) {
       if (!mounted) return;
       _showError('Error al guardar: $e');
     }

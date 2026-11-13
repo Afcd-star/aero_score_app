@@ -28,13 +28,20 @@ class EventFormNotifier extends Notifier<EventFormState> {
     isSuccess: false,
   );
 
-  Future<bool> submit({
+    Future<bool> submit({
     required String name,
     required DateTime date,
-    required String location, required EventCategory category, required String principalJudgeId, required String artistryJudgeId, required String difficultyJudgeId, required String executionJudgeId, required List<String> teamIds, String? time,
+    required String location,
+    required EventCategory category,
+    required String principalJudgeId,
+    required String artistryJudgeId,
+    required String difficultyJudgeId,
+    required String executionJudgeId,
+    required List<String> teamIds,
+    String? time,
     String? description,
     EventStatus status = EventStatus.planned,
-    List<String>? additionalJudgeIds = const [],
+    List<String> additionalJudgeIds = const <String>[],
   }) async {
     if (teamIds.length < 2) {
       state = state.copyWith(errorMessage: 'Debe agregar al menos dos equipos');
@@ -50,19 +57,27 @@ class EventFormNotifier extends Notifier<EventFormState> {
               difficultyJudgeId: difficultyJudgeId, executionJudgeId: executionJudgeId,
               additionalJudgeIds: additionalJudgeIds, teamIds: teamIds,
             )
-          : EventEntity.newEvent(
-              name: name, date: date, time: time, location: location,
-              description: description, category: category, status: status,
-              principalJudgeId: principalJudgeId, artistryJudgeId: artistryJudgeId,
-              difficultyJudgeId: difficultyJudgeId, executionJudgeId: executionJudgeId,
-              additionalJudgeIds: additionalJudgeIds, teamIds: teamIds,
+          : EventEntity(
+              name: name,
+              date: date,
+              time: time,
+              location: location,
+              description: description,
+              category: category,
+              status: status,
+              principalJudgeId: principalJudgeId,
+              artistryJudgeId: artistryJudgeId,
+              difficultyJudgeId: difficultyJudgeId,
+              executionJudgeId: executionJudgeId,
+              additionalJudgeIds: additionalJudgeIds,
+              teamIds: teamIds,
             );
       state.mode == FormMode.edit
           ? await _repository.updateEvent(event)
           : await _repository.createEvent(event);
       state = state.copyWith(isSuccess: true, isLoading: false, draft: event);
       return true;
-    } catch (e) {
+    } on Exception catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
       return false;
     }

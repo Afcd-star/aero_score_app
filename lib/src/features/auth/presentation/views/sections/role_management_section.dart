@@ -72,7 +72,9 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
                 return RoleAssignmentCard(
                   user: user,
                   currentRole: user.role,
-                  availableRoles: UserRole.values, // Todos los roles disponibles
+                  availableRoles: UserRole.values
+                      .where((role) => role.isKnown)
+                      .toList(),
                   onRoleChanged: notifier.updateUserRole,
                 );
               },

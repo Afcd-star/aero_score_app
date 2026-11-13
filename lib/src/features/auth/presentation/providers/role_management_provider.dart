@@ -44,8 +44,13 @@ class RoleManagementNotifier extends Notifier<RoleManagementState> {
   /// Crea el notificador sin dependencias externas directas.
   RoleManagementNotifier();
 
+  /// Temporizador de espera para no consultar en cada tecla.
+  Timer? _debounce;
+
   @override
   RoleManagementState build() {
+    ref.onDispose(() => _debounce?.cancel());
+    unawaited(Future<void>.microtask(loadUsers));
     return const RoleManagementState();
   }
 
@@ -76,10 +81,13 @@ class RoleManagementNotifier extends Notifier<RoleManagementState> {
     );
   }
 
-  /// Actualiza el término de búsqueda y recarga usuarios.
+  /// Actualiza el termino de busqueda y recarga tras una pausa.
   void updateSearchQuery(String query) {
     state = state.copyWith(searchQuery: query);
-    unawaited(loadUsers(search: query));
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      unawaited(loadUsers(search: query));
+    });
   }
 
   /// Cambia el rol de un usuario y recarga si la operación es correcta.

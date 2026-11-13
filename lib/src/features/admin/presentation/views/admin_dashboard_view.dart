@@ -143,23 +143,31 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
             icon: const Icon(Icons.menu_rounded, color: Colors.white),
             onPressed: () => setState(() => _showMenu = true),
           ),
-          Column(
-            children: [
-              Text(
-                'AeroScore',
-                style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.5,
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  'AeroScore',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.5,
+                  ),
                 ),
-              ),
-              Text(
-                'Panel de Administración',
-                style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
+                Text(
+                  'Panel de Administración',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.logout_rounded, color: Colors.white),
@@ -245,89 +253,99 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
           left: 0,
           top: 0,
           bottom: 0,
-          child: Container(
-            width: 280,
+          child: Material(
             color: Colors.white,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      // Monograma de la aplicacion, no avatar de usuario.
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.fuchsia,
-                              AppColors.coral,
+            borderRadius: const BorderRadius.horizontal(
+              right: Radius.circular(20),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: SizedBox(
+              width: 280,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        // Monograma de la aplicacion, no avatar de usuario.
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.fuchsia,
+                                AppColors.coral,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(24),
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'AS',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                user?.fullName ?? 'Usuario',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const Text(
+                                'Administrador',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ],
                           ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(24),
-                          ),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'AS',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            user?.fullName ?? 'Usuario',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const Text(
-                            'Administrador',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const Divider(height: 1),
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    children: _menuSections.map((section) {
-                      return _buildMenuItem(
-                        section: section,
-                        isActive: activeSection == section,
-                      );
-                    }).toList(),
+                  const Divider(height: 1),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      children: _menuSections.map((section) {
+                        return _buildMenuItem(
+                          section: section,
+                          isActive: activeSection == section,
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(
-                    Icons.logout,
-                    color: Colors.redAccent,
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.logout,
+                      color: Colors.redAccent,
+                    ),
+                    title: const Text(
+                      'Cerrar sesión',
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    onTap: () => unawaited(_signOut()),
                   ),
-                  title: const Text(
-                    'Cerrar sesión',
-                    style: TextStyle(color: Colors.redAccent),
-                  ),
-                  onTap: () => unawaited(_signOut()),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

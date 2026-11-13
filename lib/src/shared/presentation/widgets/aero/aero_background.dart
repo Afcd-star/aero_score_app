@@ -28,7 +28,7 @@ class AeroBackground extends StatelessWidget {
     final circles = <Widget>[];
     final opacity = isDashboard ? 0.2 : 0.3;
 
-    circles.add(
+    circles..add(
       Positioned(
         top: -128,
         left: -128,
@@ -48,9 +48,9 @@ class AeroBackground extends StatelessWidget {
           ),
         ),
       ),
-    );
+    )
 
-    circles.add(
+    ..add(
       Positioned(
         bottom: -192,
         right: -192,

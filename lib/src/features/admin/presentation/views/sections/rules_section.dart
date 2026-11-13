@@ -34,8 +34,7 @@ class _RulesData {
       title: 'Normas Generales',
       gradientColors: [AppColors.fuchsia, Color(0xFF8B00FF)],
       items: [
-        'Los competidores deben presentarse 30 minutos antes '
-        'del evento',
+        'Los competidores deben presentarse 30 minutos antes del evento',
         'El vestuario debe cumplir con las normas de la federación',
         'Cada presentación tiene un tiempo máximo de 2 minutos',
         'No se permite el uso de elementos no autorizados',

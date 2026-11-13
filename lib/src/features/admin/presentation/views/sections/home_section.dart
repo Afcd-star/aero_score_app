@@ -329,8 +329,8 @@ class HomeSection extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RichText(
-                  text: TextSpan(
+                Text.rich(
+                  TextSpan(
                     style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
                       color: textPrimary,
                     ),

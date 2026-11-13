@@ -76,6 +76,8 @@ class RulesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -114,9 +116,8 @@ class RulesSection extends StatelessWidget {
                           ),
                           Text(
                             'Normas y regulaciones de la competición',
-                            style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-                              color: AppColors.textOnWhite.withValues(alpha: 0.7),
-                            ),
+                            style: AppTextStyles.baseTextTheme.bodyMedium
+                                ?.copyWith(color: scheme.onSurfaceVariant),
                           ),
                         ],
                       ),

@@ -86,3 +86,50 @@ Forma de permissions acordada para cuando se cree: arreglo de cuerdas
 con los nombres del catalogo de permisos, mapeado al conjunto tipado
 de dominio. El campo json del backend es opaco, asi que el cliente
 fija la forma.
+
+## Alineamiento de toolchain postergado
+
+El aviso de build_runner que compara la version de lenguaje del SDK
+con la del analyzer no se resuelve con pub upgrade. La causa raiz es
+que analyzer queda clavado por la cadena riverpod_lint,
+riverpod_analyzer_utils y custom_lint_visitor, cuyo sufijo de version
+declara contra que analyzer esta compilado.
+
+Precondicion: migrar la cadena completa de riverpod de forma
+coherente, incluyendo annotation y generator, con versiones objetivo
+verificadas por pub outdated y gate global, no por upgrade suelto.
+
+Consecuencia observada del intento fallido: pub upgrade movio 43
+dependencias, includo dos saltos mayores en build y equatable, y
+build_runner 2.15 elimino la bandera delete conflicting outputs que
+usa el ritual de gate. Se revertio el lock sin commitear.
+
+Decision derivada: la capa cuatro de admin usa providers manuales,
+como el resto de la casa, y la migracion a anotaciones viaja en este
+frente junto con la cadena riverpod.
+
+## Cabeceras con ruta vieja
+
+Cuatro archivos conservan en su comentario de cabecera la ruta de
+administracion desde la que fueron movidos en sesiones anteriores:
+competitor_repository, event_list_view, team_repository_impl y
+team_repository. No afectan al grafo de imports porque son comentarios,
+pero mienten sobre la ubicacion del archivo. Se corrigen al abrir el
+frente de cada feature, no antes, para no mezclar naturalezas.
+
+## Layout de notifiers de interfaz
+
+La convencion de la casa coloca notifiers de estado de interfaz dentro
+de data di. Eso provoca que data di importe presentacion, como ocurre
+en auth con el notifier de gestion de roles y en competidores con el
+filtro de equipo. La ubicacion correcta es presentacion providers. Se
+unifica en un pase de layout posterior al cierre de administracion,
+con grep de consumidores por cada notifier movido.
+
+## Pase visual del header del panel
+
+El header del panel se construye hoy con widgets crudos y lectura
+forzada del usuario. La correccion de comportamiento y tipado se hace
+en capa cuatro. La reconstruccion visual con el catalogo de marca se
+hace en el pase de shared, junto con AeroEmptyState y
+AeroModulePlaceholder, para no inventar firmas de catalogo sin leerlas.

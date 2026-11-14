@@ -169,3 +169,15 @@ Nueva deuda registrada con precondicion:
 Decision de versionado adoptada: 0.MINOR.PATCH previo a 1.0, minor por
 cierre de feature, 1.0.0 con esquema de backend congelado y las seis
 features auditadas. Hito actual 0.1.0.
+## Norma de EOL para registrantes generados
+
+Se anadio .gitattributes con text eol=lf para los diez registrantes
+de plugins generados por flutter en android, ios, linux, macos y
+windows. La causa es que el generador escribe LF y core.autocrlf en
+Windows introduce deriva de finales de linea, lo que marco el
+registrante de macos como modificado sin cambio de contenido, probado
+por un diff vacio salvo el aviso de conversion. La regla fija LF en el
+arbol de trabajo y elimina la deriva futura. No renormaliza blobs ya
+comiteados con CRLF: si un registrante ya almacenado se marca como
+modificado por EOL, se renormaliza esa ruta puntual con la bandera de
+renormalizar de git add, no el arbol entero.

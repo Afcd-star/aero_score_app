@@ -1,3 +1,4 @@
+**Estado: CERRADA con desviaciones. Ver la reconciliacion al pie de este documento y la seccion de administracion del informe tecnico.**
 **Veredicto de frontera, archivo por archivo**
 
 Grupo A, lo que SE QUEDA en admin como shell más dashboard, condicionado a las reparaciones de más abajo:
@@ -27,3 +28,39 @@ Grupo B, lo que SE VA de admin:
 | `presentation/widgets/competitor_form_sheet.dart` | `competitors/presentation/widgets` | Ya consume `competitors_providers` y `CompetitorEntity`; no pinta nada en admin |
 | `presentation/widgets/competitor_list_view.dart` | `competitors/presentation/widgets` | Ya consume `competitorListProvider`; no pinta nada en admin |
 | `presentation/widgets/team_competitors_sheet.dart` | `teams/presentation/widgets` | Consume `TeamEntity` y `competitorSelectionProvider`; es hoja de equipo, no de admin |
+
+## Reconciliacion con la ejecucion, cierre 0.1.0
+
+El veredicto anterior se cumplieron la mayoria de puntos. Cuatro
+desviaciones registradas por honestidad de auditoria:
+
+- Proyectadores de etiqueta de la entidad de actividad. El veredicto
+  mandaba sacarlos a presentacion por dependencia de Flutter. No la
+  tienen: son proyecciones de cadena puras. Se quedaron en dominio y
+  estan cubiertos por pruebas. El veredicto estaba equivocado en la
+  premisa.
+- Heuristica de dos segundos. El veredicto mandaba sustituirla por
+  contrato de log de auditoria. No existe coleccion de auditoria en el
+  backend, asi que la heuristica sigue viva y registrada como deuda con
+  precondicion. No se invento un contrato inexistente.
+- Proveedores de administracion. El veredicto mandaba todo a anotaciones
+  de Riverpod 3.x. Se entregaron manuales tipados por decision expresa
+  para no mezclar manual y generado dentro de la feature; la migracion a
+  anotaciones viaja en el frente de toolchain. Desviacion deliberada y
+  registrada.
+- Header del panel. El veredicto mandaba rehacerlo. Resulto codigo muerto
+  con cero consumidores probados por grep, asi que se elimino en vez de
+  reescribirse. Rehacerlo habria sido trabajo sobre codigo que nadie
+  ejecuta.
+
+No previsto por el veredicto y corregido en el ciclo:
+
+- Los dos casos de uso del panel estaban mal alojados en auth
+  importando entidades y contrato de administracion. Se reubicaron a
+  administracion, cerrando una sexta dependencia invertida que el
+  veredicto no listaba porque los archivos no estaban en admin.
+
+Cumplidos sin desviacion: contrato podado a dos metodos, DTO de
+actividad en data models, impl con patron de competidores, view con
+navegacion tipada y seccion desde la ruta, home con forma y documentacion,
+y todas las mudanzas del grupo B a sus features.

@@ -133,3 +133,39 @@ forzada del usuario. La correccion de comportamiento y tipado se hace
 en capa cuatro. La reconstruccion visual con el catalogo de marca se
 hace en el pase de shared, junto con AeroEmptyState y
 AeroModulePlaceholder, para no inventar firmas de catalogo sin leerlas.
+
+## Delta al cierre de administracion, version 0.1.0
+
+Resuelto en este ciclo y ya no deuda abierta:
+
+- Reubicacion de hojas de competidor y equipos a sus features.
+- Creacion de modelos de datos de administracion con DTO de actividad.
+- Contrato de repositorio podado a dos metodos y definido.
+- Proveedor de administracion con cliente global inyectado y Failure
+  tipado en AsyncValue.
+- View del panel con navegacion tipada, seccion desde la ruta, cierre de
+  sesion esperado y usuario protegado.
+- Casos de uso reubicados de auth a administracion.
+- Provider y header muertos eliminados por codigo muerto.
+- Catalogo tipografico completo y saltos finales en todo el arbol.
+- Legibilidad de configuracion, gestion de roles y tarjeta de roles en
+  ambos temas.
+- Suite de pruebas de administracion con veintiun casos verdes.
+
+Nueva deuda registrada con precondicion:
+
+- Prueba del repositorio de administracion contra PocketBase.
+  Precondicion: cliente http inyectable.
+- Heuristica de dos segundos de la actividad. Precondicion: coleccion de
+  auditoria.
+- Veintiun avisos de los tres widgets de administracion en shared.
+  Frente de shared.
+- Vinetas del reglamento camufladas. Frente de catalogo.
+- Catalogo de botones con altura y relleno. Frente de catalogo.
+- Monograma frente a avatar de usuario. Frente de catalogo y tema.
+- Selector de tema con persistencia e interruptor. El cableado ya existe
+  en main; falta persistencia e interfaz. Frente de tema.
+
+Decision de versionado adoptada: 0.MINOR.PATCH previo a 1.0, minor por
+cierre de feature, 1.0.0 con esquema de backend congelado y las seis
+features auditadas. Hito actual 0.1.0.

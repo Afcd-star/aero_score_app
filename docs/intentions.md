@@ -221,7 +221,7 @@ Limitacion de copyWith en la entidad de equipo. La implementacion manual
 de copyWith usa la convencion de campo nulable con operador de oracion a
 la izquierda, asi que no puede desasignar faculty, coachId, coachName ni
 las marcas de tiempo. El formulario de edicion no puede quitar el
-entrenador via copyWith. Precondicion de解决: migrar TeamEntity a Freezed,
+entrenador via copyWith. Precondicion de solucion: migrar TeamEntity a Freezed,
 que distingue no cambiar de poner nulo con parametros opcionales reales.
 Hay un test canario en la suite de dominio que fija la limitacion; cuando
 Freezed la resuelva, el test fallara y avisara de borrar este bloque y

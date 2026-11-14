@@ -1,15 +1,22 @@
-// lib/src/features/admin/data/repositories/team_repository_impl.dart
+// lib/src/features/teams/data/repositories/team_repository_impl.dart
 import 'package:aero_score_app/src/core/error/failures.dart';
+import 'package:aero_score_app/src/core/utils/pocketbase_filter.dart';
 import 'package:aero_score_app/src/features/teams/data/models/team_model.dart';
 import 'package:aero_score_app/src/features/teams/domain/entities/team_entity.dart';
 import 'package:aero_score_app/src/features/teams/domain/repositories/team_repository.dart';
 import 'package:either_dart/either.dart';
-import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 
+/// Implementacion del repositorio de equipos contra PocketBase.
+///
+/// La garantia de permiso vive en las reglas de la coleccion del server,
+/// no aqui: el cliente no vuelve a comprobar el rol, solo traduce el 403
+/// que el server devuelve. Los valores del usuario se escapan antes de
+/// interpolarse en el filter.
 class TeamRepositoryImpl implements TeamRepository {
-
+  /// Crea la implementacion con el cliente global inyectado.
   TeamRepositoryImpl(this._client);
+
   final PocketBase _client;
 
   @override
@@ -23,21 +30,19 @@ class TeamRepositoryImpl implements TeamRepository {
   }) async {
     try {
       final filters = <String>[];
-      
       if (search?.isNotEmpty == true) {
-        final s = search!.toLowerCase();
+        final s = escapeFilterValue(search!.toLowerCase());
         filters.add('(name ~ "$s") || (university ~ "$s") || (email ~ "$s")');
       }
       if (university?.isNotEmpty == true) {
-        filters.add('university = "$university"');
+        filters.add('university = "${escapeFilterValue(university!)}"');
       }
       if (faculty?.isNotEmpty == true) {
-        filters.add('faculty = "$faculty"');
+        filters.add('faculty = "${escapeFilterValue(faculty!)}"');
       }
       if (status?.isNotEmpty == true) {
-        filters.add('status = "$status"');
+        filters.add('status = "${escapeFilterValue(status!)}"');
       }
-
       final filter = filters.isNotEmpty ? filters.join(' && ') : null;
 
       final result = await _client.collection('teams').getList(
@@ -47,18 +52,20 @@ class TeamRepositoryImpl implements TeamRepository {
         sort: '-created',
         expand: 'coachId',
       );
-
       final teams = result.items
           .map((r) => TeamModel.fromMap(r.toJson()).toEntity())
           .toList();
-
-      return Right(teams);
-      
+          return Right<Failure, List<TeamEntity>>(teams);
     } on ClientException catch (e) {
-      final errorMessage = e.response['message'] as String? ?? e.toString();
-      return Left(ServerFailure(message: errorMessage));
-    } catch (e) {
-      return Left(ServerFailure(message: 'Error inesperado: $e'));
+      final errorMessage =
+          (e.response['message'] as String?) ?? e.toString();
+      return Left<Failure, List<TeamEntity>>(
+        ServerFailure(message: errorMessage),
+      );
+    } on Exception catch (e) {
+      return Left<Failure, List<TeamEntity>>(
+        ServerFailure(message: 'Error inesperado: $e'),
+      );
     }
   }
 
@@ -69,91 +76,117 @@ class TeamRepositoryImpl implements TeamRepository {
         id,
         expand: 'coachId',
       );
-      return Right(TeamModel.fromMap(record.toJson()).toEntity());
+      return Right<Failure, TeamEntity?>(
+        TeamModel.fromMap(record.toJson()).toEntity(),
+      );
     } on ClientException catch (e) {
-      final errorMessage = e.response['message'] as String? ?? e.toString();
-      if (e.response['status'] == 404) return const Right(null);
-      return Left(ServerFailure(message: errorMessage));
-    } catch (e) {
-      return Left(ServerFailure(message: 'Error al obtener equipo: $e'));
+      if ((e.response['status'] as int?) == 404) {
+        return const Right<Failure, TeamEntity?>(null);
+      }
+      final errorMessage =
+          (e.response['message'] as String?) ?? e.toString();
+      return Left<Failure, TeamEntity?>(
+        ServerFailure(message: errorMessage),
+      );
+    } on Exception catch (e) {
+      return Left<Failure, TeamEntity?>(
+        ServerFailure(message: 'Error al obtener equipo: $e'),
+      );
     }
   }
 
   @override
   Future<Either<Failure, TeamEntity>> createTeam(TeamEntity team) async {
+    final validationError = team.validate();
+    if (validationError != null) {
+      return Left<Failure, TeamEntity>(
+        ValidationFailure(message: validationError),
+      );
+    }
     try {
-      // ✅ VERIFICAR autenticación antes de crear
-      final pb = _client; // tu instancia de PocketBase
-
-      if (!pb.authStore.isValid) {
-        return const Left(ValidationFailure(message: 'No hay sesión activa. Inicia sesión primero.'));
-      }
-
-      final currentUser = pb.authStore.record;
-      final userRole = currentUser?.getStringValue('role') ?? '';
-
-      debugPrint('🔐 [CreateTeam] Usuario actual: ${currentUser?.id}');
-      debugPrint('🔐 [CreateTeam] Rol: $userRole');
-
-      if (userRole != 'Admin') {
-        return const Left(ValidationFailure(
-          message: 'Permiso denegado. Solo los administradores pueden crear equipos.',
-        ));
-      }
-
-      // ✅ Si todo está bien, proceder con la creación
       final body = TeamModel.fromEntity(team).toMap();
-      final record = await pb.collection('teams').create(body: body);
-
-      return Right(TeamModel.fromMap(record.toJson()).toEntity());
-
-    } catch (e) {
-      return Left(ServerFailure(message: 'Error al crear equipo: $e'));
+      final record =
+          await _client.collection('teams').create(body: body);
+      return Right<Failure, TeamEntity>(
+        TeamModel.fromMap(record.toJson()).toEntity(),
+      );
+    } on ClientException catch (e) {
+      if ((e.response['status'] as int?) == 403) {
+        return const Left<Failure, TeamEntity>(
+          ServerFailure(message: 'Permiso denegado para crear equipos'),
+        );
+      }
+      final errorMessage =
+          (e.response['message'] as String?) ?? e.toString();
+      return Left<Failure, TeamEntity>(
+        ServerFailure(message: 'Error al crear equipo: $errorMessage'),
+      );
+    } on Exception catch (e) {
+      return Left<Failure, TeamEntity>(
+        ServerFailure(message: 'Error al crear equipo: $e'),
+      );
     }
   }
 
   @override
   Future<Either<Failure, TeamEntity>> updateTeam(TeamEntity team) async {
+    final validationError = team.validate();
+    if (validationError != null) {
+      return Left<Failure, TeamEntity>(
+        ValidationFailure(message: validationError),
+      );
+    }
     try {
-      final validationError = _validate(team);
-      if (validationError != null) {
-        return Left(ValidationFailure(message: validationError));
-      }
-
       final body = TeamModel.fromEntity(team).toMap();
       final record = await _client.collection('teams').update(
         team.id,
         body: body,
       );
-      
-      return Right(TeamModel.fromMap(record.toJson()).toEntity());
-      
+      return Right<Failure, TeamEntity>(
+        TeamModel.fromMap(record.toJson()).toEntity(),
+      );
     } on ClientException catch (e) {
-      final errorMessage = e.response['message'] as String? ?? e.toString();
-      return Left(ServerFailure(message: 'Error al actualizar equipo: $errorMessage'));
-    } catch (e) {
-      return Left(ServerFailure(message: 'Error al actualizar equipo: $e'));
+      if ((e.response['status'] as int?) == 403) {
+        return const Left<Failure, TeamEntity>(
+          ServerFailure(message: 'Permiso denegado para actualizar equipos'),
+        );
+      }
+      final errorMessage =
+          (e.response['message'] as String?) ?? e.toString();
+      return Left<Failure, TeamEntity>(
+        ServerFailure(message: 'Error al actualizar equipo: $errorMessage'),
+      );
+    } on Exception catch (e) {
+      return Left<Failure, TeamEntity>(
+        ServerFailure(message: 'Error al actualizar equipo: $e'),
+      );
     }
   }
 
   @override
   Future<Either<Failure, void>> deleteTeam(String id) async {
     try {
-      // Soft delete: cambiar status a 'inactive'
-      await _client.collection('teams').update(id, body: {
+      await _client.collection('teams').update(id, body: <String, dynamic>{
         'status': 'inactive',
       });
-      return const Right(null);
+      return const Right<Failure, void>(null);
     } on ClientException catch (e) {
-      final errorMessage = e.response['message'] as String? ?? e.toString();
-      return Left(ServerFailure(message: 'Error al eliminar equipo: $errorMessage'));
-    } catch (e) {
-      return Left(ServerFailure(message: 'Error al eliminar equipo: $e'));
+      final errorMessage =
+          (e.response['message'] as String?) ?? e.toString();
+      return Left<Failure, void>(
+        ServerFailure(message: 'Error al eliminar equipo: $errorMessage'),
+      );
+    } on Exception catch (e) {
+      return Left<Failure, void>(
+        ServerFailure(message: 'Error al eliminar equipo: $e'),
+      );
     }
   }
 
   @override
-  Future<Either<Failure, List<TeamEntity>>> getByUniversity(String university) async {
+  Future<Either<Failure, List<TeamEntity>>> getByUniversity(
+    String university,
+  ) async {
     return getAll(university: university);
   }
 
@@ -169,8 +202,12 @@ class TeamRepositoryImpl implements TeamRepository {
   }) async {
     try {
       final filters = <String>[];
-      if (university?.isNotEmpty == true) filters.add('university = "$university"');
-      if (faculty?.isNotEmpty == true) filters.add('faculty = "$faculty"');
+      if (university?.isNotEmpty == true) {
+        filters.add('university = "${escapeFilterValue(university!)}"');
+      }
+      if (faculty?.isNotEmpty == true) {
+        filters.add('faculty = "${escapeFilterValue(faculty!)}"');
+      }
       final filter = filters.isNotEmpty ? filters.join(' && ') : null;
 
       final result = await _client.collection('teams').getList(
@@ -178,27 +215,30 @@ class TeamRepositoryImpl implements TeamRepository {
         perPage: 500,
         fields: 'id,university,faculty',
       );
-
       final byUniversity = <String, int>{};
       final byFaculty = <String, int>{};
-
       for (final r in result.items) {
         final uni = r.getStringValue('university');
         final fac = r.getStringValue('faculty');
-        
         byUniversity[uni] = (byUniversity[uni] ?? 0) + 1;
         if (fac.isNotEmpty) {
           byFaculty[fac] = (byFaculty[fac] ?? 0) + 1;
         }
       }
-
-      return Right({
+      return Right<Failure, Map<String, int>>(<String, int>{
         if (university != null) 'university': byUniversity[university] ?? 0,
         if (faculty != null) 'faculty': byFaculty[faculty] ?? 0,
       });
-      
-    } catch (e) {
-      return Left(ServerFailure(message: 'Error al contar equipos: $e'));
+    } on ClientException catch (e) {
+      final errorMessage =
+          (e.response['message'] as String?) ?? e.toString();
+      return Left<Failure, Map<String, int>>(
+        ServerFailure(message: 'Error al contar equipos: $errorMessage'),
+      );
+    } on Exception catch (e) {
+      return Left<Failure, Map<String, int>>(
+        ServerFailure(message: 'Error al contar equipos: $e'),
+      );
     }
   }
 
@@ -206,25 +246,20 @@ class TeamRepositoryImpl implements TeamRepository {
   Future<Either<Failure, bool>> emailExists(String email) async {
     try {
       final result = await _client.collection('teams').getList(
-        filter: 'email = "$email"',
+        filter: 'email = "${escapeFilterValue(email)}"',
         perPage: 1,
       );
-      return Right(result.items.isNotEmpty);
-    } catch (e) {
-      return Left(ServerFailure(message: 'Error al verificar email: $e'));
+      return Right<Failure, bool>(result.items.isNotEmpty);
+    } on ClientException catch (e) {
+      final errorMessage =
+          (e.response['message'] as String?) ?? e.toString();
+      return Left<Failure, bool>(
+        ServerFailure(message: 'Error al verificar email: $errorMessage'),
+      );
+    } on Exception catch (e) {
+      return Left<Failure, bool>(
+        ServerFailure(message: 'Error al verificar email: $e'),
+      );
     }
-  }
-
-  /// Validación de negocio
-  String? _validate(TeamEntity team) {
-    if (team.name.trim().length < 3) return 'El nombre del equipo debe tener al menos 3 caracteres';
-    if (team.university.trim().length < 3) return 'La universidad debe tener al menos 3 caracteres';
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(team.email)) {
-      return 'Email de contacto inválido';
-    }
-    if (team.faculty?.trim().isEmpty ?? false) {
-      return 'La facultad es requerida';
-    }
-    return null;
   }
 }

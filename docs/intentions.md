@@ -181,3 +181,48 @@ arbol de trabajo y elimina la deriva futura. No renormaliza blobs ya
 comiteados con CRLF: si un registrante ya almacenado se marca como
 modificado por EOL, se renormaliza esa ruta puntual con la bandera de
 renormalizar de git add, no el arbol entero.
+
+## Deudas abiertas tras el endurecimiento de equipos
+
+Acoplamiento del literal de rol. Las reglas del server comparan el rol
+contra Admin con mayuscula inicial. Hay que confirmar que el valor del
+enum de rol del app serializa exactamente esa cadena, si no, todo el
+CRUD de administrador falla en silencio con 403. Verificacion pendiente.
+
+Falta un tipo de fallo de autorizacion en core. Hoy el 403 se traduce a
+ServerFailure con mensaje de permiso denegado, porque AuthFailure es de
+login y reutilizarlo mentiria semanticamente. La distincion de UX la
+carga el mensaje. Frente de core.
+
+Adopcion transversal del escape de filtro. El utilitario de core lo
+consume equipos; competidores y eventos interpolan igual y deben
+adoptarlo en sus frentes.
+
+Borrado logico como bool. El contrato de equipos conserva void; el cambio
+a bool y el manejo del error en el notificador van al pase de
+presentacion de equipos.
+
+Equipos inactivos legibles. Las reglas abren la lectura a cualquier
+autenticado, incluido el estado inactivo; el app filtra por estado en las
+consultas. Aceptado, anotado.
+
+Centralizacion de textos a medias. Los mensajes del app estan escritos a
+mano por todas partes, incluidos los de validacion y error que viven en
+dominio y datos, lo que acopla esas capas a la copia de presentacion y a
+un solo idioma. La centralizacion iniciada no termino. Frente de
+lenguaje con decision previa: dominio devuelve codigos o cadenas.
+
+Guiones en la interfaz. Los rangos de edad del reglamento usan guion. Si
+la norma de escribir sin guion aplica tambien a la copia del app, hay que
+reformularlos en el frente de lenguaje; si solo aplica a documentos, se
+deja como esta. Decision pendiente del autor.
+
+Limitacion de copyWith en la entidad de equipo. La implementacion manual
+de copyWith usa la convencion de campo nulable con operador de oracion a
+la izquierda, asi que no puede desasignar faculty, coachId, coachName ni
+las marcas de tiempo. El formulario de edicion no puede quitar el
+entrenador via copyWith. Precondicion de解决: migrar TeamEntity a Freezed,
+que distingue no cambiar de poner nulo con parametros opcionales reales.
+Hay un test canario en la suite de dominio que fija la limitacion; cuando
+Freezed la resuelva, el test fallara y avisara de borrar este bloque y
+actualizar el test.

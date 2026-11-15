@@ -17,9 +17,9 @@ class TeamListView extends ConsumerWidget { // ✅ Nuevo callback opcional
     this.onViewCompetitors,
   });
   final VoidCallback? onAddTeam;
-  final Function(TeamEntity) onEdit;
-  final Function(String) onDelete;
-  final Function(TeamEntity)? onViewCompetitors;
+  final void Function(TeamEntity) onEdit;
+  final void Function(String) onDelete;
+  final void Function(TeamEntity)? onViewCompetitors;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

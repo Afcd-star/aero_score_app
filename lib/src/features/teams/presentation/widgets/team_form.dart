@@ -1,4 +1,6 @@
 // lib/src/features/teams/presentation/widgets/team_form.dart
+import 'dart:async';
+
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/features/auth/presentation/providers/coach_provider.dart';
@@ -10,11 +12,9 @@ import 'package:aero_score_app/src/features/teams/presentation/widgets/coach_sel
 import 'package:aero_score_app/src/features/teams/presentation/widgets/competitor_selector_modal.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_avatar.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_form.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_input.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_skeleton.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,7 +39,6 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
 
   String? _selectedCoachId;
   final List<String> _selectedCompetitorIds = [];
-  PlatformFile? _selectedFile;
 
   @override
   void initState() {
@@ -79,57 +78,41 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
     super.dispose();
   }
 
-  Future<void> _pickFile() async {
-    try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf'],
-      );
-      if (result != null) {
-        final file = result.files.first;
-        if (file.size > 10 * 1024 * 1024) {
-          _showError('El archivo no debe superar los 10MB');
-          return;
-        }
-        setState(() => _selectedFile = file);
-        _showSuccess('Planilla cargada: ${file.name}');
-      }
-    } on Exception catch (e) {
-      _showError('Error al seleccionar archivo: $e');
-    }
-  }
-
-  void _showCompetitorsModal() {
+    void _showCompetitorsModal() {
     ref.invalidate(competitorSelectionProvider);
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => CompetitorSelectorModal(
-        initialSelectedIds: _selectedCompetitorIds,
-        onConfirm: (selectedIds) {
-          setState(() {
-            _selectedCompetitorIds..clear()
-            ..addAll(selectedIds);
-          });
-          if (context.mounted) Navigator.pop(context);
-        },
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => CompetitorSelectorModal(
+          initialSelectedIds: _selectedCompetitorIds,
+          onConfirm: (selectedIds) {
+            setState(() {
+              _selectedCompetitorIds..clear()
+              ..addAll(selectedIds);
+            });
+            if (context.mounted) Navigator.pop(context);
+          },
+        ),
       ),
     );
   }
 
   void _showCoachModal() {
     ref.invalidate(coachesProvider);
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => CoachSelectorModal(
-        initialCoachId: _selectedCoachId,
-        onConfirm: (coachId) {
-          setState(() => _selectedCoachId = coachId);
-          if (context.mounted) Navigator.pop(context);
-        },
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => CoachSelectorModal(
+          initialCoachId: _selectedCoachId,
+          onConfirm: (coachId) {
+            setState(() => _selectedCoachId = coachId);
+            if (context.mounted) Navigator.pop(context);
+          },
+        ),
       ),
     );
   }
@@ -158,16 +141,6 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
 
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-
-    if (_selectedCoachId == null || _selectedCoachId!.isEmpty) {
-      _showError('Debe seleccionar un entrenador');
-      return;
-    }
-
-    if (_selectedCompetitorIds.isEmpty) {
-      _showError('Debe agregar al menos un competidor');
-      return;
-    }
 
     final state = ref.read(teamFormProvider);
     final coaches = ref.read(coachesProvider).value ?? [];
@@ -223,7 +196,6 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
     setState(() {
       _selectedCoachId = null;
       _selectedCompetitorIds.clear();
-      _selectedFile = null;
     });
   }
 
@@ -372,64 +344,7 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
             ),
           ),
           const SizedBox(height: 24),
-          Text('Subir planilla', style: AppTextStyles.baseTextTheme.bodyLarge?.copyWith(color: isDark ? AppColors.foregroundDark : AppColors.textOnWhite)),
-          const SizedBox(height: 8),
-          AeroCard(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(12),
-              onTap: _pickFile,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.fuchsia.withValues(alpha: 0.5), width: 2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: [
-                    const Icon(Icons.upload_file, size: 48, color: AppColors.fuchsia),
-                    const SizedBox(height: 8),
-                    Text(
-                      _selectedFile?.name ?? 'Seleccionar archivo PDF (máx. 10MB)',
-                      style: AppTextStyles.baseTextTheme.bodyLarge?.copyWith(color: AppColors.fuchsia),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          if (_selectedFile != null) ...[
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.successLight.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.successLight),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.insert_drive_file, size: 16, color: AppColors.successLight),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      _selectedFile!.name,
-                      style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(color: AppColors.successLight),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, size: 16),
-                    onPressed: () => setState(() => _selectedFile = null),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                ],
-              ),
-            ),
-          ],
-          const SizedBox(height: 24),
+          
           Row(
             children: [
               Text('Competidores del equipo', style: AppTextStyles.baseTextTheme.bodyLarge?.copyWith(color: isDark ? AppColors.foregroundDark : AppColors.textOnWhite)),

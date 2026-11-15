@@ -14,7 +14,7 @@ class CoachSelectorModal extends ConsumerStatefulWidget {
     required this.initialCoachId, required this.onConfirm, super.key,
   });
   final String? initialCoachId;
-  final Function(String?) onConfirm;
+  final void Function(String?) onConfirm;
 
   @override
   ConsumerState<CoachSelectorModal> createState() => _CoachSelectorModalState();
@@ -26,18 +26,14 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
   @override
   void initState() {
     super.initState();
-    debugPrint('🎬 [CoachModal] initState - ID inicial: ${widget.initialCoachId}');
     _selectedCoachId = widget.initialCoachId;
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('🎨 [CoachModal] Build llamado');
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final coachesAsync = ref.watch(coachesProvider);
-
-    debugPrint('📊 [CoachModal] Estado async: $coachesAsync');
 
     return Container(
       decoration: BoxDecoration(

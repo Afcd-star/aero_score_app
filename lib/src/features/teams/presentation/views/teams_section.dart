@@ -1,7 +1,10 @@
 // lib/src/features/teams/presentation/views/sections/teams_section.dart
+import 'dart:async';
+
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/features/teams/data/di/teams_providers.dart';
+import 'package:aero_score_app/src/features/teams/domain/entities/team_entity.dart';
 import 'package:aero_score_app/src/features/teams/presentation/providers/team_form_notifier.dart';
 import 'package:aero_score_app/src/features/teams/presentation/widgets/team_competitors_sheet.dart';
 import 'package:aero_score_app/src/features/teams/presentation/widgets/team_form.dart';
@@ -85,11 +88,13 @@ class TeamsSection extends ConsumerWidget {
                     ref.read(teamFormProvider.notifier).prepareForEdit(team),
                 onDelete: (id) => _showDeleteConfirmation(context, ref, id),
                 onViewCompetitors: (team) {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => TeamCompetitorsSheet(team: team),
+                  unawaited(
+                    showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => TeamCompetitorsSheet(team: team),
+                    ),
                   );
                 },
               ),
@@ -102,7 +107,7 @@ class TeamsSection extends ConsumerWidget {
 
   // ✅ HEADER ORIGINAL restaurado (con ícono, título y contador)
   Widget _buildSectionHeader(
-    AsyncValue<dynamic> listState,
+    AsyncValue<List<TeamEntity>> listState,
     Color textPrimary,
     Color textSecondary,
   ) {
@@ -154,36 +159,38 @@ class TeamsSection extends ConsumerWidget {
   }
 
   void _showDeleteConfirmation(BuildContext context, WidgetRef ref, String id) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Eliminar Equipo',
-          style: TextStyle(fontWeight: FontWeight.w600),
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text(
+            'Eliminar Equipo',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          content: const Text('¿Estás seguro? Esta acción no se puede deshacer.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+              child: const Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () {
+                unawaited(ref.read(teamListProvider.notifier).deleteTeam(id));
+                Navigator.pop(dialogContext);
+              },
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.destructiveLight,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+              child: const Text('Eliminar'),
+            ),
+          ],
         ),
-        content: const Text('¿Estás seguro? Esta acción no se puede deshacer.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            ),
-            child: const Text('Cancelar'),
-          ),
-          FilledButton(
-            onPressed: () {
-              ref.read(teamListProvider.notifier).deleteTeam(id);
-              Navigator.pop(dialogContext);
-            },
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.destructiveLight,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            ),
-            child: const Text('Eliminar'),
-          ),
-        ],
       ),
     );
   }

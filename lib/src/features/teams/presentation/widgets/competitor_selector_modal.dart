@@ -14,7 +14,7 @@ class CompetitorSelectorModal extends ConsumerStatefulWidget {
     required this.initialSelectedIds, required this.onConfirm, super.key,
   });
   final List<String> initialSelectedIds;
-  final Function(List<String>) onConfirm;
+  final void Function(List<String>) onConfirm;
 
   @override
   ConsumerState<CompetitorSelectorModal> createState() => _CompetitorSelectorModalState();
@@ -26,7 +26,7 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
   @override
   void initState() {
     super.initState();
-    _tempSelectedIds = List.from(widget.initialSelectedIds);
+      _tempSelectedIds = List<String>.from(widget.initialSelectedIds);
   }
 
   void _toggleCompetitor(String id) {
@@ -171,7 +171,7 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
                             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                           ),
                         ),
-                        subtitle: Text('nationalId: ${comp.nationalId}', style: AppTextStyles.baseTextTheme.bodySmall),
+                        subtitle: Text('CI: ${comp.nationalId}', style: AppTextStyles.baseTextTheme.bodySmall),
                         trailing: isSelected
                             ? const Icon(Icons.check_circle, color: AppColors.fuchsia)
                             : null,

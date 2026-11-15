@@ -193,7 +193,9 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
               children: [
                 Expanded(
                   child: Text(
-                    _selectedCoachId != null ? 'Entrenador seleccionado' : 'Sin seleccionar',
+                    _selectedCoachId != null 
+                      ? 'Entrenador seleccionado' 
+                      : 'Sin seleccionar',
                     style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -203,7 +205,9 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
                   width: 160,
                   child: AeroButton(
                     label: 'Confirmar',
-                    onPressed: () => widget.onConfirm(_selectedCoachId),
+                    onPressed: _selectedCoachId == null
+                      ? null
+                      : () => widget.onConfirm(_selectedCoachId),
                   ),
                 ),
               ],

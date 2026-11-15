@@ -226,3 +226,74 @@ que distingue no cambiar de poner nulo con parametros opcionales reales.
 Hay un test canario en la suite de dominio que fija la limitacion; cuando
 Freezed la resuelva, el test fallara y avisara de borrar este bloque y
 actualizar el test.
+
+## Cierre del acoplamiento del literal de rol
+
+RESUELTO. Verificado que el enum de rol serializa Admin con mayuscula
+inicial, identico al literal de las reglas de la coleccion Teams del
+server, y que la conversion desde almacenamiento compara por igualdad
+exacta sin normalizacion. El riesgo de 403 silencioso en el CRUD de
+administrador queda descartado. El bloque de deuda anterior se marca
+como cerrado.
+
+## Fase obligatoria de planilla de equipo
+
+Requisito funcional confirmado por el autor, no opcional. No se
+implemento en su momento por apuro de demo, cuando se queria mostrar
+la apariencia de la app sin la persistencia real. El selector de
+planilla se retiro del formulario en el pase de presentacion porque
+recogia un archivo que el esquema vivo no podia guardar, pero la
+funcionalidad vuelve como fase propia, no como deuda suelta.
+
+Precondiciones que la fase debe cubrir, en orden de capas. Backend,
+anadir un campo de archivo a la coleccion Teams y su migracion, lo
+que obliga a reconciliar el historial de migraciones de Teams que hoy
+no cuadra con el esquema vivo. Datos, mapear el campo en el modelo con
+lectura segura y escritura, y decidir si la entidad expone el
+identificador de archivo o un objeto de archivo. Presentacion,
+restaurar la subida real con validacion de extension y tamano y la
+llamada multipart de PocketBase, en lugar del selector muerto que se
+quito. Esta fase va despues de cerrar equipos, calificacion, eventos y
+competidores, y no se mezcla con el pase de forma de equipos porque
+toca backend y datos, naturalezas distintas.
+
+## Deudas abiertas tras el pase de presentacion de equipos
+
+Crudos de catalogo en la presentacion de equipos. Indicadores de
+carga circulares, estados vacios improvisados, avatares crudos,
+tarjetas con filas de lista, contenedores, superficies sensibles a
+pulsacion, detectores de gesto y dialogos crudos viven en los
+selectores, la lista y la seccion. Deben migrar al catalogo cuando
+shared se audite. Prohibido crear estados vacios nuevos mientras
+tanto. Deuda de shared.
+
+Colores cableados con ternarios de brillo. La seccion, el formulario
+y la lista de equipos eligen texto y superficie con ternarios de
+brillo en vez del esquema de tema. Van al frente de tema con el resto
+del shell.
+
+Patron de estado de formulario manual frente a valor asincrono. El
+notifier de formulario usa banderas planas de carga, error y exito,
+mientras el de lista usa notificador asincrono. No es un fallo, es
+inconsistencia de patron que el frente de disposicion deberia
+unificar. Deuda de disposicion.
+
+Conteo de equipos incluye inactivos. El conteo por universidad y
+facultad cuenta todos los registros sin filtrar estado, mientras la
+lista si excluye inactivos. Los contadores pueden divergir de la lista
+visible. Deuda de analitica, verificar la semantica deseada.
+
+Pruebas de widget de presentacion. No se hicieron en este ciclo porque
+requieren el catalogo estable. Deuda de shared, se cubren al auditar
+el catalogo.
+
+## Desviacion del checklist de cierre en pruebas de repositorio
+
+El checklist de la informacion tecnica exige pruebas de repositorio
+con dobles. Las de equipos se difieren porque el repositorio recibe un
+cliente concreto de PocketBase y no un transporte inyectable, asi que
+doblar la red exige antes refactorizar el contrato de acceso.
+Precondicion: cliente de transporte inyectable en el repositorio de
+equipos. Las pruebas de notificador que si se hicieron cubren la
+logica de presentacion a nivel de estado, no la traduccion de red.
+No es un olvido, es un alcance diferido con causa escrita.

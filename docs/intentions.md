@@ -297,3 +297,37 @@ Precondicion: cliente de transporte inyectable en el repositorio de
 equipos. Las pruebas de notificador que si se hicieron cubren la
 logica de presentacion a nivel de estado, no la traduccion de red.
 No es un olvido, es un alcance diferido con causa escrita.
+
+## Deuda de filtrado de asignaciones ocupadas en los selectores de equipo
+
+Destapada por el pase visual del cierre de equipos. Ambos modales,
+entrenador y competidores, deben excluir a quienes ya formen parte de
+un equipo activo. No se implementa en el cierre porque es crecimiento
+de alcance: exige fijar reglas de dominio que el autor no ha declarado
+y ampliar contratos de repositorio a una consulta cruzada entre
+funcionalidades.
+
+Precondicion de dominio, fijar dos reglas antes de codificar. Uno, la
+unicidad del competidor, es decir si un competidor puede pertenecer a
+un solo equipo activo o a varios, por ejemplo un duo mixto y un solo.
+Si puede estar en varios, filtrar los ocupados esconderia competidores
+validos y seria un bug. Dos, la multiplicidad del entrenador, es decir
+si un entrenador dirige un solo equipo o varios. Si dirige varios,
+filtrar los coachIds ocupados esconderia entrenadores validos y
+romperia la creacion. El autor debe declarar ambas reglas, no se
+asumen.
+
+Precondicion de datos, exponer la consulta de asignaciones ocupadas.
+Hoy el modal de competidores consume el proveedor de seleccion que
+lista competidores sin saber de equipos, y el de entrenador lista
+usuarios con rol de entrenador sin saber de equipos. Para filtrar hace
+falta que el contrato de repositorio de equipos exponga los
+identificadores de competidor y de entrenador ya en uso en equipos
+activos, o que el de competidores y el de autenticacion sepan la
+asignacion actual. Eso es trabajo de dominio y datos, no de
+presentacion, y no cabe en un cierre ya empujado.
+
+Precondicion de presentacion, una vez fijadas las reglas y expuesta la
+consulta, los dos modales filtran la lista que renderizan por los
+identificadores ocupados, con el estado vacio del catalogo cuando no
+queda nadie, no un empty state improvisado.

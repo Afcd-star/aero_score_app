@@ -540,3 +540,15 @@ bloqueo de lanzamiento, porque se alcanza por uso normal. Se corrige
 enrutando a los tres jueces a un marcador, igual que ya esta el
 principal, y se mantienen diferidos los 51 errores del modulo. Los
 hallazgos tres a seis se registran como deuda de core y de producto.
+## Hallazgo uno del enrutador: RESUELTO
+
+Los cuatro roles de juez aterrizan ahora en el marcador generalizado,
+con el titulo tomado de la etiqueta del catalogo de identidad. Ningun
+juez alcanza la vista principal de puntuacion por inicio de sesion.
+Los 51 errores del modulo siguen diferidos y el conteo del analizador
+no baja, porque el analisis cubre archivos aunque no sean alcanzables.
+
+Deuda menor derivada: el nombre de la clase del marcador conserva la
+palabra principal aunque sirve a los cuatro roles. No se renombra
+porque la vista esta destinada a ser absorbida por el marcador de
+modulo del catalogo al auditar shared, y ese bloque ya lo registra.

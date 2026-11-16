@@ -6,15 +6,15 @@ import 'package:flutter_test/flutter_test.dart';
 /// Punto de entrada de la suite de la entidad de equipo.
 void main() {
   TeamEntity valid() => const TeamEntity(
-        id: 't1',
-        name: 'Estrellas Ritmicas',
-        university: 'Universidad de La Habana',
-        email: 'contacto@uh.cu',
-        faculty: 'FIO',
-        coachId: 'c1',
-        coachName: 'Ana Lopez',
-        competitorIds: <String>['k1', 'k2'],
-      );
+    id: 't1',
+    name: 'Estrellas Ritmicas',
+    university: 'Universidad de La Habana',
+    email: 'contacto@uh.cu',
+    faculty: 'FIO',
+    coachId: 'c1',
+    coachName: 'Ana Lopez',
+    competitorIds: <String>['k1', 'k2'],
+  );
 
   group('TeamEntity.validate', () {
     test('un equipo completo pasa', () {
@@ -53,15 +53,24 @@ void main() {
     });
 
     test('rechaza facultad en blanco', () {
-      expect(valid().copyWith(faculty: '  ').validate(), 'La facultad es requerida');
+      expect(
+        valid().copyWith(faculty: '  ').validate(),
+        'La facultad es requerida',
+      );
     });
 
     test('rechaza email invalido', () {
-      expect(valid().copyWith(email: 'no-es-email').validate(), 'Email de contacto inválido');
+      expect(
+        valid().copyWith(email: 'no-es-email').validate(),
+        'Email de contacto inválido',
+      );
     });
 
     test('rechaza nombre corto', () {
-      expect(valid().copyWith(name: 'Ab').validate(), 'El nombre del equipo debe tener al menos 3 caracteres');
+      expect(
+        valid().copyWith(name: 'Ab').validate(),
+        'El nombre del equipo debe tener al menos 3 caracteres',
+      );
     });
   });
 
@@ -88,7 +97,10 @@ void main() {
 
     test('las marcas de tiempo no afectan la igualdad', () {
       expect(
-        valid().copyWith(created: DateTime.utc(2026), updated: DateTime.utc(2026)),
+        valid().copyWith(
+          created: DateTime.utc(2026),
+          updated: DateTime.utc(2026),
+        ),
         valid(),
       );
     });

@@ -22,10 +22,12 @@ class FakeTeamRepository implements TeamRepository {
   final List<TeamEntity> Function()? getAllImpl;
 
   /// Simula la creacion, con exito o fallo.
-  final Future<Either<Failure, TeamEntity>> Function(TeamEntity team)? createImpl;
+  final Future<Either<Failure, TeamEntity>> Function(TeamEntity team)?
+  createImpl;
 
   /// Simula la actualizacion, con exito o fallo.
-  final Future<Either<Failure, TeamEntity>> Function(TeamEntity team)? updateImpl;
+  final Future<Either<Failure, TeamEntity>> Function(TeamEntity team)?
+  updateImpl;
 
   /// Simula el borrado logico, con exito o fallo.
   final Future<Either<Failure, void>> Function(String id)? deleteImpl;
@@ -63,7 +65,9 @@ class FakeTeamRepository implements TeamRepository {
   }
 
   @override
-  Future<Either<Failure, List<TeamEntity>>> getByUniversity(String university) async {
+  Future<Either<Failure, List<TeamEntity>>> getByUniversity(
+    String university,
+  ) async {
     throw UnimplementedError('getByUniversity no se ejerce en estos tests');
   }
 

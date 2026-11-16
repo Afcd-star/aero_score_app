@@ -9,15 +9,15 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../support/fake_team_repository.dart';
 
 TeamEntity _team(String id, {String status = 'active'}) => TeamEntity(
-      id: id,
-      name: 'Equipo $id',
-      university: 'Universidad',
-      email: 'e$id@x.cu',
-      faculty: 'FIO',
-      coachId: 'c1',
-      status: status,
-      competitorIds: const <String>['k1'],
-    );
+  id: id,
+  name: 'Equipo $id',
+  university: 'Universidad',
+  email: 'e$id@x.cu',
+  faculty: 'FIO',
+  coachId: 'c1',
+  status: status,
+  competitorIds: const <String>['k1'],
+);
 
 /// Punto de entrada de la suite del notifier de lista.
 void main() {
@@ -78,24 +78,27 @@ void main() {
       expect(state.value!.map((t) => t.id), <String>['b']);
     });
 
-    test('deleteTeam fallido conserva la lista y propaga el fallo tipado', () async {
-      final fake = FakeTeamRepository(
-        getAllImpl: () => <TeamEntity>[_team('a')],
-        deleteImpl: (id) async =>
-          const Left<Failure, void>(ServerFailure(message: 'sin conexion')),
-      );
-      final container = ProviderContainer(
-        overrides: [
-          teamRepositoryProvider.overrideWithValue(fake),
-        ],
-      );
-      addTearDown(container.dispose);
+    test(
+      'deleteTeam fallido conserva la lista y propaga el fallo tipado',
+      () async {
+        final fake = FakeTeamRepository(
+          getAllImpl: () => <TeamEntity>[_team('a')],
+          deleteImpl: (id) async =>
+              const Left<Failure, void>(ServerFailure(message: 'sin conexion')),
+        );
+        final container = ProviderContainer(
+          overrides: [
+            teamRepositoryProvider.overrideWithValue(fake),
+          ],
+        );
+        addTearDown(container.dispose);
 
-      await container.read(teamListProvider.future);
-      await container.read(teamListProvider.notifier).deleteTeam('a');
-      final state = container.read(teamListProvider);
-      expect(state.hasError, isTrue);
-      expect(state.error, isA<ServerFailure>());
-    });
+        await container.read(teamListProvider.future);
+        await container.read(teamListProvider.notifier).deleteTeam('a');
+        final state = container.read(teamListProvider);
+        expect(state.hasError, isTrue);
+        expect(state.error, isA<ServerFailure>());
+      },
+    );
   });
 }

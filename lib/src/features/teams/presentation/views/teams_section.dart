@@ -22,8 +22,12 @@ class TeamsSection extends ConsumerWidget {
     final formState = ref.watch(teamFormProvider);
     final listState = ref.watch(teamListProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textPrimary = isDark ? AppColors.foregroundDark : AppColors.foregroundLight;
-    final textSecondary = isDark ? AppColors.mutedForegroundDark : AppColors.mutedForegroundLight;
+    final textPrimary = isDark
+        ? AppColors.foregroundDark
+        : AppColors.foregroundLight;
+    final textSecondary = isDark
+        ? AppColors.mutedForegroundDark
+        : AppColors.mutedForegroundLight;
 
     // ✅ Lógica unificada: mostrar formulario si mode != idle
     final showForm = formState.mode != TeamFormMode.idle;
@@ -163,17 +167,24 @@ class TeamsSection extends ConsumerWidget {
       showDialog<void>(
         context: context,
         builder: (dialogContext) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           title: const Text(
             'Eliminar Equipo',
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
-          content: const Text('¿Estás seguro? Esta acción no se puede deshacer.'),
+          content: const Text(
+            '¿Estás seguro? Esta acción no se puede deshacer.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
               ),
               child: const Text('Cancelar'),
             ),
@@ -185,7 +196,10 @@ class TeamsSection extends ConsumerWidget {
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.destructiveLight,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
               ),
               child: const Text('Eliminar'),
             ),

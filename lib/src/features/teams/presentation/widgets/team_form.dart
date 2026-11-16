@@ -19,8 +19,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AeroTeamForm extends ConsumerStatefulWidget {
-
-  const AeroTeamForm({super.key, this.initialTeam, this.onSuccess, this.onCancel});
+  const AeroTeamForm({
+    super.key,
+    this.initialTeam,
+    this.onSuccess,
+    this.onCancel,
+  });
   final TeamEntity? initialTeam;
   final VoidCallback? onSuccess;
   final VoidCallback? onCancel;
@@ -62,8 +66,9 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
 
     if (draft.competitorIds.isNotEmpty) {
       setState(() {
-        _selectedCompetitorIds..clear()
-        ..addAll(draft.competitorIds);
+        _selectedCompetitorIds
+          ..clear()
+          ..addAll(draft.competitorIds);
       });
     }
     setState(() => _selectedCoachId = draft.coachId);
@@ -78,7 +83,7 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
     super.dispose();
   }
 
-    void _showCompetitorsModal() {
+  void _showCompetitorsModal() {
     ref.invalidate(competitorSelectionProvider);
     unawaited(
       showModalBottomSheet<void>(
@@ -89,8 +94,9 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
           initialSelectedIds: _selectedCompetitorIds,
           onConfirm: (selectedIds) {
             setState(() {
-              _selectedCompetitorIds..clear()
-              ..addAll(selectedIds);
+              _selectedCompetitorIds
+                ..clear()
+                ..addAll(selectedIds);
             });
             if (context.mounted) Navigator.pop(context);
           },
@@ -146,7 +152,13 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
     final coaches = ref.read(coachesProvider).value ?? [];
     final selectedCoach = coaches.firstWhere(
       (c) => c.id == _selectedCoachId,
-      orElse: () => const CoachInfo(id: '', firstName: '', lastName: '', email: '', username: ''),
+      orElse: () => const CoachInfo(
+        id: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        username: '',
+      ),
     );
 
     try {
@@ -167,19 +179,25 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
         );
         await ref.read(teamFormProvider.notifier).updateTeam(updatedTeam);
       } else {
-        await ref.read(teamFormProvider.notifier).createTeam(
-          name: _nameCtrl.text.trim(),
-          university: _universityCtrl.text.trim(),
-          faculty: _facultyCtrl.text.trim(),
-          email: _emailCtrl.text.trim(),
-          coachId: _selectedCoachId,
-          coachName: selectedCoach.displayName,
-          competitorIds: _selectedCompetitorIds,
-        );
+        await ref
+            .read(teamFormProvider.notifier)
+            .createTeam(
+              name: _nameCtrl.text.trim(),
+              university: _universityCtrl.text.trim(),
+              faculty: _facultyCtrl.text.trim(),
+              email: _emailCtrl.text.trim(),
+              coachId: _selectedCoachId,
+              coachName: selectedCoach.displayName,
+              competitorIds: _selectedCompetitorIds,
+            );
       }
 
       if (!mounted) return;
-      _showSuccess(state.isEditing ? 'Equipo actualizado correctamente' : 'Equipo creado correctamente');
+      _showSuccess(
+        state.isEditing
+            ? 'Equipo actualizado correctamente'
+            : 'Equipo creado correctamente',
+      );
       widget.onSuccess?.call();
     } on Exception catch (e) {
       if (!mounted) return;
@@ -224,12 +242,19 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(state.isEditing ? 'Editar Equipo' : 'Adicionar Equipo', style: AppTextStyles.baseTextTheme.titleLarge),
+          Text(
+            state.isEditing ? 'Editar Equipo' : 'Adicionar Equipo',
+            style: AppTextStyles.baseTextTheme.titleLarge,
+          ),
           const SizedBox(height: 8),
           Text(
-            state.isEditing ? 'Actualice los datos del equipo' : 'Complete los datos del nuevo equipo',
+            state.isEditing
+                ? 'Actualice los datos del equipo'
+                : 'Complete los datos del nuevo equipo',
             style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-              color: isDark ? AppColors.mutedForegroundDark : Colors.grey.shade600,
+              color: isDark
+                  ? AppColors.mutedForegroundDark
+                  : Colors.grey.shade600,
             ),
           ),
           const SizedBox(height: 24),
@@ -253,7 +278,8 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
             field: AeroInput(
               controller: _universityCtrl,
               hintText: 'Nombre de la universidad',
-              validator: (v) => (v?.trim().isEmpty ?? true) ? 'Campo obligatorio' : null,
+              validator: (v) =>
+                  (v?.trim().isEmpty ?? true) ? 'Campo obligatorio' : null,
             ),
           ),
           const SizedBox(height: 16),
@@ -263,15 +289,27 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
             field: AeroInput(
               controller: _facultyCtrl,
               hintText: 'Nombre de la facultad',
-              validator: (v) => (v?.trim().isEmpty ?? true) ? 'Campo obligatorio' : null,
+              validator: (v) =>
+                  (v?.trim().isEmpty ?? true) ? 'Campo obligatorio' : null,
             ),
           ),
           const SizedBox(height: 24),
           Row(
             children: [
-              Text('Entrenador ', style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
+              Text(
+                'Entrenador ',
+                style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               const SizedBox(width: 4),
-              Text('*', style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(color: theme.colorScheme.error, fontWeight: FontWeight.w600)),
+              Text(
+                '*',
+                style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.error,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -279,7 +317,9 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
             loading: () => Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                border: Border.all(color: isDark ? AppColors.borderDark : Colors.grey.shade300),
+                border: Border.all(
+                  color: isDark ? AppColors.borderDark : Colors.grey.shade300,
+                ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Center(child: AeroSkeleton(height: 20)),
@@ -291,12 +331,23 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
                 borderRadius: BorderRadius.circular(12),
                 color: AppColors.destructiveLight.withValues(alpha: 0.1),
               ),
-              child: Text('Error: $err', style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(color: AppColors.destructiveLight)),
+              child: Text(
+                'Error: $err',
+                style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
+                  color: AppColors.destructiveLight,
+                ),
+              ),
             ),
             data: (coaches) {
               final selectedCoach = coaches.firstWhere(
                 (c) => c.id == _selectedCoachId,
-                orElse: () => const CoachInfo(id: '', firstName: '', lastName: '', username: '', email: ''),
+                orElse: () => const CoachInfo(
+                  id: '',
+                  firstName: '',
+                  lastName: '',
+                  username: '',
+                  email: '',
+                ),
               );
               return InkWell(
                 borderRadius: BorderRadius.circular(12),
@@ -305,23 +356,44 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: _selectedCoachId != null ? AppColors.fuchsia.withValues(alpha: 0.5) : (isDark ? AppColors.borderDark : Colors.grey.shade300),
+                      color: _selectedCoachId != null
+                          ? AppColors.fuchsia.withValues(alpha: 0.5)
+                          : (isDark
+                                ? AppColors.borderDark
+                                : Colors.grey.shade300),
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.person_outline, color: _selectedCoachId != null ? AppColors.fuchsia : AppColors.mutedForegroundDark),
+                      Icon(
+                        Icons.person_outline,
+                        color: _selectedCoachId != null
+                            ? AppColors.fuchsia
+                            : AppColors.mutedForegroundDark,
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          selectedCoach.displayName.isNotEmpty ? selectedCoach.displayName : 'Seleccionar entrenador',
-                          style: AppTextStyles.baseTextTheme.bodyLarge?.copyWith(
-                            color: selectedCoach.displayName.isNotEmpty ? (isDark ? AppColors.foregroundDark : AppColors.textOnWhite) : AppColors.mutedForegroundDark,
-                          ),
+                          selectedCoach.displayName.isNotEmpty
+                              ? selectedCoach.displayName
+                              : 'Seleccionar entrenador',
+                          style: AppTextStyles.baseTextTheme.bodyLarge
+                              ?.copyWith(
+                                color: selectedCoach.displayName.isNotEmpty
+                                    ? (isDark
+                                          ? AppColors.foregroundDark
+                                          : AppColors.textOnWhite)
+                                    : AppColors.mutedForegroundDark,
+                              ),
                         ),
                       ),
-                      Icon(Icons.chevron_right, color: isDark ? AppColors.borderDark : Colors.grey.shade400),
+                      Icon(
+                        Icons.chevron_right,
+                        color: isDark
+                            ? AppColors.borderDark
+                            : Colors.grey.shade400,
+                      ),
                     ],
                   ),
                 ),
@@ -338,25 +410,41 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
               keyboardType: TextInputType.emailAddress,
               validator: (v) {
                 if (v?.trim().isEmpty ?? true) return 'Campo obligatorio';
-                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v!)) return 'Email inválido';
+                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v!))
+                  return 'Email inválido';
                 return null;
               },
             ),
           ),
           const SizedBox(height: 24),
-          
+
           Row(
             children: [
-              Text('Competidores del equipo', style: AppTextStyles.baseTextTheme.bodyLarge?.copyWith(color: isDark ? AppColors.foregroundDark : AppColors.textOnWhite)),
+              Text(
+                'Competidores del equipo',
+                style: AppTextStyles.baseTextTheme.bodyLarge?.copyWith(
+                  color: isDark
+                      ? AppColors.foregroundDark
+                      : AppColors.textOnWhite,
+                ),
+              ),
               const SizedBox(width: 4),
-              Text('*', style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(color: theme.colorScheme.error, fontWeight: FontWeight.w600)),
+              Text(
+                '*',
+                style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.error,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 4),
           Text(
             '${_selectedCompetitorIds.length} seleccionado${_selectedCompetitorIds.length == 1 ? '' : 's'}',
             style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-              color: isDark ? AppColors.mutedForegroundDark : AppColors.textSecondary,
+              color: isDark
+                  ? AppColors.mutedForegroundDark
+                  : AppColors.textSecondary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -377,7 +465,13 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
                   children: _selectedCompetitorIds.map((id) {
                     final competitor = competitors.firstWhere(
                       (c) => c.id == id,
-                      orElse: () => CompetitorSelectionInfo(id: id, firstName: 'Competidor', lastName: 'Desconocido', nationalId: '', university: ''),
+                      orElse: () => CompetitorSelectionInfo(
+                        id: id,
+                        firstName: 'Competidor',
+                        lastName: 'Desconocido',
+                        nationalId: '',
+                        university: '',
+                      ),
                     );
                     return _buildCompetitorChip(competitor);
                   }).toList(),
@@ -389,11 +483,20 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
           if (state.isLoading) ...[
             const LinearProgressIndicator(color: AppColors.fuchsia),
             const SizedBox(height: 12),
-            Center(child: Text('Procesando...', style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(color: AppColors.fuchsia))),
+            Center(
+              child: Text(
+                'Procesando...',
+                style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
+                  color: AppColors.fuchsia,
+                ),
+              ),
+            ),
             const SizedBox(height: 12),
           ],
           AeroButton(
-            label: state.isLoading ? (state.isEditing ? 'Actualizando...' : 'Creando...') : (state.isEditing ? 'Actualizar Equipo' : 'Registrar Equipo'),
+            label: state.isLoading
+                ? (state.isEditing ? 'Actualizando...' : 'Creando...')
+                : (state.isEditing ? 'Actualizar Equipo' : 'Registrar Equipo'),
             onPressed: state.isLoading ? null : _handleSubmit,
             isLoading: state.isLoading,
             fullWidth: true,
@@ -428,14 +531,23 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(competitor.fullName, style: AppTextStyles.baseTextTheme.bodyLarge),
-                Text('CI: ${competitor.nationalId}', style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(color: AppColors.mutedForegroundDark)),
+                Text(
+                  competitor.fullName,
+                  style: AppTextStyles.baseTextTheme.bodyLarge,
+                ),
+                Text(
+                  'CI: ${competitor.nationalId}',
+                  style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
+                    color: AppColors.mutedForegroundDark,
+                  ),
+                ),
               ],
             ),
           ),
           IconButton(
             icon: const Icon(Icons.close, color: Colors.redAccent),
-            onPressed: () => setState(() => _selectedCompetitorIds.remove(competitor.id)),
+            onPressed: () =>
+                setState(() => _selectedCompetitorIds.remove(competitor.id)),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),

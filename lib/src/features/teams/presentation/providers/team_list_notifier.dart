@@ -29,7 +29,8 @@ class TeamListNotifier extends AsyncNotifier<List<TeamEntity>> {
     state = const AsyncValue<List<TeamEntity>>.loading();
     final result = await _repository.getAll();
     state = result.fold(
-      (failure) => AsyncValue<List<TeamEntity>>.error(failure, StackTrace.current),
+      (failure) =>
+          AsyncValue<List<TeamEntity>>.error(failure, StackTrace.current),
       (teams) => AsyncValue<List<TeamEntity>>.data(
         teams.where((t) => t.isActive).toList(),
       ),

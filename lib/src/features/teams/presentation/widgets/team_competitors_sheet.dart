@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TeamCompetitorsSheet extends ConsumerWidget {
-
   const TeamCompetitorsSheet({
-    required this.team, super.key,
+    required this.team,
+    super.key,
   });
   final TeamEntity team;
 
@@ -37,7 +37,9 @@ class TeamCompetitorsSheet extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
               gradient: AppColors.getGlowGradient(),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,7 +70,11 @@ class TeamCompetitorsSheet extends ConsumerWidget {
                 Material(
                   color: Colors.transparent,
                   child: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white, size: 24),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -105,9 +111,10 @@ class TeamCompetitorsSheet extends ConsumerWidget {
                       const SizedBox(height: 12),
                       Text(
                         'Error al cargar',
-                        style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
-                          color: AppColors.destructiveLight,
-                        ),
+                        style: AppTextStyles.baseTextTheme.titleMedium
+                            ?.copyWith(
+                              color: AppColors.destructiveLight,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -206,7 +213,9 @@ class TeamCompetitorsSheet extends ConsumerWidget {
                 Text(
                   'CI: ${competitor.nationalId}',
                   style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
-                    color: isDark ? AppColors.mutedForegroundDark : AppColors.mutedForegroundLight,
+                    color: isDark
+                        ? AppColors.mutedForegroundDark
+                        : AppColors.mutedForegroundLight,
                   ),
                 ),
               ],

@@ -9,9 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Modal independiente para selección de entrenador.
 /// Maneja su propio estado y emite el ID del coach seleccionado.
 class CoachSelectorModal extends ConsumerStatefulWidget {
-
   const CoachSelectorModal({
-    required this.initialCoachId, required this.onConfirm, super.key,
+    required this.initialCoachId,
+    required this.onConfirm,
+    super.key,
   });
   final String? initialCoachId;
   final void Function(String?) onConfirm;
@@ -31,7 +32,6 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
 
   @override
   Widget build(BuildContext context) {
-
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final coachesAsync = ref.watch(coachesProvider);
 
@@ -40,7 +40,9 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
         color: isDark ? AppColors.cardDark : Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.8,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -50,7 +52,9 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
               gradient: AppColors.getGlowGradient(),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,7 +73,11 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
                 Material(
                   color: Colors.transparent,
                   child: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white, size: 24),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -98,13 +106,18 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.error_outline, size: 48, color: AppColors.destructiveLight),
+                      const Icon(
+                        Icons.error_outline,
+                        size: 48,
+                        color: AppColors.destructiveLight,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         'Error al cargar',
-                        style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
-                          color: AppColors.destructiveLight,
-                        ),
+                        style: AppTextStyles.baseTextTheme.titleMedium
+                            ?.copyWith(
+                              color: AppColors.destructiveLight,
+                            ),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -128,18 +141,28 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.person_outline, size: 64, color: Colors.grey),
+                        Icon(
+                          Icons.person_outline,
+                          size: 64,
+                          color: Colors.grey,
+                        ),
                         SizedBox(height: 16),
                         Text('No hay entrenadores disponibles'),
                         SizedBox(height: 8),
-                        Text('Registra un entrenador primero', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        Text(
+                          'Registra un entrenador primero',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
                       ],
                     ),
                   );
                 }
 
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
                   itemCount: coaches.length,
                   itemBuilder: (context, index) {
                     final coach = coaches[index];
@@ -153,22 +176,35 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
                           backgroundColor: AppColors.fuchsia,
                           child: Text(
                             coach.initials.isNotEmpty ? coach.initials : '?',
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         title: Text(
                           coach.displayName,
-                          style: AppTextStyles.baseTextTheme.bodyLarge?.copyWith(
-                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                          ),
+                          style: AppTextStyles.baseTextTheme.bodyLarge
+                              ?.copyWith(
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ),
                         ),
                         subtitle: Text(
-                          coach.username.isNotEmpty ? '@${coach.username}' : 'Sin username', 
-                          style: AppTextStyles.baseTextTheme.bodySmall),
+                          coach.username.isNotEmpty
+                              ? '@${coach.username}'
+                              : 'Sin username',
+                          style: AppTextStyles.baseTextTheme.bodySmall,
+                        ),
                         trailing: isSelected
-                            ? const Icon(Icons.check_circle, color: AppColors.fuchsia)
+                            ? const Icon(
+                                Icons.check_circle,
+                                color: AppColors.fuchsia,
+                              )
                             : null,
-                        onTap: () => setState(() => _selectedCoachId = coach.id),
+                        onTap: () =>
+                            setState(() => _selectedCoachId = coach.id),
                       ),
                     );
                   },
@@ -182,7 +218,9 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: isDark ? AppColors.cardDark : Colors.grey.shade50,
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(24),
+              ),
               border: Border(
                 top: BorderSide(
                   color: isDark ? AppColors.borderDark : Colors.grey.shade200,
@@ -193,9 +231,9 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
               children: [
                 Expanded(
                   child: Text(
-                    _selectedCoachId != null 
-                      ? 'Entrenador seleccionado' 
-                      : 'Sin seleccionar',
+                    _selectedCoachId != null
+                        ? 'Entrenador seleccionado'
+                        : 'Sin seleccionar',
                     style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -206,8 +244,8 @@ class _CoachSelectorModalState extends ConsumerState<CoachSelectorModal> {
                   child: AeroButton(
                     label: 'Confirmar',
                     onPressed: _selectedCoachId == null
-                      ? null
-                      : () => widget.onConfirm(_selectedCoachId),
+                        ? null
+                        : () => widget.onConfirm(_selectedCoachId),
                   ),
                 ),
               ],

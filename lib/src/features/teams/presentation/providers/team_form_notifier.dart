@@ -5,15 +5,15 @@ import 'package:aero_score_app/src/features/teams/domain/repositories/team_repos
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Modo del formulario de equipo.
-enum TeamFormMode { 
+enum TeamFormMode {
   ///Modo inactivo, sin borrador ni operaciones en curso.
-  idle, 
+  idle,
 
   ///Modo para crear un nuevo equipo.
-  create, 
+  create,
 
   ///Modo para editar un equipo existente.
-  edit 
+  edit,
 }
 
 /// Estado del formulario de equipo.

@@ -9,10 +9,13 @@ import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_skeleto
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TeamListView extends ConsumerWidget { // ✅ Nuevo callback opcional
+class TeamListView extends ConsumerWidget {
+  // ✅ Nuevo callback opcional
 
   const TeamListView({
-    required this.onEdit, required this.onDelete, this.onAddTeam,
+    required this.onEdit,
+    required this.onDelete,
+    this.onAddTeam,
     super.key,
     this.onViewCompetitors,
   });
@@ -29,9 +32,8 @@ class TeamListView extends ConsumerWidget { // ✅ Nuevo callback opcional
     return state.when(
       loading: _buildSkeleton,
       error: (error, _) => _buildError(error.toString(), isDark),
-      data: (teams) => teams.isEmpty
-          ? _buildEmptyState(isDark)
-          : _buildList(teams, context),
+      data: (teams) =>
+          teams.isEmpty ? _buildEmptyState(isDark) : _buildList(teams, context),
     );
   }
 
@@ -41,14 +43,18 @@ class TeamListView extends ConsumerWidget { // ✅ Nuevo callback opcional
         3,
         (index) => const Padding(
           padding: EdgeInsets.only(bottom: 16),
-          child: AeroSkeleton(height: 280), // ✅ Altura aumentada para nuevo diseño
+          child: AeroSkeleton(
+            height: 280,
+          ), // ✅ Altura aumentada para nuevo diseño
         ),
       ),
     );
   }
 
   Widget _buildError(String error, bool isDark) {
-    final errorColor = isDark ? AppColors.destructiveDark : AppColors.destructiveLight;
+    final errorColor = isDark
+        ? AppColors.destructiveDark
+        : AppColors.destructiveLight;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -94,7 +100,9 @@ class TeamListView extends ConsumerWidget { // ✅ Nuevo callback opcional
           Text(
             'No hay equipos registrados',
             style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-              color: isDark ? AppColors.foregroundDark : AppColors.foregroundLight,
+              color: isDark
+                  ? AppColors.foregroundDark
+                  : AppColors.foregroundLight,
             ),
           ),
         ],
@@ -115,8 +123,12 @@ class TeamListView extends ConsumerWidget { // ✅ Nuevo callback opcional
   Widget _buildTeamCard(TeamEntity team, BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? AppColors.cardDark : Colors.white;
-    final textPrimary = isDark ? AppColors.foregroundDark : AppColors.foregroundLight;
-    final textSecondary = isDark ? AppColors.mutedForegroundDark : AppColors.mutedForegroundLight;
+    final textPrimary = isDark
+        ? AppColors.foregroundDark
+        : AppColors.foregroundLight;
+    final textSecondary = isDark
+        ? AppColors.mutedForegroundDark
+        : AppColors.mutedForegroundLight;
     final competitorCount = team.competitorIds.length;
 
     return Container(
@@ -161,10 +173,11 @@ class TeamListView extends ConsumerWidget { // ✅ Nuevo callback opcional
                     children: [
                       Text(
                         team.name,
-                        style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
-                          color: textPrimary,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: AppTextStyles.baseTextTheme.titleMedium
+                            ?.copyWith(
+                              color: textPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -181,7 +194,7 @@ class TeamListView extends ConsumerWidget { // ✅ Nuevo callback opcional
           ),
 
           const SizedBox(height: 8),
-          
+
           // ✅ SECCIÓN: Universidad
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -9,24 +9,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Modal independiente para selección de competidores.
 /// Maneja su propio estado de selección temporal y emite el resultado final.
 class CompetitorSelectorModal extends ConsumerStatefulWidget {
-
   const CompetitorSelectorModal({
-    required this.initialSelectedIds, required this.onConfirm, super.key,
+    required this.initialSelectedIds,
+    required this.onConfirm,
+    super.key,
   });
   final List<String> initialSelectedIds;
   final void Function(List<String>) onConfirm;
 
   @override
-  ConsumerState<CompetitorSelectorModal> createState() => _CompetitorSelectorModalState();
+  ConsumerState<CompetitorSelectorModal> createState() =>
+      _CompetitorSelectorModalState();
 }
 
-class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModal> {
+class _CompetitorSelectorModalState
+    extends ConsumerState<CompetitorSelectorModal> {
   late List<String> _tempSelectedIds;
 
   @override
   void initState() {
     super.initState();
-      _tempSelectedIds = List<String>.from(widget.initialSelectedIds);
+    _tempSelectedIds = List<String>.from(widget.initialSelectedIds);
   }
 
   void _toggleCompetitor(String id) {
@@ -49,7 +52,9 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
         color: isDark ? AppColors.cardDark : Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.8,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -59,7 +64,9 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
               gradient: AppColors.getGlowGradient(),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,7 +85,11 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
                 Material(
                   color: Colors.transparent,
                   child: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.white, size: 24),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -107,13 +118,18 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.error_outline, size: 48, color: AppColors.destructiveLight),
+                      const Icon(
+                        Icons.error_outline,
+                        size: 48,
+                        color: AppColors.destructiveLight,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         'Error al cargar',
-                        style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
-                          color: AppColors.destructiveLight,
-                        ),
+                        style: AppTextStyles.baseTextTheme.titleMedium
+                            ?.copyWith(
+                              color: AppColors.destructiveLight,
+                            ),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -124,7 +140,8 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
                       const SizedBox(height: 16),
                       AeroButton(
                         label: 'Reintentar',
-                        onPressed: () => ref.invalidate(competitorSelectionProvider),
+                        onPressed: () =>
+                            ref.invalidate(competitorSelectionProvider),
                         variant: AeroButtonVariant.outline,
                       ),
                     ],
@@ -137,18 +154,28 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.people_outline, size: 64, color: Colors.grey),
+                        Icon(
+                          Icons.people_outline,
+                          size: 64,
+                          color: Colors.grey,
+                        ),
                         SizedBox(height: 16),
                         Text('No hay competidores disponibles'),
                         SizedBox(height: 8),
-                        Text('Crea un competidor primero', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        Text(
+                          'Crea un competidor primero',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
                       ],
                     ),
                   );
                 }
 
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
                   itemCount: competitors.length,
                   itemBuilder: (context, index) {
                     final comp = competitors[index];
@@ -162,18 +189,30 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
                           backgroundColor: AppColors.fuchsia,
                           child: Text(
                             comp.initials.isNotEmpty ? comp.initials : '?',
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         title: Text(
                           comp.fullName,
-                          style: AppTextStyles.baseTextTheme.bodyLarge?.copyWith(
-                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                          ),
+                          style: AppTextStyles.baseTextTheme.bodyLarge
+                              ?.copyWith(
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ),
                         ),
-                        subtitle: Text('CI: ${comp.nationalId}', style: AppTextStyles.baseTextTheme.bodySmall),
+                        subtitle: Text(
+                          'CI: ${comp.nationalId}',
+                          style: AppTextStyles.baseTextTheme.bodySmall,
+                        ),
                         trailing: isSelected
-                            ? const Icon(Icons.check_circle, color: AppColors.fuchsia)
+                            ? const Icon(
+                                Icons.check_circle,
+                                color: AppColors.fuchsia,
+                              )
                             : null,
                         onTap: () => _toggleCompetitor(comp.id),
                       ),
@@ -189,7 +228,9 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: isDark ? AppColors.cardDark : Colors.grey.shade50,
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(24),
+              ),
               border: Border(
                 top: BorderSide(
                   color: isDark ? AppColors.borderDark : Colors.grey.shade200,
@@ -210,7 +251,9 @@ class _CompetitorSelectorModalState extends ConsumerState<CompetitorSelectorModa
                   width: 160,
                   child: AeroButton(
                     label: 'Confirmar',
-                    onPressed: _tempSelectedIds.isEmpty ? null : () => widget.onConfirm(_tempSelectedIds),
+                    onPressed: _tempSelectedIds.isEmpty
+                        ? null
+                        : () => widget.onConfirm(_tempSelectedIds),
                   ),
                 ),
               ],

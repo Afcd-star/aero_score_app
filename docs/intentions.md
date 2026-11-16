@@ -500,3 +500,43 @@ redireccionamiento del router manda al rol de juez a una ruta de
 puntuacion al iniciar sesion, entonces no hace falta escribir la URL,
 es el camino normal, y un juez que entre hoy cae en la pantalla a
 medias. Hasta leer el router no se afirma ni se descarta.
+## Hallazgos del enrutador, medidos sobre el archivo real
+
+Uno, defecto de inicio de sesion de tres roles de juez. El mapa de
+ruta por rol manda al juez de arte a /judge/artistry, al de dificultad
+a /judge/difficulty y al de ejecucion a /judge/execution, y esas tres
+rutas construyen la vista principal de puntuacion. El redireccionamiento
+posterior al login devuelve esa ruta cuando el usuario viene del login,
+asi que no hace falta escribir la URL: es el camino garantizado. La
+premisa de que la pantalla era practicamente inalcanzable queda
+falsada con evidencia.
+
+Dos, asimetria que confirma el diagnostico. El juez principal ya tiene
+una vista marcadora propia, mientras los otros tres jueces reciben la
+vista real a medio construir. Alguien sabia que puntuacion no estaba
+lista y protegio a uno de cuatro.
+
+Tres, mentira de estado al espectador. El mapa de rol manda al
+espectador a /pending-approval, que es la pantalla de cuenta en espera
+de aprobacion. Un espectador activo y aprobado ve que su cuenta esta
+pendiente, lo cual es falso. No existe vista de visitante ni de
+resultados, asi que el rol no tiene destino propio.
+
+Cuatro, marcadores crudos en el propio enrutador. Las rutas de
+entrenador y organizador construyen un texto centrado sin Scaffold ni
+catalogo, y el constructor de error usa boton crudo y color cableado.
+
+Cinco, recreacion del enrutador. El proveedor observa el estado de
+autenticacion y construye un enrutador nuevo en cada cambio, lo que
+reinicia la pila de navegacion. El patron correcto es un escucha de
+refresco, no recrear la instancia.
+
+Seis, diagnostico de rutas activo siempre. La bandera de registro de
+diagnostico esta en verdadero sin condicion de compilacion, asi que
+tambien registra en lanzamiento.
+
+Prioridad: el hallazgo uno es defecto de la compilacion actual, no
+bloqueo de lanzamiento, porque se alcanza por uso normal. Se corrige
+enrutando a los tres jueces a un marcador, igual que ya esta el
+principal, y se mantienen diferidos los 51 errores del modulo. Los
+hallazgos tres a seis se registran como deuda de core y de producto.

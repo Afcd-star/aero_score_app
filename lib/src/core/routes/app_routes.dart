@@ -16,12 +16,8 @@ import 'package:aero_score_app/src/'
 import 'package:aero_score_app/src/'
     'features/auth/presentation/views/unknown_role_view.dart';
 import 'package:aero_score_app/src/'
-    'features/scoring/domain/types.dart';
-import 'package:aero_score_app/src/'
     'features/scoring/presentation/'
     'views/judge_principal_placeholder_view.dart';
-import 'package:aero_score_app/src/'
-    'features/scoring/presentation/views/scoring_main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -94,25 +90,27 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/judge/difficulty',
-        builder: (_, _) => const ScoringMainView(
-          juryType: JuryType.difficulty,
+        builder: (_, _) => const JudgePrincipalPlaceholderView(
+          role: UserRole.judgeD,
         ),
       ),
       GoRoute(
         path: '/judge/execution',
-        builder: (_, _) => const ScoringMainView(
-          juryType: JuryType.execution,
+        builder: (_, _) => const JudgePrincipalPlaceholderView(
+          role: UserRole.judgeE,
         ),
       ),
       GoRoute(
         path: '/judge/artistry',
-        builder: (_, _) => const ScoringMainView(
-          juryType: JuryType.artistry,
+        builder: (_, _) => const JudgePrincipalPlaceholderView(
+          role: UserRole.judgeA,
         ),
       ),
       GoRoute(
         path: '/judge/principal',
-        builder: (_, _) => const JudgePrincipalPlaceholderView(),
+        builder: (_, _) => const JudgePrincipalPlaceholderView(
+          role: UserRole.judgeP,
+        ),
       ),
       GoRoute(
         path: '/coach',

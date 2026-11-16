@@ -1,11 +1,14 @@
 // lib/src/features/scoring/presentation/views/judge_principal_placeholder_view.dart
 import 'dart:async';
+
 import 'package:aero_score_app/src/'
     'core/theme/app_colors.dart';
 import 'package:aero_score_app/src/'
     'core/theme/text_styles.dart';
 import 'package:aero_score_app/src/'
     'features/auth/data/di/auth_providers.dart';
+import 'package:aero_score_app/src/'
+    'features/auth/domain/entities/user_role.dart';
 import 'package:aero_score_app/src/'
     'shared/presentation/widgets/aero/aero_background.dart';
 import 'package:aero_score_app/src/'
@@ -14,10 +17,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Vista provisional del módulo de juez principal.
+/// Vista provisional del módulo de juez.
+///
+/// Sirve a los cuatro roles de juez mientras el módulo de puntuación no
+/// está construido. El título sale de la etiqueta en español del catálogo
+/// de identidad, para no duplicar copia. Conserva la palabra principal en
+/// su nombre por historia, y está destinada a ser absorbida por el
+/// marcador de módulo del catálogo cuando se audite shared, así que no se
+/// invierte en renombrarla ahora.
 class JudgePrincipalPlaceholderView extends ConsumerWidget {
-  /// Crea la vista provisional.
-  const JudgePrincipalPlaceholderView({super.key});
+  /// Crea la vista provisional para el rol de juez indicado.
+  const JudgePrincipalPlaceholderView({required this.role, super.key});
+
+  /// Rol de juez al que se muestra el módulo pendiente.
+  final UserRole role;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +51,7 @@ class JudgePrincipalPlaceholderView extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Juez principal',
+                    role.label,
                     style: AppTextStyles.baseTextTheme.titleLarge
                         ?.copyWith(fontWeight: FontWeight.w700),
                     textAlign: TextAlign.center,
@@ -46,7 +59,7 @@ class JudgePrincipalPlaceholderView extends ConsumerWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Este módulo está en desarrollo. '
-                    'Aún no permite validar calificaciones.',
+                    'Aún no permite $_pendingAction.',
                     style: AppTextStyles.baseTextTheme.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -69,6 +82,13 @@ class JudgePrincipalPlaceholderView extends ConsumerWidget {
       ),
     );
   }
+
+  /// Acción que el rol todavía no puede ejecutar, con el vocabulario de
+  /// la federación.
+  String get _pendingAction => switch (role) {
+    UserRole.judgeP => 'validar puntuaciones',
+    _ => 'puntuar',
+  };
 }
 
 Future<void> _signOut(BuildContext context, WidgetRef ref) async {

@@ -465,3 +465,38 @@ conversiones estrictas son error de analisis y ademas riesgo de fallo
 en ejecucion si el backend entrega otro tipo. Los de shared estan en el
 catalogo que consumen todas las features, asi que su arreglo tiene el
 mayor apalancamiento por error corregido.
+## Estado de puntuacion: en construccion, no codigo muerto
+
+El modulo tiene codigo real: tres modelos de datos, repositorio,
+notifier, vista principal y dos widgets en shared. El inventario mide
+51 errores, 182 de informacion y una advertencia. No es un modulo
+vacio, es un modulo a medio construir de la epoca sin control de
+versiones. Por eso la regla de eliminar codigo muerto NO se le aplica:
+su codigo se reaudita y se reescribe en su frente, no se borra.
+
+Decision de orden confirmada por el autor y aceptada: sus errores no
+se arreglan ahora. Razones. Uno, no hay despliegue, asi que no hay
+riesgo vivo de caida. Dos, el modulo se va a construir de verdad, asi
+que sanear sus modelos ahora es retrabajo probable sobre un contrato
+que puede cambiar. Tres, el saneamiento de lecturas es mecanico y se
+hace mejor con el esquema real delante, igual que se hizo con equipos
+contra el esquema vivo y no contra las migraciones viejas.
+
+## Bloqueo de lanzamiento: rutas hacia pantalla sin construir
+
+El router importa la vista principal de puntuacion y la construye en
+tres constructores de ruta. Eso la hace alcanzable para el compilador
+y direccionable por URL en web, aunque ningun menu lleve a ella.
+Alcanzabilidad de compilacion, de navegacion y de direccion directa
+son tres cosas distintas y las tres son verdad a la vez.
+
+Precondicion de lanzamiento: antes de cualquier despliegue, o la
+pantalla esta construida y probada, o las rutas se retiran o se
+protegen por rol. No se despliega una ruta que renderiza una pantalla
+a medio hacer cuyo modelo de datos falla con datos reales.
+
+Verificacion pendiente que puede cambiar la prioridad: si el
+redireccionamiento del router manda al rol de juez a una ruta de
+puntuacion al iniciar sesion, entonces no hace falta escribir la URL,
+es el camino normal, y un juez que entre hoy cae en la pantalla a
+medias. Hasta leer el router no se afirma ni se descarta.

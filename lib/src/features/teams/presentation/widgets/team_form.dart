@@ -18,15 +18,27 @@ import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_skeleto
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Formulario de creación y edición de un equipo.
+///
+/// Construye la entidad desde los controles y delega el guardado en el
+/// notificador de formulario. La validación de negocio vive en la
+/// entidad de dominio, no aquí. La recogida de planilla se retiró
+/// porque el esquema vivo no tiene campo que la persista, fase
+/// obligatoria registrada.
 class AeroTeamForm extends ConsumerStatefulWidget {
+  /// Crea el formulario con el equipo opcional y las funciones de
+  /// éxito y cancelación.
   const AeroTeamForm({
     super.key,
     this.initialTeam,
     this.onSuccess,
     this.onCancel,
   });
+  /// Equipo en edición, nulo cuando el formulario crea uno nuevo.
   final TeamEntity? initialTeam;
+  /// Función que se invoca al completarse un guardado exitoso.
   final VoidCallback? onSuccess;
+  /// Función que se invoca al cancelar la edición.
   final VoidCallback? onCancel;
 
   @override
@@ -410,8 +422,9 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
               keyboardType: TextInputType.emailAddress,
               validator: (v) {
                 if (v?.trim().isEmpty ?? true) return 'Campo obligatorio';
-                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v!))
+                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v!)) {
                   return 'Email inválido';
+                }
                 return null;
               },
             ),
@@ -440,7 +453,8 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
           ),
           const SizedBox(height: 4),
           Text(
-            '${_selectedCompetitorIds.length} seleccionado${_selectedCompetitorIds.length == 1 ? '' : 's'}',
+            '${_selectedCompetitorIds.length} '
+            'seleccionado${_selectedCompetitorIds.length == 1 ? '' : 's'}',
             style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
               color: isDark
                   ? AppColors.mutedForegroundDark

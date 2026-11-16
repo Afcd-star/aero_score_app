@@ -9,12 +9,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Modal independiente para selección de competidores.
 /// Maneja su propio estado de selección temporal y emite el resultado final.
 class CompetitorSelectorModal extends ConsumerStatefulWidget {
+  /// Crea el modal con la selección inicial y la función de
+  /// confirmación.
   const CompetitorSelectorModal({
     required this.initialSelectedIds,
     required this.onConfirm,
     super.key,
   });
+  /// Identificadores de competidores ya seleccionados al abrir.
   final List<String> initialSelectedIds;
+  /// Función que emite la lista confirmada al cerrar el modal.
   final void Function(List<String>) onConfirm;
 
   @override

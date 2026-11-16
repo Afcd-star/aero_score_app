@@ -6,11 +6,20 @@ import 'package:aero_score_app/src/features/teams/domain/entities/team_entity.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Hoja modal que muestra el roster de competidores de un equipo.
+///
+/// Lee el roster desde el proveedor de selección de competidores y
+/// filtra por los identificadores del equipo recibido. Su contenido
+/// visual usa widgets crudos de Material, deuda de catálogo registrada
+/// para el frente de shared.
 class TeamCompetitorsSheet extends ConsumerWidget {
+  /// Crea la hoja para el equipo indicado.
   const TeamCompetitorsSheet({
     required this.team,
     super.key,
   });
+  
+  /// Equipo cuyo roster se muestra en la hoja.
   final TeamEntity team;
 
   @override
@@ -19,7 +28,6 @@ class TeamCompetitorsSheet extends ConsumerWidget {
     final competitorsAsync = ref.watch(competitorSelectionProvider);
     final competitorIds = team.competitorIds;
 
-    //TODO: Revisar si esto esta usando los widgets perzonalizados
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.cardDark : Colors.white,

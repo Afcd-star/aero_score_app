@@ -9,12 +9,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Modal independiente para selección de entrenador.
 /// Maneja su propio estado y emite el ID del coach seleccionado.
 class CoachSelectorModal extends ConsumerStatefulWidget {
+  /// Crea el modal con el identificador inicial y la función de
+  /// confirmación.
   const CoachSelectorModal({
     required this.initialCoachId,
     required this.onConfirm,
     super.key,
   });
+  /// Identificador del entrenador preseleccionado, nulo si no hay.
   final String? initialCoachId;
+  /// Función que emite el identificador confirmado al cerrar el modal.
   final void Function(String?) onConfirm;
 
   @override

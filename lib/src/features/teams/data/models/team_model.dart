@@ -50,8 +50,9 @@ class TeamModel {
       coachName: expandedCoachName,
       email: (map['email'] as String?) ?? '',
       status: (map['status'] as String?) ?? 'active',
-      competitorIds:
-          competitorRaw is List ? List<String>.from(competitorRaw) : const <String>[],
+      competitorIds: competitorRaw is List
+          ? List<String>.from(competitorRaw)
+          : const <String>[],
       created: createdStr != null ? DateTime.tryParse(createdStr) : null,
       updated: updatedStr != null ? DateTime.tryParse(updatedStr) : null,
     );

@@ -1,8 +1,13 @@
-// lib/src/features/admin/domain/repositories/team_repository.dart
+// lib/src/features/teams/domain/repositories/team_repository.dart
 import 'package:aero_score_app/src/core/error/failures.dart';
 import 'package:aero_score_app/src/features/teams/domain/entities/team_entity.dart';
 import 'package:either_dart/either.dart';
 
+/// Contrato de acceso a datos de la funcionalidad de equipos.
+///
+/// Define las operaciones de consulta, creación, actualización,
+/// borrado lógico y agregación que la capa de datos implementa contra
+/// PocketBase, devolviendo siempre un resultado tipado con Either.
 abstract class TeamRepository {
   /// Obtener todos los equipos con filtros opcionales
   Future<Either<Failure, List<TeamEntity>>> getAll({

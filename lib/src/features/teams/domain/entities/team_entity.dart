@@ -1,4 +1,5 @@
 // lib/src/features/teams/domain/entities/team_entity.dart
+import 'package:meta/meta.dart';
 
 /// Entidad de dominio de un equipo.
 ///
@@ -6,6 +7,11 @@
 /// desnormalizada que llega por la expansion de la relacion y puede ser
 /// nula, por eso la validacion de negocio exige `coachId`, la relacion
 /// real, y nunca `coachName`.
+///
+/// La anotacion de inmutabilidad es superficial: exige campos finales
+/// pero no congela el contenido de la lista del roster. El cierre
+/// profundo es la migracion a Freezed, registrada como deuda.
+@immutable
 class TeamEntity {
   /// Crea el equipo con sus campos obligatorios y opcionales.
   const TeamEntity({
@@ -152,12 +158,12 @@ class TeamEntity {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        name,
-        university,
-        faculty,
-        coachId,
-        status,
-        Object.hashAll(competitorIds),
-      );
+    id,
+    name,
+    university,
+    faculty,
+    coachId,
+    status,
+    Object.hashAll(competitorIds),
+  );
 }

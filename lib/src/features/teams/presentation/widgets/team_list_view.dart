@@ -9,9 +9,13 @@ import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_skeleto
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Lista de equipos activos con tarjetas de detalle y acciones.
+///
+/// Observa el notificador de lista y renderiza estado de carga, error,
+/// vacío o datos. Los estados de carga y vacío usan widgets crudos,
+/// deuda de catálogo registrada para shared.
 class TeamListView extends ConsumerWidget {
-  // ✅ Nuevo callback opcional
-
+  /// Crea la lista con las acciones de edición, borrado y consulta.
   const TeamListView({
     required this.onEdit,
     required this.onDelete,
@@ -19,9 +23,13 @@ class TeamListView extends ConsumerWidget {
     super.key,
     this.onViewCompetitors,
   });
+  /// Acción opcional para añadir equipo desde la propia lista.
   final VoidCallback? onAddTeam;
+  /// Acción que abre la edición del equipo indicado.
   final void Function(TeamEntity) onEdit;
+  /// Acción que solicita el borrado lógico del identificador dado.
   final void Function(String) onDelete;
+  /// Acción opcional que abre la hoja del roster del equipo.
   final void Function(TeamEntity)? onViewCompetitors;
 
   @override
@@ -181,7 +189,8 @@ class TeamListView extends ConsumerWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '$competitorCount competidor${competitorCount == 1 ? '' : 'es'}',
+                        '$competitorCount '
+                        'competidor${competitorCount == 1 ? '' : 'es'}',
                         style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
                           color: textSecondary,
                         ),

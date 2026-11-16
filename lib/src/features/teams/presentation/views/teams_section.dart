@@ -14,7 +14,11 @@ import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Sección del panel que alterna entre la lista de equipos y el
+/// formulario de creación o edición, según el modo del notificador
+/// de formulario.
 class TeamsSection extends ConsumerWidget {
+  /// Crea la sección sin parámetros propios.
   const TeamsSection({super.key});
 
   @override

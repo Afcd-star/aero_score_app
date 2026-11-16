@@ -77,8 +77,17 @@ Arbol de lib:
 - Eventos: saneada en sesiones anteriores, con dos bloqueos de
   compilacion resueltos en el desbloqueo minimo. Deuda de cabecera y de
   lints internos registrada.
-- Equipos: pendiente de auditoria. No ha entrado en el ciclo archivo por
-  archivo. Arrastra la mayor deuda de compilacion restante.
+- Equipos: CERRADA en 0.2.0. Segunda feature bajo checklist completo.
+  Evidencia: cero hallazgos del analizador en la feature y sus pruebas,
+  veintinueve casos nuevos hasta cincuenta en el proyecto, documentacion
+  publica completa, ochenta columnas, salto final y pase visual en claro
+  y oscuro. Orden fijo de capas ejecutado: dominio con validacion
+  unificada e igualdad sobre campos de contenido, datos con modelo
+  tipado contra el esquema vivo y escape de filtros, inyeccion
+  documentada, presentacion con borrado logico coherente y tipos
+  declarados. Incrementos funcionales registrados como frentes propios:
+  disponibilidad de asignaciones y coherencia de modalidad del roster.
+  La planilla es fase obligatoria con precondiciones de las tres capas.
 - Calificacion: pendiente de auditoria. No ha entrado en el ciclo.
 - Administracion: CERRADA. Primer hito bajo checklist completo. Evidencia:
   cero avisos en el perimetro de la feature, veintiun pruebas de unidad

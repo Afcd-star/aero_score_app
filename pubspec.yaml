@@ -1,7 +1,7 @@
 name: aero_score_app
 description: "Evaluación competitiva de Gimnasia Aeróbica Deportiva."
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.2.0+2
 
 environment:
   sdk: ^3.11.5

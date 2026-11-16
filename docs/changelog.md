@@ -3,6 +3,46 @@
 Formato basado en Keep a Changelog y SemVer. Previo a 1.0 se usa
 0.MINOR.PATCH, con minor por cierre de funcionalidad.
 
+## 0.2.0 - Equipos cerrada
+
+### Anadido
+- Utilitario de escape de filtros de PocketBase en core, con siete
+  pruebas, adoptado por equipos y pendiente en competidores y eventos.
+- Suite de pruebas de equipos: veintidos casos de entidad y de los
+  notifiers de lista y formulario, con doble del contrato hecho a mano.
+- Anotacion de inmutabilidad en la entidad, con meta declarado como
+  dependencia directa del manifiesto.
+- Registro de casos borde de disponibilidad, correccion de vocabulario
+  a puntuacion y orden de frentes por direccion de dependencia.
+
+### Cambiado
+- Validacion de negocio unificada en la entidad, que exige la relacion
+  del entrenador y al menos un competidor.
+- Igualdad sobre campos de contenido, excluyendo la proyeccion del
+  entrenador y las marcas de tiempo.
+- Modelo tipado contra el esquema vivo, con marca de actualizacion y
+  sin enviar campos que no son columnas.
+- Repositorio sin comprobacion de rol en cliente, con clausulas de
+  excepcion tipadas y valores de filtro escapados.
+- Borrado logico coherente: la lista filtra inactivos en carga y
+  recarga, asi que un equipo borrado no reaparece.
+- Notifier de formulario sin error fantasma entre reintentos.
+- Confirmacion del selector de entrenador deshabilitada sin seleccion.
+- Forma completa de la feature: documentacion publica, ochenta columnas
+  y formateador canonico.
+
+### Corregido
+- Inyeccion de filtro por interpolacion sin escapar en las consultas.
+- Etiqueta de identificacion del selector de competidores, en ingles.
+- Cabecera del contrato, que apuntaba a administracion.
+- Trazas de depuracion con emojis en el selector de entrenador.
+
+### Eliminado
+- Selector de planilla, que recogia un archivo sin campo donde
+  persistirlo. La funcionalidad vuelve como fase obligatoria.
+- Comprobacion redundante de rol en el cliente, que el server ya
+  garantiza por reglas de coleccion.
+- Chequeos de negocio duplicados en el formulario.
 ## 0.1.0 - Administracion cerrada
 
 ### Anadido

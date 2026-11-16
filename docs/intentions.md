@@ -401,3 +401,67 @@ de la reclasificacion independiente del informe a produccion, que el
 autor ya decidio como commit propio. No se toca el README aqui porque
 es documentacion de producto con naturaleza propia y la reclasificacion
 la aborda en bloque.
+
+## Casos borde del frente de disponibilidad de asignaciones
+
+Registrados antes de implementarlo. Uno, al editar un equipo hay que
+eximir su propio roster de la consulta de ocupados, o el selector
+esconderia al entrenador y a los competidores que ese equipo ya tiene
+y el usuario no podria conservar su seleccion. Se resuelve con un
+parametro de exclusion por identificador de equipo en la consulta, no
+filtrando en el modal. Dos, los rosters de equipos inactivos deben
+quedar libres, asi que la consulta de ocupados filtra por estado
+activo; si no, un borrado logico secuestraria competidores para
+siempre. Tres, la copia del estado vacio debe distinguir entre no hay
+registrados y todos estan asignados, porque el texto actual dice que
+se registre un entrenador primero y eso seria mentira cuando la causa
+real es la ocupacion. Ese cambio de copia toca la deuda de
+centralizacion de textos ya registrada.
+
+## Correccion de vocabulario de dominio
+
+El modulo se llama puntuacion, no calificacion. Segun la FIG los
+jueces puntuan a los competidores, y ese es el termino del negocio.
+Los identificadores en ingles del codigo ya son correctos. La copia
+de interfaz tiene al menos una cadena con el termino equivocado, la
+descripcion del rol de juez principal, que dice que valida
+calificaciones. Se corrige en el frente de lenguaje junto con el
+resto de la copia, y los bloques de deuda que hablaban de
+calificacion se leen como puntuacion.
+
+## Orden de frentes por direccion de dependencia
+
+Decision del autor, aceptada. Puntuacion se construye al final, no
+ despues de equipos, porque consume identidad de juez, roster,
+categoria y evento; construir al consumidor antes que sus
+dependencias obliga a reescribir su capa de consumo cada vez que algo
+de abajo se mueve. Primero se cierran los frentes que pueden cambiar
+contratos de otros modulos, con shared antes de eventos para que
+eventos adopte el catalogo final una sola vez. El catalogo de shared
+se deriva de un inventario de usos crudos en todas las features, no
+de auditar cada feature a fondo. La vista de visitante consume la
+salida de puntuacion y va despues de el.
+
+## Cierre de equipos en 0.2.0 e inventario global medido
+
+Equipos cerrada segun checklist de codigo. Reconciliacion de
+inventario: la cabecera con ruta vieja del repositorio ya estaba
+corregida como efecto del reescrito del endurecimiento, asi que solo
+la del contrato se corrigio en el pase de forma. El bloque que hablaba
+de dos cabeceras de equipos queda resuelto.
+
+Inventario global en hallazgos del analizador al cierre: administracion
+y equipos en cero. Autenticacion 44 de informacion. Competidores 86 de
+informacion. Core 141 de informacion y una advertencia. Eventos 11
+errores, 209 de informacion y dos advertencias. Puntuacion 51 errores,
+182 de informacion y una advertencia. Shared 5 errores y 261 de
+informacion. Total 67 errores, cuatro advertencias y 923 de
+informacion.
+
+Lectura: los errores de eventos estan solo en presentacion y son las
+mismas clases corregidas en equipos. Los de puntuacion se concentran en
+tres modelos de datos con lecturas implicitas de dinamico, que bajo
+conversiones estrictas son error de analisis y ademas riesgo de fallo
+en ejecucion si el backend entrega otro tipo. Los de shared estan en el
+catalogo que consumen todas las features, asi que su arreglo tiene el
+mayor apalancamiento por error corregido.

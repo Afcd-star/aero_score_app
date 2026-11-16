@@ -23,6 +23,7 @@ dependencies:
   google_fonts: ^8.1.0 # Tipografías
   intl: ^0.20.2 # Localización e formatos
   json_annotation: ^4.9.0 # Serialización JSON
+  meta: ^1.18.0 # Anotaciones de inmutabilidad
   pocketbase: ^0.24.0 # Backend
   riverpod_annotation: ^3.0.3 # Anotaciones de estado
   shared_preferences: ^2.3.3 # Preferencias locales

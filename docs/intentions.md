@@ -331,3 +331,73 @@ Precondicion de presentacion, una vez fijadas las reglas y expuesta la
 consulta, los dos modales filtran la lista que renderizan por los
 identificadores ocupados, con el estado vacio del catalogo cuando no
 queda nadie, no un empty state improvisado.
+
+## Reglas de dominio de las asignaciones de equipo, cerradas
+
+Entrenador por equipo. Cerrado con evidencia del esquema vivo: la
+relacion del entrenador es individual a la coleccion de usuarios, o
+sea un entrenador dirige un solo equipo. Filtrar los identificadores
+de entrenador ya ocupados es correcto y no esconde entrenadores
+validos.
+
+Competidor por equipo. Cerrado por declaracion del autor: un
+competidor pertenece a un solo equipo activo. Filtrar los ocupados es
+correcto.
+
+## Deuda ampliada: coherencia de modalidad del roster, no solo filtrar
+
+ocupados. Destapada por el autor al revisar el filtrado. El problema
+real no es quitar a quienes ya estan en un equipo, es que el roster
+debe cuadrar con la modalidad del evento. Las modalidades admiten
+individuales masculinos, individuales femeninos, duo mixto, trio y
+quinteto, y cada una exige un numero y un reparto de sexos concreto:
+un duo mixto pide dos competidores de sexos distintos, un quinteto
+pide cinco. Si el selector solo filtrara ocupados, un usuario podria
+armar un duo mixto con una sola persona o con dos del mismo sexo, y
+los jueces verian un roster incoherente con la categoria que califican.
+
+Hueco de dominio que lo bloquea. La entidad de equipo guarda una lista
+plana de identificadores de competidor sin categoria ni modalidad, asi
+que hoy no hay donde expresar la regla. Precondicion antes de tocar el
+selector: decidir donde vive la modalidad, si la impone el evento, la
+declara el equipo o la hereda de los competidores, y como se valida el
+cupo y el reparto de sexos del roster contra esa modalidad. Eso es
+trabajo de dominio, datos y presentacion a la vez, toca evento,
+competidor y equipo, y no cabe en el cierre de equipos. Se registra
+como frente propio de reglas de roster, no como linea suelta del
+filtrado.
+
+## Deuda de producto: frontend funcional de juez y visitante en paniales
+
+Revelada por el autor. Las pantallas de juez, que califican en vivo,
+y de visitante, que ven resultados, son el frontend funcional real de
+la app y estan tocadas muy superficialmente, no construidas. Esto
+reencuadra el frente de calificacion: no es deuda de forma de una
+feature existente, es funcionalidad no construida, y la vista de
+visitante ni siquiera tiene frente abierto. Precondicion: auditar
+calificacion y la vista de visitante como construccion, no como
+limpieza, con el mismo orden de capas y el gate de pruebas.
+
+Consecuencia para el reordenamiento de frentes de produccion. El autor
+plantea posponerlo hasta cerrar la fase inicial, y se acepta, porque
+subir permiso de red de Android, sincronizacion sin conexion y
+seguridad por rol a la cima no tiene sentido si no hay juez que
+consuma el permiso ni visitante que vea el resultado protegido. La
+fase inicial incluye construir calificacion y la vista de visitante de
+verdad, no solo sanear las features de gestion. El reordenamiento se
+plantea cuando esas pantallas existan.
+
+## Deuda de docs: README publico desalineado con el estado real
+
+Destapada al revisar los documentos de referencia. El README del
+repositorio, que es la pagina publica de GitHub, repite las mentiras
+del informe viejo: declara administracion en revision y equipos
+pendientes cuando ambos ya no lo estan, e impone anotaciones de
+Riverpod y dobles con mocktail que el codigo contradice por decision
+registrada en el informe unificado. Un README publico que miente es
+peor que un doc interno que miente, porque lo lee cualquier interesado
+de produccion. Precondicion: alinearlo con el informe unificado dentro
+de la reclasificacion independiente del informe a produccion, que el
+autor ya decidio como commit propio. No se toca el README aqui porque
+es documentacion de producto con naturaleza propia y la reclasificacion
+la aborda en bloque.

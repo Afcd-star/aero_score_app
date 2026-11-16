@@ -367,7 +367,7 @@ competidor y equipo, y no cabe en el cierre de equipos. Se registra
 como frente propio de reglas de roster, no como linea suelta del
 filtrado.
 
-## Deuda de producto: frontend funcional de juez y visitante en paniales
+## Deuda de producto: frontend funcional de juez y visitante en panales
 
 Revelada por el autor. Las pantallas de juez, que califican en vivo,
 y de visitante, que ven resultados, son el frontend funcional real de

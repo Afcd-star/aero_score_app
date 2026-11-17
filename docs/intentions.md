@@ -597,3 +597,45 @@ informacion.
 Nota de naming. El widget actual se llama gestion de roles, pero pasa a
 gestionar usuarios, roles y estados. Su nombre queda corto y se evalua
 renombrarlo en este frente, no antes.
+## Errata de historia: registro mezclado en un commit de arreglo
+
+El commit 8cb9270 se publico con tres archivos cuando su mensaje declara
+dos. Ademas del notificador y la vista de cuenta pendiente, arrastro este
+documento con el registro del frente de gestion de usuarios como pantalla
+propia, que estaba preparado en el indice desde el turno anterior y no
+tenia commit propio.
+
+Causa raiz. El lead entrego un bloque con preparacion del documento sin
+su commit en el mismo bloque, dejando residuo preparado en el indice. Y la
+guardia del commit siguiente describia el residuo como sin preparar,
+cuando el riesgo real era que ya estuviera preparado. Es la segunda vez
+del mismo patron: la primera fue el lote de documentaciones de equipos,
+que se aplico sin commit y luego inflo la guardia de cinco a diez rutas.
+
+Decision. No se reescribe la historia. El commit ya esta publicado y la
+regla de no reescribir commits publicados es de seguridad, mas fuerte que
+la de atomicidad, que es de higiene. El codigo del commit es correcto y
+esta verificado, asi que revertirlo para rehacerlo en dos generaria ruido
+sobre codigo bueno. Se acepta la impureza y se anota aqui.
+
+Contramedida mecanica adoptada. Los commits pasan a limitarse por rutas
+en la propia orden de commit, con separador de rutas y la lista explicita
+despues. Esa forma commitea solo el contenido de las rutas nombradas e
+ignora lo preparado en el indice para cualquier otra ruta, asi que el
+residuo ya no puede colarse. La guardia de estado se mantiene como
+verificacion, no como unica defensa. Salvedad: esa forma toma el contenido
+del arbol de trabajo de las rutas nombradas, asi que no se usa con
+preparacion parcial de un mismo archivo.
+
+Segunda contramedida de proceso. El lead no entrega preparacion de
+archivos sin su commit en el mismo bloque. Si un documento se prepara para
+un commit futuro, se entrega el bloque completo o no se prepara.
+
+## Nota de color semantico del estado de cuenta
+
+En la tarjeta de usuario el estado activo se pinta con el color primario
+del esquema y el pendiente con el terciario, que en este tema resulta
+verdoso. El resultado es que pendiente parece exito y activo parece
+neutro, semantica invertida por accidente del esquema. Se corrige en el
+frente de tema con roles semanticos de exito y advertencia, no con
+colores cableados.

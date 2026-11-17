@@ -171,12 +171,9 @@ class PendingApprovalView extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                TextButton.icon(
+                                TextButton.icon(
                   onPressed: () {
-                    // Actualizar estado de la cuenta
-                    unawaited(
-                      ref.read(authProvider.notifier).login('', ''),
-                    );
+                    unawaited(_refreshStatus(context, ref));
                   },
                   icon: const Icon(Icons.refresh),
                   label: const Text('Verificar Estado'),
@@ -220,4 +217,20 @@ class PendingApprovalView extends ConsumerWidget {
       ),
     );
   }
+}
+
+Future<void> _refreshStatus(BuildContext context, WidgetRef ref) async {
+  final messenger = ScaffoldMessenger.of(context);
+  final error = await ref
+      .read(authProvider.notifier)
+      .refreshAccountStatus();
+  if (!context.mounted) return;
+  messenger.showSnackBar(
+    SnackBar(
+      content: Text(
+        error ?? 'Tu cuenta sigue pendiente de aprobación.',
+      ),
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
 }

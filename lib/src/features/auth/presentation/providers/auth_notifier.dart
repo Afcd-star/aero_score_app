@@ -169,6 +169,34 @@ class AuthNotifier extends Notifier<AuthState> {
     state = const AuthInitial();
   }
 
+  /// Reconsulta la cuenta para detectar si ya fue aprobada.
+  ///
+  /// Devuelve null cuando el estado se actualizó, o el mensaje del fallo
+  /// cuando la consulta no pudo completarse. No emite estado de carga ni
+  /// de error a propósito: el enrutador manda ambos al inicio de sesión,
+  /// así que emitirlos expulsaría al usuario de la pantalla de espera.
+  /// Al tener éxito deja el estado autenticado con los datos frescos, y
+  /// es el enrutador quien decide el destino según el estado de cuenta.
+  Future<String?> refreshAccountStatus() async {
+    final currentUsername = switch (state) {
+      AuthSuccess(:final user) => user.username,
+      AuthPendingApproval(:final username) => username,
+      _ => null,
+    };
+    if (currentUsername == null || currentUsername.isEmpty) {
+      return 'No hay una cuenta que consultar.';
+    }
+
+    final result = await _repository.getUserInfo(currentUsername);
+    return result.fold(
+      (failure) => failure.message,
+      (user) {
+        state = AuthSuccess(user);
+        return null;
+      },
+    );
+  }
+
   Future<void> _restoreSession() async {
     debugPrint(
       '🔄 [Auth] Intentando restaurar sesión...',

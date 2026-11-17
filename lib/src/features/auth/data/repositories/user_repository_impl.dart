@@ -1,5 +1,6 @@
 // lib/src/features/auth/data/repositories/user_repository_impl.dart
 import 'package:aero_score_app/src/core/error/failures.dart';
+import 'package:aero_score_app/src/core/utils/pocketbase_filter.dart';
 import 'package:aero_score_app/src/features/auth/'
     'data/models/user_model.dart';
 import 'package:aero_score_app/src/features/auth/'
@@ -21,18 +22,16 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, List<UserEntity>>> getAllUsers({
     String? search}) async {
     try {
-      final filter = search != null && search.isNotEmpty
-          ? '''
-            (username ~ "$search") ||
-            (email ~ "$search") ||
-            (firstName ~ "$search") ||
-            (lastName ~ "$search")
-            '''
-          : '';
+      String? filter;
+      if (search != null && search.isNotEmpty) {
+        final s = escapeFilterValue(search);
+        filter = '(username ~ "$s") || (email ~ "$s") || '
+            '(firstName ~ "$s") || (lastName ~ "$s")';
+      }
 
       final records = await _client.collection('users').getFullList(
         sort: '-created',
-        filter: filter.isEmpty ? null : filter,
+        filter: filter,
       );
 
       final users = records

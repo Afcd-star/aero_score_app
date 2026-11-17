@@ -171,7 +171,7 @@ class PendingApprovalView extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                                TextButton.icon(
+                TextButton.icon(
                   onPressed: () {
                     unawaited(_refreshStatus(context, ref));
                   },
@@ -221,15 +221,21 @@ class PendingApprovalView extends ConsumerWidget {
 
 Future<void> _refreshStatus(BuildContext context, WidgetRef ref) async {
   final messenger = ScaffoldMessenger.of(context);
-  final error = await ref
+  final outcome = await ref
       .read(authProvider.notifier)
       .refreshAccountStatus();
-  if (!context.mounted) return;
+  final error = outcome.error;
+  final String message;
+  if (error != null) {
+    message = error;
+  } else if (outcome.approved) {
+    message = 'Cuenta aprobada. Entrando al módulo.';
+  } else {
+    message = 'Tu cuenta sigue pendiente de aprobación.';
+  }
   messenger.showSnackBar(
     SnackBar(
-      content: Text(
-        error ?? 'Tu cuenta sigue pendiente de aprobación.',
-      ),
+      content: Text(message),
       behavior: SnackBarBehavior.floating,
     ),
   );

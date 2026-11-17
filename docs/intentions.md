@@ -552,3 +552,48 @@ Deuda menor derivada: el nombre de la clase del marcador conserva la
 palabra principal aunque sirve a los cuatro roles. No se renombra
 porque la vista esta destinada a ser absorbida por el marcador de
 modulo del catalogo al auditar shared, y ese bloque ya lo registra.
+## Frente de producto: gestion de usuarios como pantalla propia
+
+Decision del autor, aceptada con evidencia visual. La gestion de roles
+y usuarios se monta hoy desplegada dentro de la seccion de
+configuracion. En telefono eso entierra los ajustes reales bajo N
+tarjetas de usuario, y cada tarjeta crece al mostrar el estado de la
+cuenta. El patron correcto ya existe en la propia app para colecciones:
+pantalla con encabezado, chips de filtro, accion principal y lista. La
+gestion de usuarios es una coleccion, no un ajuste.
+
+Alcance acordado. Uno, seccion propia de administracion con entrada en
+el menu lateral, al mismo nivel que equipos y eventos, no colgada de
+configuracion. Dos, la seccion de configuracion queda solo con sus filas
+de preferencias y el cierre de sesion, como lista de destinos que se
+abren al pulsar. Tres, filtros por estado de cuenta y por rol, ademas de
+la barra de busqueda actual, que se conserva para busquedas especificas.
+Cuatro, el filtro por estado es el que hace descubrible la aprobacion,
+que hoy exige recorrer la lista entera.
+
+Decision de capa que abarata el frente. Los filtros se aplican en
+cliente sobre la lista ya cargada, porque el repositorio de usuarios
+usa lista completa y trae todos los registros. Por tanto el frente es
+solo de presentacion mas el catalogo de secciones, sin tocar contrato
+de repositorio ni backend. Si el volumen de usuarios crece hasta hacer
+inviable traerlos todos, entonces se pasa el filtrado al servidor y eso
+ya es deuda de escalabilidad registrada aparte.
+
+Precondiciones y consecuencias verificadas. El catalogo de secciones de
+administracion gana un valor, lo que rompe a proposito la prueba que
+afirma que tiene seis; hay que actualizar el conteo a siete y anadir la
+etiqueta nueva al mapa de etiquetas. El enrutador gana una subruta, el
+menu lateral gana una entrada y el conmutador de seccion del panel gana
+un caso. La seccion de configuracion pierde el montaje de la gestion y
+el divisor que la separaba.
+
+Orden acordado. Primero el cableado de aprobacion, que son dos archivos
+y desbloquea la entrada de todo usuario que no sea administrador, y
+cuyo codigo vive en la tarjeta y el notifier, asi que sobrevive intacto
+al traslado. Despues este frente. No se mezclan en un commit porque uno
+es defecto funcional y el otro es reestructuracion de arquitectura de
+informacion.
+
+Nota de naming. El widget actual se llama gestion de roles, pero pasa a
+gestionar usuarios, roles y estados. Su nombre queda corto y se evalua
+renombrarlo en este frente, no antes.

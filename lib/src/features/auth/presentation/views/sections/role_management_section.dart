@@ -76,6 +76,7 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
                       .where((role) => role.isKnown)
                       .toList(),
                   onRoleChanged: notifier.updateUserRole,
+                  onStatusChanged: notifier.updateUserStatus,
                 );
               },
             );

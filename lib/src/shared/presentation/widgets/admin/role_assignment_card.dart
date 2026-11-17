@@ -22,6 +22,7 @@ class RoleAssignmentCard extends StatelessWidget {
     required this.currentRole,
     required this.availableRoles,
     required this.onRoleChanged,
+    required this.onStatusChanged,
     super.key,
   });
 
@@ -35,7 +36,13 @@ class RoleAssignmentCard extends StatelessWidget {
   final List<UserRole> availableRoles;
 
   /// Accion solicitada al confirmar un rol distinto del actual.
-  final void Function(String userId, UserRole newRole) onRoleChanged;
+  ///
+  /// Devuelve el resultado de la escritura para que la tarjeta avise del
+  /// fallo en lugar de descartarlo en silencio.
+  final Future<bool> Function(String userId, UserRole newRole) onRoleChanged;
+
+  /// Accion solicitada al aprobar la cuenta pendiente.
+  final Future<bool> Function(String userId, String newStatus) onStatusChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +138,91 @@ class RoleAssignmentCard extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Estado de la cuenta:',
+                      style: text.labelSmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _statusLabel,
+                      style: text.labelSmall?.copyWith(
+                        color: _statusColor(scheme),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_isPending)
+                TextButton.icon(
+                  onPressed: () => unawaited(_approve(context)),
+                  icon: const Icon(Icons.check_circle_outline, size: 16),
+                  label: const Text('Aprobar'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.mint,
+                  ),
+                ),
+            ],
+          ),
         ],
+      ),
+    );
+  }
+
+  bool get _isPending => user.status == 'Pending Approval';
+
+  String get _statusLabel => switch (user.status) {
+    'Active' => 'Activo',
+    'Pending Approval' => 'Pendiente de aprobación',
+    _ => 'Estado no reconocido',
+  };
+
+  Color _statusColor(ColorScheme scheme) => switch (user.status) {
+    'Active' => scheme.primary,
+    'Pending Approval' => scheme.tertiary,
+    _ => scheme.error,
+  };
+
+  Future<void> _approve(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final ok = await onStatusChanged(user.id, 'Active');
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          ok ? 'Cuenta aprobada.' : 'No se pudo aprobar la cuenta.',
+        ),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  Future<void> _assignRole(
+    BuildContext dialogContext,
+    UserRole selectedRole,
+  ) async {
+    if (selectedRole == currentRole) {
+      Navigator.pop(dialogContext);
+      return;
+    }
+    final messenger = ScaffoldMessenger.of(dialogContext);
+    Navigator.pop(dialogContext);
+    final ok = await onRoleChanged(user.id, selectedRole);
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          ok ? 'Rol actualizado.' : 'No se pudo actualizar el rol.',
+        ),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -177,8 +268,7 @@ class RoleAssignmentCard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final role = availableRoles[index];
                     final isSelected = selectedRole == role;
-                    final roleColor =
-                        ThemeHelper.getRoleColor(role, context);
+                    final roleColor = ThemeHelper.getRoleColor(role, context);
 
                     return Card(
                       margin: const EdgeInsets.only(bottom: 8),
@@ -188,15 +278,12 @@ class RoleAssignmentCard extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: BorderSide(
-                          color: isSelected
-                              ? roleColor
-                              : scheme.outlineVariant,
+                          color: isSelected ? roleColor : scheme.outlineVariant,
                           width: isSelected ? 1.5 : 1,
                         ),
                       ),
                       child: ListTile(
-                        onTap: () =>
-                            setDialogState(() => selectedRole = role),
+                        onTap: () => setDialogState(() => selectedRole = role),
                         leading: Container(
                           width: 40,
                           height: 40,
@@ -239,10 +326,7 @@ class RoleAssignmentCard extends StatelessWidget {
                 ),
                 FilledButton(
                   onPressed: () {
-                    if (selectedRole != currentRole) {
-                      onRoleChanged(user.id, selectedRole);
-                    }
-                    Navigator.pop(dialogContext);
+                    unawaited(_assignRole(dialogContext, selectedRole));
                   },
                   child: const Text('Asignar'),
                 ),

@@ -37,6 +37,7 @@ class TeamsSection extends ConsumerWidget {
     final showForm = formState.mode != TeamFormMode.idle;
 
     return SingleChildScrollView(
+      key: ValueKey<TeamFormMode>(formState.mode),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: SectionCard(
         padding: const EdgeInsets.all(24),

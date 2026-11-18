@@ -1,8 +1,6 @@
 // lib/src/features/admin/presentation/views/sections/settings_section.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
-import 'package:aero_score_app/src/features/auth/presentation/views/'
-    'sections/role_management_section.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/admin/'
     'section_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
@@ -11,11 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Seccion de configuracion del panel de administracion.
+/// Seccion de preferencias del panel de administracion.
 ///
-/// Monta la gestion de roles, que pertenece a autenticacion, y el
-/// resto de preferencias del sistema. Superficies y textos salen del
-/// esquema de tema para ser legibles en claro y en oscuro.
+/// La gestion de usuarios se movio a su propia seccion del panel, asi
+/// que aqui solo quedan las preferencias del sistema y el cierre de
+/// sesion. Superficies y textos salen del esquema de tema.
 class SettingsSection extends ConsumerWidget {
   /// Crea la seccion de configuracion.
   const SettingsSection({super.key});
@@ -37,12 +35,8 @@ class SettingsSection extends ConsumerWidget {
               children: [
                 _buildHeader(context),
                 const SizedBox(height: 24),
-                const RoleManagementSection(),
-                const SizedBox(height: 24),
-                const Divider(height: 1, thickness: 1),
-                const SizedBox(height: 24),
                 Text(
-                  'Otras Configuraciones',
+                  'Preferencias',
                   style: text.titleMedium?.copyWith(
                     color: scheme.onSurface,
                     fontWeight: FontWeight.w600,

@@ -184,27 +184,30 @@ class RoleAssignmentCard extends StatelessWidget {
   String get _statusLabel => switch (user.status) {
     'Active' => 'Activo',
     'Pending Approval' => 'Pendiente de aprobación',
+    'Inactive' => 'Inactivo',
     _ => 'Estado no reconocido',
   };
 
   Color _statusColor(ColorScheme scheme) => switch (user.status) {
     'Active' => scheme.primary,
     'Pending Approval' => scheme.tertiary,
+    'Inactive' => scheme.outline,
     _ => scheme.error,
   };
 
   Future<void> _approve(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     final ok = await onStatusChanged(user.id, 'Active');
-    messenger..clearSnackBars()
-    ..showSnackBar(
-      SnackBar(
-        content: Text(
-          ok ? 'Cuenta aprobada.' : 'No se pudo aprobar la cuenta.',
+    messenger
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            ok ? 'Cuenta aprobada.' : 'No se pudo aprobar la cuenta.',
+          ),
+          behavior: SnackBarBehavior.floating,
         ),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+      );
   }
 
   Future<void> _assignRole(
@@ -218,15 +221,16 @@ class RoleAssignmentCard extends StatelessWidget {
     final messenger = ScaffoldMessenger.of(dialogContext);
     Navigator.pop(dialogContext);
     final ok = await onRoleChanged(user.id, selectedRole);
-    messenger..clearSnackBars()
-    ..showSnackBar(
-      SnackBar(
-        content: Text(
-          ok ? 'Rol actualizado.' : 'No se pudo actualizar el rol.',
+    messenger
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            ok ? 'Rol actualizado.' : 'No se pudo actualizar el rol.',
+          ),
+          behavior: SnackBarBehavior.floating,
         ),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+      );
   }
 
   void _showRoleDialog(BuildContext context) {

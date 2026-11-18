@@ -7,13 +7,15 @@ import 'package:aero_score_app/src/features/auth/domain/entities/user_role.dart'
 import 'package:aero_score_app/src/features/auth/domain/repositories/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Estado de la gestión de roles y usuarios.
+/// Estado de la gestion de usuarios, roles y estados de cuenta.
 class RoleManagementState {
-  /// Crea el estado inicial de gestión de roles.
+  /// Crea el estado con sus datos, su busqueda y sus filtros.
   const RoleManagementState({
     this.users = const AsyncValue.loading(),
     this.searchQuery = '',
     this.isUpdating = false,
+    this.statusFilter,
+    this.roleFilter,
   });
 
   /// Usuarios cargados o error de carga.
@@ -22,24 +24,55 @@ class RoleManagementState {
   /// Texto actual del buscador.
   final String searchQuery;
 
-  /// Indica si hay una actualización en curso.
+  /// Indica si hay una actualizacion en curso.
   final bool isUpdating;
 
-  /// Copia el estado con valores opcionales sobrescritos.
+  /// Estado de cuenta por el que filtrar. Nulo significa todos.
+  final String? statusFilter;
+
+  /// Rol por el que filtrar. Nulo significa todos.
+  final UserRole? roleFilter;
+
+  /// Copia el estado sobrescribiendo los campos indicados.
+  ///
+  /// No puede devolver los filtros a nulo, porque un argumento nulo
+  /// significa no cambiar. Para limpiar un filtro se usan los metodos
+  /// del notificador, que construyen estado nuevo.
   RoleManagementState copyWith({
     AsyncValue<List<UserEntity>>? users,
     String? searchQuery,
     bool? isUpdating,
+    String? statusFilter,
+    UserRole? roleFilter,
   }) {
     return RoleManagementState(
       users: users ?? this.users,
       searchQuery: searchQuery ?? this.searchQuery,
       isUpdating: isUpdating ?? this.isUpdating,
+      statusFilter: statusFilter ?? this.statusFilter,
+      roleFilter: roleFilter ?? this.roleFilter,
     );
+  }
+
+  /// Usuarios que pasan los filtros activos, en el orden cargado.
+  ///
+  /// El filtrado es en cliente porque el repositorio ya trae la lista
+  /// completa. Es puro, asi que se prueba sin notificador ni red.
+  List<UserEntity> get filteredUsers {
+    final loaded = users.value ?? const <UserEntity>[];
+    return loaded.where((u) {
+      if (statusFilter != null && u.status != statusFilter) {
+        return false;
+      }
+      if (roleFilter != null && u.role != roleFilter) {
+        return false;
+      }
+      return true;
+    }).toList();
   }
 }
 
-/// Notificador encargado de gestionar usuarios y roles.
+/// Notificador encargado de gestionar usuarios, roles y estados.
 class RoleManagementNotifier extends Notifier<RoleManagementState> {
   /// Crea el notificador sin dependencias externas directas.
   RoleManagementNotifier();
@@ -69,10 +102,7 @@ class RoleManagementNotifier extends Notifier<RoleManagementState> {
     result.fold(
       (failure) {
         state = state.copyWith(
-          users: AsyncValue.error(
-            failure.message,
-            StackTrace.current,
-          ),
+          users: AsyncValue.error(failure.message, StackTrace.current),
         );
       },
       (data) {
@@ -90,11 +120,33 @@ class RoleManagementNotifier extends Notifier<RoleManagementState> {
     });
   }
 
-  /// Cambia el rol de un usuario y recarga si la operación es correcta.
-  Future<bool> updateUserRole(
-    String userId,
-    UserRole newRole,
-  ) async {
+  /// Fija el filtro de estado de cuenta. Nulo significa todos.
+  ///
+  /// Construye estado nuevo en lugar de copiar, porque la copia no
+  /// puede devolver el filtro a nulo y limpiarlo quedaria imposible.
+  void updateStatusFilter(String? value) {
+    state = RoleManagementState(
+      users: state.users,
+      searchQuery: state.searchQuery,
+      isUpdating: state.isUpdating,
+      roleFilter: state.roleFilter,
+      statusFilter: value,
+    );
+  }
+
+  /// Fija el filtro de rol. Nulo significa todos.
+  void updateRoleFilter(UserRole? value) {
+    state = RoleManagementState(
+      users: state.users,
+      searchQuery: state.searchQuery,
+      isUpdating: state.isUpdating,
+      statusFilter: state.statusFilter,
+      roleFilter: value,
+    );
+  }
+
+  /// Cambia el rol de un usuario y recarga si la operacion es correcta.
+  Future<bool> updateUserRole(String userId, UserRole newRole) async {
     state = state.copyWith(isUpdating: true);
 
     final result = await _repository.updateUserRole(
@@ -120,11 +172,8 @@ class RoleManagementNotifier extends Notifier<RoleManagementState> {
     return success;
   }
 
-  /// Cambia el estado de un usuario y recarga si la operación es correcta.
-  Future<bool> updateUserStatus(
-    String userId,
-    String newStatus,
-  ) async {
+  /// Cambia el estado de un usuario y recarga si es correcta.
+  Future<bool> updateUserStatus(String userId, String newStatus) async {
     state = state.copyWith(isUpdating: true);
 
     final result = await _repository.updateUserStatus(

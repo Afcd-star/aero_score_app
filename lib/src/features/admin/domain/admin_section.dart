@@ -18,6 +18,9 @@ enum AdminSection {
   /// Gestion de competidores.
   competitors,
 
+  /// Gestion de usuarios, roles y estados de cuenta.
+  users,
+
   /// Consulta del reglamento.
   rules,
 
@@ -36,6 +39,7 @@ extension AdminSectionX on AdminSection {
     AdminSection.teams => 'Equipos',
     AdminSection.events => 'Eventos',
     AdminSection.competitors => 'Competidores',
+    AdminSection.users => 'Usuarios',
     AdminSection.rules => 'Reglamento',
     AdminSection.settings => 'Configuración',
   };

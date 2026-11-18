@@ -79,6 +79,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, _) => const AdminDashboardView(),
           ),
           GoRoute(
+            path: 'users',
+            builder: (_, _) => const AdminDashboardView(),
+          ),
+          GoRoute(
             path: 'settings',
             builder: (_, _) => const AdminDashboardView(),
           ),

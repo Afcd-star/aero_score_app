@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AdminSection', () {
     test('el catalogo tiene las seis secciones del panel', () {
-      expect(AdminSection.values.length, 6);
+      expect(AdminSection.values.length, 7);
     });
 
     test('pathName coincide con el nombre del enum', () {
@@ -21,6 +21,7 @@ void main() {
         AdminSection.teams: 'Equipos',
         AdminSection.events: 'Eventos',
         AdminSection.competitors: 'Competidores',
+        AdminSection.users: 'Usuarios',
         AdminSection.rules: 'Reglamento',
         AdminSection.settings: 'Configuración',
       }.forEach((seccion, etiqueta) {

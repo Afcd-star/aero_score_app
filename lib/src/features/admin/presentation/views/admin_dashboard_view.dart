@@ -17,6 +17,8 @@ import 'package:aero_score_app/src/features/auth/domain/entities/'
     'user_entity.dart';
 import 'package:aero_score_app/src/features/auth/presentation/providers/'
     'auth_notifier.dart';
+import 'package:aero_score_app/src/features/auth/presentation/views/'
+    'sections/role_management_section.dart';
 import 'package:aero_score_app/src/features/competitors/presentation/views/'
     'competitors_section.dart';
 import 'package:aero_score_app/src/features/events/presentation/views/'
@@ -36,6 +38,7 @@ const List<AdminSection> _menuSections = <AdminSection>[
   AdminSection.teams,
   AdminSection.competitors,
   AdminSection.rules,
+  AdminSection.users,
   AdminSection.settings,
 ];
 
@@ -184,6 +187,7 @@ class _AdminDashboardViewState extends ConsumerState<AdminDashboardView> {
       AdminSection.teams => const TeamsSection(),
       AdminSection.events => const EventsSection(),
       AdminSection.competitors => const CompetitorsSection(),
+      AdminSection.users => const RoleManagementSection(),
       AdminSection.rules => const RulesSection(),
       AdminSection.settings => const SettingsSection(),
     };

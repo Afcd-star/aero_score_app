@@ -16,6 +16,7 @@ extension AdminSectionUi on AdminSection {
     AdminSection.teams => Icons.people,
     AdminSection.events => Icons.event,
     AdminSection.competitors => Icons.person,
+    AdminSection.users => Icons.manage_accounts,
     AdminSection.rules => Icons.description,
     AdminSection.settings => Icons.settings,
   };
@@ -26,6 +27,7 @@ extension AdminSectionUi on AdminSection {
     AdminSection.teams => Icons.groups_rounded,
     AdminSection.events => Icons.event_rounded,
     AdminSection.competitors => Icons.person_rounded,
+    AdminSection.users => Icons.manage_accounts_rounded,
     AdminSection.rules => Icons.description_rounded,
     AdminSection.settings => Icons.settings_rounded,
   };
@@ -36,6 +38,7 @@ extension AdminSectionUi on AdminSection {
     AdminSection.teams => Colors.blue,
     AdminSection.events => Colors.green,
     AdminSection.competitors => Colors.pink,
+    AdminSection.users => Colors.teal,
     AdminSection.rules => Colors.orange,
     AdminSection.settings => Colors.grey,
   };

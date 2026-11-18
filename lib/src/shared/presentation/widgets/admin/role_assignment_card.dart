@@ -179,21 +179,33 @@ class RoleAssignmentCard extends StatelessWidget {
     );
   }
 
-  bool get _isPending => user.status == 'Pending Approval';
+    bool get _isPending => user.isPending;
 
-  String get _statusLabel => switch (user.status) {
-    'Active' => 'Activo',
-    'Pending Approval' => 'Pendiente de aprobación',
-    'Inactive' => 'Inactivo',
-    _ => 'Estado no reconocido',
-  };
+  String get _statusLabel {
+    if (user.isApproved) {
+      return 'Activo';
+    }
+    if (user.isPending) {
+      return 'Pendiente de aprobación';
+    }
+    if (user.isInactive) {
+      return 'Inactivo';
+    }
+    return 'Estado no reconocido';
+  }
 
-  Color _statusColor(ColorScheme scheme) => switch (user.status) {
-    'Active' => scheme.primary,
-    'Pending Approval' => scheme.tertiary,
-    'Inactive' => scheme.outline,
-    _ => scheme.error,
-  };
+  Color _statusColor(ColorScheme scheme) {
+    if (user.isApproved) {
+      return scheme.primary;
+    }
+    if (user.isPending) {
+      return scheme.tertiary;
+    }
+    if (user.isInactive) {
+      return scheme.outline;
+    }
+    return scheme.error;
+  }
 
   Future<void> _approve(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);

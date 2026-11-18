@@ -676,3 +676,20 @@ enumeraciones exige reinicio en caliente antes de juzgar el resultado.
 Cambio de manifiesto, de recursos, de definiciones de compilacion o de
 codigo nativo exige parada completa. Y ninguna prueba viva se reporta
 como fallo sin declarar antes que modo de recarga se uso.
+## Regla de generacion: no correr el generador sin necesidad
+
+Evidencia: las ultimas corridas del generador en cada puerta de calidad
+reportaron cero salidas escritas, o sea no habia nada que regenerar. Se
+pagaron entre cuarenta y cien segundos por corrida mas un demonio de
+construccion residente que retiene memoria, en un equipo de ocho gigas.
+
+Regla. El generador solo se corre cuando el commit toca fuentes con
+anotaciones de generacion, clases con partes generadas, o el manifiesto.
+Commits de documentacion, de presentacion sin anotaciones, de logica pura
+o de pruebas no lo necesitan. La puerta de calidad de esos commits es
+analisis mas pruebas, sin generador.
+
+Contexto. El demonio de Flutter del editor se cayo durante este frente.
+Es tooling, no la app ni el backend ni el repositorio. La hipotesis
+principal es presion de memoria por procesos de Dart apilados, y se
+confirma midiendo procesos residentes y memoria libre, no afirmando.

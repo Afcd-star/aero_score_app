@@ -777,3 +777,29 @@ Alternativa con contrapartida. Ejecutar en escritorio Windows evita el
 navegador, pero se pierde la emulacion de dispositivo y la verificacion
 de ancho movil, que es justo lo que se usa para el pase visual. No se
 adopta sin decidir esa contrapartida.
+## Correccion de la deuda de Android con el manifiesto leido
+
+Medicion. El manifiesto de depuracion y el de perfil SI declaran el
+permiso de red, cada uno en su linea seis, como trae la plantilla de
+Flutter. El manifiesto principal no lo declara. Y no hay declaracion de
+texto claro en ninguno de los tres.
+
+Correccion. La deuda registrada decia que la falta de permiso de red
+bloquea release y dispositivo fisico. Es mitad falsa. En depuracion el
+permiso existe, asi que un telefono fisico ya puede abrir sockets. Lo
+que falta para desarrollo en dispositivo es el texto claro, porque
+Android bloquea HTTP sin cifrar desde la version nueve y el backend de
+desarrollo sirve HTTP en red local.
+
+Alcance real que queda. Uno, desarrollo en telefono fisico: anadir texto
+claro solo al manifiesto de depuracion, con lo que release sigue cerrado
+por defecto y no se abre superficie de produccion. Dos, lanzamiento:
+declarar el permiso de red en el manifiesto principal, porque sin el la
+compilacion de release no tiene red en absoluto. Son dos cambios de una
+linea cada uno, en archivos distintos y con naturalezas distintas, asi
+que no se mezclan.
+
+Nota de seguridad. El texto claro no se declara en el manifiesto
+principal ni de forma global. Abrir HTTP sin cifrar en produccion seria
+cambio de postura de seguridad, no ajuste de desarrollo, y exigia antes
+decidir si el backend de produccion sirve HTTPS.

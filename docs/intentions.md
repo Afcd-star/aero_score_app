@@ -803,3 +803,52 @@ Nota de seguridad. El texto claro no se declara en el manifiesto
 principal ni de forma global. Abrir HTTP sin cifrar en produccion seria
 cambio de postura de seguridad, no ajuste de desarrollo, y exigia antes
 decidir si el backend de produccion sirve HTTPS.
+## Correccion mayor: la guia de catalogo describe widgets inexistentes
+
+Inventario real medido por arbol. Catalogo Aero: doce archivos, alerta
+de dialogo, avatar, fondo, insignia, boton, tarjeta, formulario, entrada
+de texto, selector, esqueleto de carga, interruptor y area de texto.
+Administracion: cuatro, accion rapida, tarjeta de metricas, tarjeta de
+asignacion de rol y tarjeta de seccion. Puntuacion: dos, tarjeta y hoja
+de formulario. Total dieciocho.
+
+La guia de uso describe unos cincuenta y tres. Es un catalogo
+aspiracional heredado de la estructura anterior a la migracion, no un
+inventario del arbol actual. Prueba adicional: el grupo de toggles que
+el autor recupero importa una ruta relativa de la estructura plana, usa
+la fuente directa en vez de los roles del tema, no tiene documentacion y
+cablea colores, asi que no es portable tal cual.
+
+Correccion del lead. Varias deudas registradas por el lead apuntan a
+widgets como si existieran: indicador de progreso, aviso temporal, grupo
+de radios, separador y grupo de toggles. Ninguno existe. Esas deudas se
+releen como crear la pieza, no como adoptarla. La causa es citar la guia
+sin contrastar el arbol, el mismo vicio de suponer en vez de leer.
+
+Catalogo que si hace falta crear, seis, con uso crudo probado. Estado
+vacio, para listas sin datos y busquedas sin resultado. Barra de filtros
+de seleccion unica, para usuarios y eventos. Aviso temporal con su tema,
+por el defecto de contraste probado. Marcador de modulo, para los
+destinos crudos de entrenador y organizador y el marcador de jurado.
+Indicador de progreso, para los indicadores circulares crudos. Hoja
+modal, porque el encabezado con degradado y el boton de cierre estan
+duplicados en tres hojas.
+
+Catalogo que ya existe y falta adoptar, cuatro. Insignia para los chips
+de rol y estado hechos a mano. Dialogo de alerta para el borrado de
+equipos. Avatar para los avatares crudos. Tarjeta para los contenedores
+crudos.
+
+Diferidos hasta que su superficie exista, tres. Tabla y paginacion para
+resultados de visitante. Deslizador para captura de puntuacion.
+
+Rechazados para esta app, unos treinta. Barra de menus, migas de pan,
+menu contextual, tarjeta al pasar el raton, popover, redimensionable,
+carrusel, area de scroll con estilo, comando con atajo y similares, por
+ser de escritorio o de nicho sin superficie actual. Crearlos seria
+sobreingenieria.
+
+Accion pendiente. Reescribir la guia de uso para que refleje el
+inventario real y la lista de lo que falta, con su justificacion. Mientras
+no se reescriba, la guia no es fuente de verdad del catalogo y toda
+decision de widget se contrasta con el arbol.

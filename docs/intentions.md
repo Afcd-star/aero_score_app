@@ -693,3 +693,47 @@ Contexto. El demonio de Flutter del editor se cayo durante este frente.
 Es tooling, no la app ni el backend ni el repositorio. La hipotesis
 principal es presion de memoria por procesos de Dart apilados, y se
 confirma midiendo procesos residentes y memoria libre, no afirmando.
+## Cierre del flujo de aprobacion de cuentas
+
+Cerrado con evidencia en las dos ramas. Rama de exito: aprobar desde el
+panel deja la tarjeta en activo y retira el boton; el usuario pendiente
+pulsa verificar estado, el mensaje confirma la aprobacion y el
+enrutador lo lleva al marcador de su jurado. Rama de fallo: con el
+backend detenido a proposito por el autor, aprobar muestra el aviso de
+fallo en lugar de silencio.
+
+Con esto ningun usuario que no sea administrador queda encerrado por
+falta de aprobacion, que era el defecto mas bloqueante del producto.
+
+Queda abierto y registrado, no cerrado por este frente. El destino del
+espectador en el enrutador, que lo manda a la pantalla de espera aunque
+su cuenta este aprobada. La etiqueta de estado en ingles que ve el
+usuario en la pantalla de espera. La copia que promete notificaciones
+que no existen. El contraste y la posicion del aviso, que se pierde
+sobre la barra de navegacion. La accion de refrescar el listado de
+usuarios, que hoy no existe y hace que un cambio externo no se vea. Los
+siete avisos de forma de la seccion de gestion, que absorbe el frente de
+rediseno.
+
+## Presion de memoria medida en el equipo de desarrollo
+
+Medicion: memoria visible total 7.2 gigas, libre 0.7 gigas, cerca del
+noventa por ciento en uso. La caida del demonio de Flutter del editor es
+coherente con ese margen. El demonio no reincidio y el servidor de
+analisis y el demonio de tooling quedaron en verde.
+
+Matiz honesto sobre la hipotesis. Se esperaban los procesos de Dart como
+consumidores principales por apilamiento de puertas de calidad, pero su
+conjunto residente medido fue de decenas de megas y todos arrancaron en
+el mismo minuto, o sea son la flota del editor y no acumulacion. Eso no
+los exonera: Windows recorta el conjunto residente de los procesos
+inactivos y los pagina, asi que residente no mide comprometido. La
+medicion siguiente mira bytes privados y los mayores consumidores del
+sistema, para no nombrar culpable sin dato.
+
+Regla operativa derivada. No apilar la aplicacion en ejecucion con la
+puerta de calidad completa, porque cada una anade maquinas virtuales
+sobre un sistema ya al noventa por ciento. La omision del generador
+cuando no hay fuentes anotadas baja ese pico. Y cerrar las pestanas del
+navegador que no se usan, en especial el panel del backend cuando no se
+esta consultando.

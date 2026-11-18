@@ -852,3 +852,26 @@ Accion pendiente. Reescribir la guia de uso para que refleje el
 inventario real y la lista de lo que falta, con su justificacion. Mientras
 no se reescriba, la guia no es fuente de verdad del catalogo y toda
 decision de widget se contrasta con el arbol.
+## Salvedad de la forma de commit limitada por rutas
+
+La contramedida adoptada tras la errata del commit mezclado era
+commitear con separador de rutas y la lista explicita, para que el
+residuo del indice no pudiera colarse. Esa forma tiene un limite que el
+lead no verifico antes de adoptarla: solo acepta rutas que git ya
+conoce. Un archivo nuevo, sin rastrear, produce el error de que la ruta
+no coincide con ningun archivo conocido, y el commit no se crea.
+
+Prueba. Las dos piezas nuevas de catalogo y sus dos pruebas quedaron sin
+commitear con ese error, mientras el analisis y las pruebas ya estaban en
+verde. El arbol quedo con cuatro archivos sin rastrear y nada roto.
+
+Regla refinada. Para archivos nuevos hay que prepararlos con add, lo que
+los hace conocidos, y despues commitear con la forma limitada por rutas.
+Las dos protecciones se componen: el add hace conocida la ruta nueva y el
+limite por rutas sigue ignorando cualquier otro residuo preparado. Para
+archivos ya rastreados el add es innecesario y la forma limitada basta.
+
+Correccion de metodo del lead. Adoptar una contramedida sin probar su
+caso de archivo nuevo es el mismo vicio de afirmar sin verificar que esta
+bitacora viene registrando. Toda contramedida se prueba en los dos casos,
+archivo modificado y archivo nuevo, antes de declararla estandar.

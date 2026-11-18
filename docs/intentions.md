@@ -639,3 +639,40 @@ verdoso. El resultado es que pendiente parece exito y activo parece
 neutro, semantica invertida por accidente del esquema. Se corrige en el
 frente de tema con roles semanticos de exito y advertencia, no con
 colores cableados.
+## Regla operativa de recarga tras cambiar codigo
+
+Tres defectos falsos se reportaron por compilar viejo: el boton de
+verificar estado, las rutas de jurado y el listado de usuarios. El costo
+fueron turnos de diagnostico sobre codigo correcto. La regla queda
+escrita para no repetirlo.
+
+Recarga en caliente. Inyecta codigo nuevo en la maquina virtual y
+conserva el estado. No vuelve a ejecutar el punto de entrada ni los
+inicializadores de nivel superior, y no recrea instancias ya cacheadas.
+Sirve para cambios dentro del cuerpo de construccion de un widget o de
+un metodo que se vuelve a invocar. No sirve para estructura.
+
+Reinicio en caliente. Reinicia el aislamiento de Dart, vuelve a ejecutar
+el punto de entrada y reconstruye todo el estado desde cero. Pierde el
+estado, lo cual es deseable cuando el estado viejo es el problema. No
+recompila codigo nativo ni relee configuracion de plataforma.
+
+Parada completa y relanzamiento. Recompila Dart y nativo, relee el
+manifiesto, el registro de plugins, los recursos declarados y los valores
+de definicion de compilacion. Es el unico que sirve cuando cambia el
+manifiesto de dependencias, un permiso de plataforma o un valor de
+compilacion.
+
+Trampas verificadas de este proyecto. El proveedor del enrutador cachea
+una instancia con su lista de rutas, asi que cambiar rutas exige
+reinicio en caliente como minimo. El notificador de autenticacion guarda
+una marca de sesion restaurada que sobrevive a la recarga, asi que la
+restauracion no se vuelve a ejecutar. El notificador de gestion de
+usuarios dispara la carga una sola vez al construirse, asi que una
+recarga no refresca la lista y parece que faltan registros.
+
+Regla adoptada. Cambio de rutas, de proveedores, de clases selladas o de
+enumeraciones exige reinicio en caliente antes de juzgar el resultado.
+Cambio de manifiesto, de recursos, de definiciones de compilacion o de
+codigo nativo exige parada completa. Y ninguna prueba viva se reporta
+como fallo sin declarar antes que modo de recarga se uso.

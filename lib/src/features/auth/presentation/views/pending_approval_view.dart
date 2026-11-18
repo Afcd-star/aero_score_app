@@ -233,7 +233,8 @@ Future<void> _refreshStatus(BuildContext context, WidgetRef ref) async {
   } else {
     message = 'Tu cuenta sigue pendiente de aprobación.';
   }
-  messenger.showSnackBar(
+  messenger..clearSnackBars()
+  ..showSnackBar(
     SnackBar(
       content: Text(message),
       behavior: SnackBarBehavior.floating,

@@ -196,7 +196,8 @@ class RoleAssignmentCard extends StatelessWidget {
   Future<void> _approve(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
     final ok = await onStatusChanged(user.id, 'Active');
-    messenger.showSnackBar(
+    messenger..clearSnackBars()
+    ..showSnackBar(
       SnackBar(
         content: Text(
           ok ? 'Cuenta aprobada.' : 'No se pudo aprobar la cuenta.',
@@ -217,7 +218,8 @@ class RoleAssignmentCard extends StatelessWidget {
     final messenger = ScaffoldMessenger.of(dialogContext);
     Navigator.pop(dialogContext);
     final ok = await onRoleChanged(user.id, selectedRole);
-    messenger.showSnackBar(
+    messenger..clearSnackBars()
+    ..showSnackBar(
       SnackBar(
         content: Text(
           ok ? 'Rol actualizado.' : 'No se pudo actualizar el rol.',

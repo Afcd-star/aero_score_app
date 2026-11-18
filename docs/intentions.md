@@ -875,3 +875,70 @@ Correccion de metodo del lead. Adoptar una contramedida sin probar su
 caso de archivo nuevo es el mismo vicio de afirmar sin verificar que esta
 bitacora viene registrando. Toda contramedida se prueba en los dos casos,
 archivo modificado y archivo nuevo, antes de declararla estandar.
+## Cierre de codigo del frente de gestion de usuarios y hallazgos del catalogo
+
+Publicado con diez rutas, mas el refactor y la documentacion de la
+entidad de usuario, la adopcion de los predicados de estado en la
+tarjeta, y el arreglo de render del catalogo. Verificado despues de cada
+commit: perimetro en vacio, sesenta y siete errores de linea base y
+sesenta y cinco pruebas verdes.
+
+Pase visual del frente PENDIENTE. Toca superficie, asi que el checklist
+impide declararlo cerrado del todo sin el pase en claro y oscuro.
+
+Correcciones de metodo del lead en este frente, tres. Uno, el filtro y la
+etiqueta de estado se disenaron con dos estados tomados de una captura
+del backend, cuando el contrato de dominio declara tres; la muestra no es
+el contrato. Dos, el grep de los predicados uso coincidencia de subcadena
+y caso una variable local del enrutador, lo que habria hecho creer que
+habia consumidores. Tres, se cito la guia de catalogo como regla cuando
+describe piezas que no existen en el arbol.
+
+Decision sobre los predicados de estado. Se adoptan en la tarjeta en
+lugar de eliminarse, porque expresan la semantica del dominio y retiran
+de presentacion los literales duplicados. Deuda de raiz: el estado es una
+cadena suelta en entidad, modelo, enrutador, filtro y tarjeta; el arreglo
+es un enumerado con conversion desde almacenamiento, igual que el
+catalogo de identidad, y toca unas siete rutas del frente de
+autenticacion.
+
+Enmienda del checklist por evidencia. El analizador no detecta desbordes
+de render: dos Row del catalogo desbordaban y sus avisos eran invisibles
+para el. Se adopta que toda pieza de catalogo nueva o tocada viaje con
+prueba de render a ancho estrecho, ademas de su prueba de logica. La
+desviacion de diferir pruebas de widget queda costeada con este episodio.
+
+Causa real de la inconsistencia de botones, pendiente de decision. El
+variante primario usa los tokens monocromos heredados, negro sobre claro
+y blanco sobre oscuro, mientras la marca es el degradado fucsia. Solo los
+sitios que pasan degradado explicito salen con marca, y de ahi la
+apariencia aleatoria. Recomendacion del lead: que el primario use el
+degradado de la casa por defecto, con el parametro explicito pudiendo
+sobrescribirlo, lo que unifica todos los primarios sin tocar sitios de
+llamada. Requiere aprobacion del autor y pase visual, y va en commit
+aparte.
+
+Maquinaria muerta del envoltorio de campo, probada. La notificacion
+personalizada tiene tres ocurrencias, todas en su propio archivo, y cero
+disparadores. La clave global de tipo estado de campo esta colgada de un
+subarbol con clave, que no tiene estado, asi que su estado actual es nulo
+siempre. Conclusión: la deteccion interna de errores y el aviso de foco
+estan inertes, y los parametros de error y de foco son una API que
+miente. El impacto visible es limitado porque el campo de texto muestra
+sus propios errores. Decision preferida: eliminar la maquinaria en lugar
+de repararla, porque repararla duplica lo que el campo ya hace, y de paso
+retira el aviso de tipo crudo. Precondicion: grafo de consumidores, para
+conservar los parametros que alguien si use.
+
+Deuda abierta del frente de usuarios. Uno, refresco automatico al entrar
+a la seccion, porque el proveedor sobrevive la navegacion. Frente de
+disposicion. Dos, naming del widget y del proveedor, que dicen roles pero
+gestionan usuarios, roles y estados. Tres, crudos conservados donde ya
+existian, encabezado, busqueda y caja de error. Frente de shared.
+
+Nota sobre documentos de referencia. Las copias subidas del informe y del
+README son instantaneas previas al cierre de equipos, declaran
+administracion en revision y equipos pendientes, e imponen anotaciones y
+dobles con mocktail que el codigo contradice por decision escrita. La
+fuente de verdad es el repo, no las copias. Su alineacion sigue siendo el
+gesto independiente ya acordado.

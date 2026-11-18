@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 // ═════════════════════════════════════════════════════════════
 
 class AeroForm extends StatelessWidget {
-
   const AeroForm({
-    required this.child, super.key,
+    required this.child,
+    super.key,
     this.formKey,
     this.autovalidateMode = AutovalidateMode.onUserInteraction,
     this.onSubmit,
@@ -52,10 +52,10 @@ class AeroForm extends StatelessWidget {
 // ═════════════════════════════════════════════════════════════
 
 class AeroFormField extends StatefulWidget {
-  
-
   const AeroFormField({
-    required this.label, required this.field, super.key,
+    required this.label,
+    required this.field,
+    super.key,
     this.errorText,
     this.required = false,
     this.onFocusChange,
@@ -104,11 +104,13 @@ class _AeroFormFieldState extends State<AeroFormField> {
         // Label con asterisco rojo
         Row(
           children: [
-            Text(
-              widget.label,
-              style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w600,
+            Flexible(
+              child: Text(
+                widget.label,
+                style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             if (widget.required) ...[
@@ -168,7 +170,6 @@ class _AeroFormFieldState extends State<AeroFormField> {
 // ═════════════════════════════════════════════════════════════
 
 class FormFieldNotification extends Notification {
-
   FormFieldNotification({this.errorText, this.hasFocus = false});
   final String? errorText;
   final bool hasFocus;

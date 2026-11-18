@@ -8,7 +8,6 @@ enum AeroButtonVariant { primary, outline, destructive, ghost, secondary }
 enum AeroButtonSize { sm, md, lg }
 
 class AeroButton extends StatelessWidget {
-
   const AeroButton({
     super.key,
     this.label, // ✅ Sin required
@@ -153,7 +152,13 @@ class AeroButton extends StatelessWidget {
           if (!iconOnly) const SizedBox(width: 8),
         ],
         if (!iconOnly && label != null)
-          Text(label!, style: TextStyle(color: textColor)),
+          Flexible(
+            child: Text(
+              label!,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: textColor),
+            ),
+          ),
         if (!iconOnly && trailingIcon != null) ...[
           const SizedBox(width: 8),
           IconTheme(
@@ -161,7 +166,6 @@ class AeroButton extends StatelessWidget {
             child: Icon(trailingIcon),
           ),
         ],
-        
       ],
     );
   }

@@ -737,3 +737,43 @@ sobre un sistema ya al noventa por ciento. La omision del generador
 cuando no hay fuentes anotadas baja ese pico. Y cerrar las pestanas del
 navegador que no se usan, en especial el panel del backend cuando no se
 esta consultando.
+## Cierre de la hipotesis de memoria con bytes privados medidos
+
+Medicion de compromiso. Los cinco procesos de Dart suman unos
+seiscientos megas de bytes privados, con uno solo en quinientos
+veintiseis, que es el servidor de analisis. Su residente estaba recortado
+a setenta y cuatro megas, lo que confirma que Windows pagina los procesos
+inactivos y que el residente no sirve para medir consumo.
+
+Correccion de la prediccion del lead. Se esperaban gigas en Dart por
+apilamiento de puertas de calidad. No fue asi: seiscientos megas es
+consumo real pero no dominante, y los cinco procesos arrancaron juntos,
+o sea son la flota del editor y no acumulacion.
+
+Hallazgo decisivo. El mayor consumidor residente del sistema no es una
+aplicacion: es la compresion de memoria de Windows, con mil setecientos
+treinta y dos megas. Ese almacen es sintoma de presion severa, no causa:
+Windows comprime paginas en RAM en lugar de mandarlas todas al disco, y
+ahi caben varios gigas de datos comprimidos.
+
+Reparto real. El editor aporta tres procesos con unos seiscientos megas
+residentes entre ellos. El navegador aporta cuatro procesos en la lista
+de los doce mayores, con unos quinientos megas. Mas el antivirus, el
+explorador y el sistema. No hay un unico culpable: la suma del editor, el
+navegador, Dart y Windows sobre siete gigas y dos es la causa.
+
+Acciones de alivio, de mayor a menor efecto. Uno, ejecutar la app en un
+dispositivo Android fisico, que la saca del equipo por completo y libera
+la flota del navegador, ademas de dar experiencia movil real.
+Precondicion barata de verificar: el manifiesto de depuracion de la
+plantilla de Flutter ya suele declarar el permiso de red, asi que la
+deuda registrada podria estar exagerada en su parte de dispositivo
+fisico; falta comprobar el texto claro para HTTP en red local. Dos,
+cerrar pestanas del navegador que no se consultan, en especial el panel
+del backend. Tres, no apilar app en ejecucion con puerta de calidad
+completa, ya registrado.
+
+Alternativa con contrapartida. Ejecutar en escritorio Windows evita el
+navegador, pero se pierde la emulacion de dispositivo y la verificacion
+de ancho movil, que es justo lo que se usa para el pase visual. No se
+adopta sin decidir esa contrapartida.

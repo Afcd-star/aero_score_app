@@ -30,14 +30,17 @@ import 'package:flutter/material.dart';
 /// )
 /// ```
 class AeroAlertDialog extends StatelessWidget {
-
   const AeroAlertDialog({
-    required this.title, required this.content, required this.actions, super.key,
+    required this.title,
+    required this.content,
+    required this.actions,
+    super.key,
     this.icon,
     this.iconColor,
     this.onDismissed,
     this.barrierDismissible = true,
   });
+
   /// Título principal del diálogo (obligatorio para claridad)
   final String title;
 
@@ -56,28 +59,19 @@ class AeroAlertDialog extends StatelessWidget {
   /// Callback opcional cuando el diálogo se cierra sin acción
   final VoidCallback? onDismissed;
 
-  /// Si true, el diálogo no se puede cerrar tocando fuera o con back button
+  /// Si true, el diálogo se puede cerrar tocando fuera o con retroceso.
   final bool barrierDismissible;
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Determinar colores según tema actual para consistencia
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDark ? AppColors.surfaceBase : Colors.white;
-    const titleColor = AppColors.textPrimary;
-    const contentColor = AppColors.textSecondary;
+    final scheme = Theme.of(context).colorScheme;
 
     return AlertDialog(
-      // ✅ Accesibilidad: etiqueta semántica para lectores de pantalla
       semanticLabel: 'Alerta: $title',
-      
-      // ✅ Estilo visual consistente con el sistema Aero
-      backgroundColor: backgroundColor,
+      backgroundColor: scheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: AppColors.borderSubtle.withValues(alpha: isDark ? 0.3 : 0.15),
-        ),
+        side: BorderSide(color: scheme.outlineVariant),
       ),
       elevation: 8,
       shadowColor: Colors.black.withValues(alpha: 0.2),
@@ -86,18 +80,14 @@ class AeroAlertDialog extends StatelessWidget {
       title: Row(
         children: [
           if (icon != null) ...[
-            Icon(
-              icon,
-              color: iconColor ?? (isDark ? AppColors.fuchsia : AppColors.fuchsia),
-              size: 24,
-            ),
+            Icon(icon, color: iconColor ?? AppColors.fuchsia, size: 24),
             const SizedBox(width: 12),
           ],
           Expanded(
             child: Text(
               title,
               style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
-                color: titleColor,
+                color: scheme.onSurface,
                 fontWeight: FontWeight.w700,
               ),
               overflow: TextOverflow.ellipsis,
@@ -109,8 +99,8 @@ class AeroAlertDialog extends StatelessWidget {
       content: Text(
         content,
         style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-          color: contentColor,
-          height: 1.4, // Mejor legibilidad en mensajes largos
+          color: scheme.onSurfaceVariant,
+          height: 1.4,
         ),
       ),
 
@@ -158,7 +148,7 @@ class AeroAlertDialog extends StatelessWidget {
 
   /// ✅ Factory preconfigurado para alertas de confirmación destructiva
   /// ⚠️ IMPORTANTE: Este método solo crea el widget. El caller debe manejar Navigator.pop()
-  static AeroAlertDialog destructive({
+  AeroAlertDialog destructive({
     required String title,
     required String content,
     required VoidCallback onConfirm,
@@ -191,7 +181,7 @@ class AeroAlertDialog extends StatelessWidget {
 
   /// ✅ Factory preconfigurado para alertas de éxito/información
   /// ⚠️ IMPORTANTE: Este método solo crea el widget. El caller debe manejar Navigator.pop()
-  static AeroAlertDialog success({
+  AeroAlertDialog success({
     required String title,
     required String content,
     String? confirmLabel,

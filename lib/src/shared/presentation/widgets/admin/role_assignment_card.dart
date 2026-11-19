@@ -170,36 +170,43 @@ class RoleAssignmentCard extends StatelessWidget {
                 ),
               ),
               if (primary != null)
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 4,
-                  alignment: WrapAlignment.end,
-                  children: <Widget>[
-                    AeroButton(
-                      label: primary.label,
-                      size: AeroButtonSize.sm,
-                      variant: primary.destructive
-                          ? AeroButtonVariant.destructive
-                          : AeroButtonVariant.primary,
-                      icon: Icon(
-                        primary.destructive
-                            ? Icons.block
-                            : Icons.check_circle_outline,
-                        size: 16,
-                      ),
-                      onPressed: () =>
-                          unawaited(_runStatusAction(context, primary)),
-                    ),
-                    if (secondary != null)
+                SizedBox(
+                  width: 132,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
                       AeroButton(
-                        label: secondary.label,
+                        label: primary.label,
                         size: AeroButtonSize.sm,
-                        variant: AeroButtonVariant.destructive,
-                        icon: const Icon(Icons.close, size: 16),
+                        fullWidth: true,
+                        variant: primary.destructive
+                            ? AeroButtonVariant.destructive
+                            : AeroButtonVariant.primary,
+                        icon: Icon(
+                          primary.destructive
+                              ? Icons.block
+                              : Icons.check_circle_outline,
+                          size: 16,
+                        ),
                         onPressed: () =>
-                            unawaited(_runStatusAction(context, secondary)),
+                            unawaited(_runStatusAction(context, primary)),
                       ),
-                  ],
+                      if (secondary != null) ...[
+                        const SizedBox(height: 6),
+                        AeroButton(
+                          label: secondary.label,
+                          size: AeroButtonSize.sm,
+                          fullWidth: true,
+                          variant: AeroButtonVariant.destructive,
+                          icon: const Icon(Icons.close, size: 16),
+                          onPressed: () => unawaited(
+                            _runStatusAction(context, secondary),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
             ],
           ),
@@ -213,7 +220,7 @@ class RoleAssignmentCard extends StatelessWidget {
       return 'Activo';
     }
     if (user.isPending) {
-      return 'Pendiente de aprobación';
+      return 'Pendiente';
     }
     if (user.isInactive) {
       return 'Inactivo';

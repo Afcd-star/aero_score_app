@@ -90,7 +90,6 @@ class AeroAlertDialog extends StatelessWidget {
                 color: scheme.onSurface,
                 fontWeight: FontWeight.w700,
               ),
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

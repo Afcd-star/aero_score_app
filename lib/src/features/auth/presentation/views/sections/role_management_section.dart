@@ -86,8 +86,8 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
     final state = ref.watch(roleManagementProvider);
     final notifier = ref.read(roleManagementProvider.notifier);
     final visible = state.filteredUsers;
-    final toApprove = visible.where((u) => u.status != 'Active').toList();
-    final toReject = visible.where((u) => u.status != 'Inactive').toList();
+    final pendingView = state.statusFilter == 'Pending Approval';
+    final inactiveView = state.statusFilter == 'Inactive';
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -124,40 +124,70 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
               ),
             ),
             const SizedBox(height: 20),
-            const SizedBox(height: 12),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: AeroButton(
-                    label: 'Aprobar (${toApprove.length})',
-                    size: AeroButtonSize.sm,
-                    onPressed: toApprove.isEmpty
-                        ? null
-                        : () => unawaited(
-                            _runBulk(context, notifier, toApprove, 'Active'),
-                          ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: AeroButton(
-                    label: 'Rechazar (${toReject.length})',
-                    size: AeroButtonSize.sm,
-                    variant: AeroButtonVariant.destructive,
-                    onPressed: toReject.isEmpty
-                        ? null
-                        : () => unawaited(
-                            _runBulk(
-                              context,
-                              notifier,
-                              toReject,
-                              'Inactive',
+            if (pendingView) ...[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: AeroButton(
+                      label: 'Aprobar (${visible.length})',
+                      size: AeroButtonSize.sm,
+                      onPressed: visible.isEmpty
+                          ? null
+                          : () => unawaited(
+                              _runBulk(
+                                context,
+                                notifier,
+                                visible,
+                                'Active',
+                                'Aprobar',
+                              ),
                             ),
-                          ),
+                    ),
                   ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: AeroButton(
+                      label: 'Rechazar (${visible.length})',
+                      size: AeroButtonSize.sm,
+                      variant: AeroButtonVariant.destructive,
+                      onPressed: visible.isEmpty
+                          ? null
+                          : () => unawaited(
+                              _runBulk(
+                                context,
+                                notifier,
+                                visible,
+                                'Inactive',
+                                'Rechazar',
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+            ],
+            if (inactiveView) ...[
+              SizedBox(
+                width: double.infinity,
+                child: AeroButton(
+                  label: 'Reactivar (${visible.length})',
+                  size: AeroButtonSize.sm,
+                  onPressed: visible.isEmpty
+                      ? null
+                      : () => unawaited(
+                          _runBulk(
+                            context,
+                            notifier,
+                            visible,
+                            'Active',
+                            'Reactivar',
+                          ),
+                        ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 12),
+            ],
             state.users.when(
               loading: _buildSkeleton,
               error: (err, _) => _buildErrorState(
@@ -367,6 +397,7 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
     RoleManagementNotifier notifier,
     List<UserEntity> targets,
     String target,
+    String verb,
   ) async {
     final destructive = target == 'Inactive';
     final verb = destructive ? 'Rechazar' : 'Aprobar';

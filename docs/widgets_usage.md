@@ -1,118 +1,122 @@
-**Análisis Crítico**
-Tienes ~53 widgets personalizados pero sin una guía clara de uso. Esto genera inconsistencia: desarrolladores usando `AeroCard` donde debería ir `AeroSheet`, o `AeroDialog` donde `AeroAlertDialog` es más apropiado. Sin criterios de selección, tu sistema de diseño se vuelve impredecible y la UX inconsistente.
+# Guia de uso del catalogo de widgets
 
-**Recomendación Técnica**
-Proporciono guía práctica de uso por contexto. Cada widget resuelve un problema específico de UI/UX.
+Estado de este documento: inventario verificado contra el arbol. La
+version anterior describia unas cincuenta y tres piezas de las que solo
+existian dieciocho, y sus referencias rotas llegaron a los comentarios de
+documentacion del codigo. Esta version la sustituye.
 
-**Guía de Uso por Escenario**
+Regla de firma: este documento dice que pieza usar y para que. La firma
+exacta se lee en el archivo de la pieza antes de usarla. No se duplican
+constructores aqui porque se desactualizan y esta guia ya fallo una vez
+por describir lo que no existia.
 
-### 📝 **FORMULARIOS E INPUTS**
+Regla de decision: si una pieza del catalogo cubre la necesidad, se usa
+la pieza. Si no la cubre, se extiende el catalogo antes de improvisar en
+la vista. Y toda decision se contrasta con el arbol, no con este
+documento.
 
-| Widget | Cuándo usarlo | Ejemplo concreto |
-|--------|---------------|------------------|
-| **aero_select.dart** | Cuando necesitas un dropdown simple (sin búsqueda) | Seleccionar categoría (Solo M, Solo F, Dúo Mixto) |
-| **aero_checkbox.dart** | Opciones binarias independientes | "¿Acepta términos?", "Notificarme resultados" |
-| **aero_radio_group.dart** | Selección única entre 2+ opciones | Sexo (Masculino/Femenino), Estado (Activo/Inactivo) |
-| **aero_switch.dart** | Toggle on/off inmediato | Activar/desactivar notificaciones, modo oscuro |
-| **aero_toggle.dart** | Alternar entre 2 estados | Vista lista/grid, mostrar/ocultar contraseña |
-| **aero_toggle_group.dart** | Múltiples toggles relacionados | Filtros: "Activos", "Pendientes", "Completados" |
-| **aero_otp_input.dart** | Códigos de verificación | Confirmar email, 2FA, recuperación de contraseña |
-| **aero_textarea.dart** | Texto largo multilínea | Observaciones del jurado, descripción del evento |
-| **aero_slider.dart** | Seleccionar valor en rango | Calificación 0-10, ajustar volumen, precio mínimo/máximo |
+## Inventario real, veinte archivos
 
-### 🎨 **LAYOUT Y ESTRUCTURA**
+Catalogo Aero, catorce archivos:
 
-| Widget | Cuándo usarlo | Ejemplo concreto |
-|--------|---------------|------------------|
-| **aero_aspect_ratio.dart** | Mantener proporción fija | Cards de competidores (16:9), avatares (1:1) |
-| **aero_separator.dart** | Dividir secciones visualmente | Entre items de lista, después de headers |
-| **aero_resizable.dart** | Usuario ajusta tamaño | Panel de calificaciones, consola de logs |
-| **aero_scroll_area.dart** | Scroll con estilos personalizados | Lista larga de competidores, historial de eventos |
-| **aero_collapsible.dart** | Expandir/colapsar 1 sección | Detalles adicionales de competidor, FAQ simple |
-| **aero_accordion.dart** | Múltiples secciones expandibles | Configuración por categorías (Cuenta, Notificaciones, Privacidad) |
+- aero_alert_dialog: confirmacion de accion destructiva o error que
+  exige decision. Fondo, borde y textos del esquema ambiental, asi que
+  se lee en claro y en oscuro. Su titulo salta de linea, no se trunca,
+  porque puede llevar un conteo de seguridad.
+- aero_avatar: representacion visual de persona o equipo, con iniciales
+  de reserva.
+- aero_background: fondo decorativo de la casa, con variante de panel.
+- aero_badge: etiqueta pequena de estado o rol, con variantes
+  semanticas y tres tamanos. Deuda abierta: su contraste esta roto en
+  exito y la condicion de atencion esta invertida, asi que hoy no es
+  seguro para texto pequeno en claro. Se corrige con tokens semanticos.
+- aero_button: accion. Cinco variantes y tres tamanos, con modo solo
+  icono y estado de carga. El primario toma el degradado de marca por
+  defecto; el parametro de degradado explicito puede sobrescribirlo.
+- aero_card: contenedor de superficie agrupada.
+- aero_form: envoltorio de formulario con autovalidacion. Este archivo
+  aloja dos piezas, el envoltorio y el par etiqueta y campo. El par
+  muestra error externo opcional; el error interno del campo lo muestra
+  el propio campo, no el envoltorio.
+- aero_input: entrada de texto de una linea.
+- aero_select: seleccion de una opcion en lista.
+- aero_skeleton: marcador de carga con forma de contenido.
+- aero_switch: interruptor de encendido y apagado.
+- aero_textarea: entrada de texto multilinea.
+- aero_empty_state: ausencia de datos o busqueda sin resultado, con
+  icono, titulo, mensaje opcional y accion opcional.
+- aero_filter_bar: filtro de seleccion unica con desplazamiento
+  horizontal y titulo opcional. Es controlada: el indice activo lo
+  decide el consumidor, nunca el propio widget.
 
-### 🔘 **BOTONES Y ACCIONES**
+Administracion, cuatro archivos:
 
-| Widget | Cuándo usarlo | Ejemplo concreto |
-|--------|---------------|------------------|
-| **aero_command.dart** | Acción con atajo de teclado | "Guardar (Ctrl+S)", "Buscar (Ctrl+F)" |
+- admin_quick_action: accion rapida del panel.
+- admin_stats_card: tarjeta de metrica del panel.
+- role_assignment_card: tarjeta de usuario con rol, estado y
+  transiciones de cuenta, con confirmacion para las destructivas.
+- section_card: contenedor de seccion del panel.
 
-### 📊 **VISUALIZACIÓN DE DATOS**
+Puntuacion, dos archivos:
 
-| Widget | Cuándo usarlo | Ejemplo concreto |
-|--------|---------------|------------------|
-| **aero_table.dart** | Datos tabulares con sorting | Ranking de competidores, resultados por jurado |
-| **aero_avatar.dart** | Representación visual de usuario/equipo | Lista de competidores, perfil de usuario |
-| **aero_badge.dart** | Etiquetas pequeñas de estado/rol | "Activo", "Admin", "Judge D", "Pendiente" |
-| **aero_skeleton.dart** | Placeholder mientras carga | Durante fetch de competidores, mientras carga perfil |
-| **aero_progress.dart** | Mostrar progreso | Upload de planilla, cálculo de puntuaciones, login |
+- scoring_card y scoring_form_sheet: pertenecen a un modulo en
+  construccion. Se reauditan en su frente, no se adoptan como estables.
 
-### 📂 **NAVEGACIÓN Y MENÚS**
+Los tres ultimos grupos arrastran deuda de documentacion publica y de
+lineas largas. Se resuelve en el frente de shared.
 
-| Widget | Cuándo usarlo | Ejemplo concreto |
-|--------|---------------|------------------|
-| **aero_drawer.dart** | Navegación lateral en móvil | Menú principal en smartphones |
-| **aero_menubar.dart** | Menú estilo desktop (top bar) | File, Edit, View en versión tablet/desktop |
-| **aero_context_menu.dart** | Menú right-click | Opciones sobre competidor (Editar, Eliminar, Ver) |
-| **aero_breadcrumb.dart** | Navegación jerárquica | Home > Eventos > Evento 2024 > Resultados |
+## Que falta crear, cuatro piezas con uso crudo probado
 
-### 🪟 **DIÁLOGOS Y OVERLAYS**
+- Aviso temporal con su tema. Hoy los avisos usan el mecanismo crudo de
+  la plataforma, salen con contraste pobre sobre la barra de navegacion
+  y se pierden. Necesita tema propio y posicion decidida.
+- Marcador de modulo. Los destinos de entrenador y organizador en el
+  enrutador son texto centrado sin Scaffold, y el marcador de jurado es
+  una vista temporal que esta pieza debe absorber.
+- Indicador de progreso. Hay indicadores circulares crudos repetidos en
+  selectores, listas y secciones.
+- Hoja modal. El encabezado con degradado y el boton de cierre estan
+  duplicados en tres hojas. Es la duplicacion mas clara del arbol.
 
-| Widget | Cuándo usarlo | Ejemplo concreto |
-|--------|---------------|------------------|
-| **aero_dialog.dart** | Diálogo personalizado genérico | Configuración avanzada, preview de PDF |
-| **aero_alert_dialog.dart** | Alertas críticas | "¿Eliminar competidor?", "Error de conexión" |
-| **aero_alert_banner.dart** | Notificaciones persistentes | "Mantenimiento programado", "Nueva versión disponible" |
-| **aero_popover.dart** | Info emergente al click | Detalles rápidos de competidor sin navegar |
-| **aero_hover_card.dart** | Preview al hacer hover | Vista previa de evento al pasar mouse |
-| **aero_sheet.dart** | Bottom sheet (mobile) | Filtros de búsqueda, seleccionar fecha, acciones rápidas |
-| **aero_tooltip.dart** | Info rápida al hover | Explicación de campo, atajo de teclado |
-| **aero_toast.dart** | Notificación temporal | "Guardado exitoso", "Error al cargar", "Sesión expirada" |
+## Que existe y falta adoptar
 
-### 📅 **CALENDARIO Y FECHA**
+- Insignia para los chips de rol y estado hechos a mano, cuando sus
+  tokens de contraste esten corregidos.
+- Tarjeta para los contenedores crudos de listas y selectores.
+- Avatar para los avatares crudos fuera de la tarjeta de usuario, que
+  ya lo usa.
+- Dialogo de alerta para el borrado de equipos, que hoy usa dialogo
+  crudo. Ya se adopto en las transiciones de cuenta y en el lote.
 
-| Widget | Cuándo usarlo | Ejemplo concreto |
-|--------|---------------|------------------|
-| **aero_calendar.dart** | Seleccionar fecha/rango | Programar evento, seleccionar fecha de competencia |
-| **aero_pagination.dart** | Navegar páginas de datos | Tabla de 100 competidores (10 por página) |
+## Diferidos hasta que su superficie exista
 
-### 🎡 **COMPONENTES INTERACTIVOS**
+- Tabla y paginacion, para resultados de visitante.
+- Deslizador, para captura de puntuacion.
 
-| Widget | Cuándo usarlo | Ejemplo concreto |
-|--------|---------------|------------------|
-| **aero_carousel.dart** | Galería deslizable | Fotos del evento, logos de patrocinadores |
-| **aero_tabs.dart** | Cambiar entre vistas | Pestañas: "Dificultad", "Ejecución", "Arte" |
+No se crean antes de que exista la pantalla que los consume, porque
+crear catalogo sin consumidor es codigo muerto con otro nombre.
 
----
+## Rechazados para esta app
 
-**Ejemplos de Combinaciones Comunes**
+Barra de menus, migas de pan, menu contextual, tarjeta al pasar el raton,
+popover, informacion al pasar el raton, redimensionable, proporcion
+forzada, carrusel, area de scroll con estilo, comando con atajo,
+acordeon, colapsable, grupo de radios, interruptor de dos estados,
+entrada de codigo de verificacion, calendario y separador.
 
-1. **Formulario de Competidor:**
-   - `AeroInput` (nombre, email)
-   - `AeroSelect` (categoría, facultad)
-   - `AeroRadioGroup` (sexo)
-   - `AeroCheckbox` (acepta términos)
-   - `AeroButton` (guardar)
-   - `AeroCard` (contenedor)
+Razon: son de escritorio o de nicho sin superficie actual en esta app, o
+duplican lo que Material ya resuelve con el esquema de tema. Crearlos
+seria sobreingenieria y anadiria mantenimiento sin valor. Si una
+superficie futura los necesita, se crean entonces con su consumidor
+delante.
 
-2. **Dashboard de Resultados:**
-   - `AeroTable` (ranking)
-   - `AeroBadge` (estado, rol)
-   - `AeroAvatar` (competidor)
-   - `AeroPagination` (navegación)
-   - `AeroTabs` (por categoría)
-   - `AeroProgress` (carga inicial)
+## Normas de uso
 
-3. **Configuración de Usuario:**
-   - `AeroAccordion` (secciones: Cuenta, Notificaciones, Privacidad)
-   - `AeroSwitch` (activar/desactivar notificaciones)
-   - `AeroInput` (cambiar email, contraseña)
-   - `AeroButton` (guardar cambios)
-
-**Próximos Pasos**
-1. **Crea documentación** en `docs/widgets_usage.md` con esta guía.
-2. **Añade ejemplos** en `example/` o `lib/examples/` mostrando cada widget en contexto.
-3. **Implementa Storybook** o herramienta similar para visualizar widgets aislados.
-4. **Establece reglas**: "Si necesitas X, usa Y widget" para mantener consistencia.
-
-¿Necesitas que profundice en algún widget específico o que te muestre código de ejemplo para alguno?
+Toda pieza nueva o tocada viaja con prueba de render a ancho estrecho,
+porque el analizador no detecta desbordes. El texto de etiqueta y de
+accion es flexible y salta de linea, nunca se trunca, porque truncar el
+rotulo de una accion deja al usuario sin saber que pulsa. Superficies y
+textos salen del esquema de tema, no de constantes cableadas, para que
+la pieza sea legible en claro y en oscuro. Y ninguna pieza guarda estado
+que el consumidor deba conocer: si el consumidor tiene un notificador,
+el indice o el valor activo vive ahi.

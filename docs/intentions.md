@@ -1058,3 +1058,32 @@ contra la semantica de la accion, no solo contra su tamano. Tres, entregas
 sin ancla: una linea suelta para borrar, que aparece en varios archivos
 donde es legitima. Regla: toda edicion se entrega con bloque unico
 alrededor, o con sustitucion acotada al archivo y contada.
+## Prioridad del interruptor de tema, pedida por el autor
+
+El autor cambia el tema del sistema operativo a mano en cada pase
+visual, porque la app lo sigue y no hay interruptor propio. Eso encarece
+cada puerta de calidad con superficie, y el frente de shared necesita
+muchas. El registro ya decia que el cableado existe en el punto de
+entrada y que faltan persistencia e interfaz.
+
+Recomendacion del lead: hacerlo antes de la guia y del frente de shared,
+porque es una herramienta que abarata todo lo que viene despues, no un
+pulido. Precondicion de lectura: punto de entrada, archivo de tema y
+proveedor de preferencias, para no duplicar el cableado existente.
+Destino de la interfaz: la fila de preferencias de configuracion, que
+hoy es un marcador y con esto gana su primer destino real.
+
+## Destinos de rol pendientes en el enrutador, ampliados por el autor
+
+El bloque del espectador queda ampliado. No es solo el espectador: los
+destinos de entrenador y organizador tambien son texto centrado crudo
+sin Scaffold ni catalogo. El autor pide cubrirlos en el mismo frente de
+destinos, con una salvedad explicita: el de organizador puede esperar
+mucho mas porque su funcionalidad no esta planteada aun.
+
+Alcance del frente cuando se abra. Espectador, con marcador honesto
+mientras no exista vista de resultados. Entrenador, con marcador o con
+su vista si para entonces existe. Organizador, marcador minimo, y su
+funcionalidad queda como frente propio sin fecha. Los tres consumen el
+marcador de modulo del catalogo, asi que el frente depende de que esa
+pieza exista.

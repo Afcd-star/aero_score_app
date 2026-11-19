@@ -13,10 +13,10 @@ import 'package:flutter/material.dart';
 /// - Mostrar errores críticos que requieren atención inmediata
 /// - Alertas de seguridad o validación de negocio
 ///
-/// ## Cuándo NO usarlo:
-/// - Formularios complejos → usa [AeroDialog] o [AeroSheet]
-/// - Información no crítica → usa [AeroToast] o [AeroAlertBanner]
-/// - Menús de opciones → usa [AeroContextMenu]
+/// No usarlo para formularios complejos, para información que no exige
+/// una decisión, ni para menús de opciones. Esas responsabilidades
+/// pertenecen a piezas de catálogo aún no creadas, registradas como
+/// deuda de shared. Mientras no existan no se improvisan en la vista.
 ///
 /// ## Ejemplo básico:
 /// ```dart

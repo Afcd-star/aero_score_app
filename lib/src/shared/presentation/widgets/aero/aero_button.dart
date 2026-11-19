@@ -50,7 +50,12 @@ class AeroButton extends StatelessWidget {
     final (bgColor, fgColor, border) = _getColors(theme, isDark);
     final (verticalPadding, fontSize) = _getDimensions();
 
-    final hasGradient = gradient != null;
+    final effectiveGradient =
+        gradient ??
+        (variant == AeroButtonVariant.primary
+            ? AppColors.getGlowGradient()
+            : null);
+    final hasGradient = effectiveGradient != null;
     final buttonBackgroundColor = hasGradient ? Colors.transparent : bgColor;
     final textColor = hasGradient ? Colors.white : fgColor;
 
@@ -92,11 +97,11 @@ class AeroButton extends StatelessWidget {
         height: height,
         child: Container(
           decoration: BoxDecoration(
-            gradient: gradient,
+            gradient: effectiveGradient,
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: gradient!.colors.first.withValues(alpha: 0.3),
+                color: effectiveGradient.colors.first.withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),

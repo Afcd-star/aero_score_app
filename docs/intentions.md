@@ -1007,3 +1007,54 @@ de exitos y fallos, porque parar el lote por un registro malo es peor el
 dia del evento. Cinco, sin cambio de contrato: el notificador itera el
 metodo unitario que ya existe, y el lote del servidor queda como mejora
 de escalabilidad registrada.
+## Cierre del frente de gestion de usuarios, con pase visual verificado
+
+Cerrado de punta a punta. Catalogo extendido con estado vacio y barra de
+filtros controlada. Seccion propia de usuarios con encabezado, contador,
+busqueda, dos filtros, refrescar y estado vacio. Configuracion reducida a
+preferencias. Tarjeta con rol, estado y transiciones. Lote de aprobacion y
+rechazo, y reactivacion, sobre el filtro que le da sentido.
+
+Pase visual verificado en ambos modos con capturas. Con filtro todos no
+hay botones de lote y queda un solo hueco. Con pendientes aparecen aprobar
+y rechazar con el mismo conteo. Con inactivos aparece reactivar. Las
+acciones de la tarjeta van apiladas con aprobar arriba. El estado
+pendiente ya no se parte a mitad de palabra. Y el titulo de la
+confirmacion se lee completo con su numero, en dos lineas si hace falta.
+
+Balance del frente. Pruebas de cincuenta a sesenta y nueve. Errores de
+sesenta y siete a sesenta y seis, primera bajada de la linea base en toda
+la conversacion. Catalogo con dos piezas nuevas y cuatro adoptadas.
+
+## Deuda diferida por decision del autor, dos
+
+Uno, prueba de widget del guard de alcance. Hoy la restriccion del lote al
+filtro vive en la vista y solo la cubre el pase visual, que ya la verifico
+con captura. El autor decide diferirla porque implementarla ahora seria
+pulir de mas. Archivo destino: suite nueva de la seccion en
+test/features/auth/presentation/views/sections/, usando el doble que ya
+existe en test/features/auth/support/fake_user_repository.dart. Casos
+minimos: con filtro todos no existen los botones de lote, con pendientes
+existen los dos, con inactivos existe reactivar. Razon para no olvidarla:
+el riesgo que cubre es dejar a la federacion entera sin acceso en un clic,
+y un guard de riesgo catastrofico no deberia depender solo de ojos.
+
+Dos, anchura del dialogo de confirmacion. El titulo con un digito de
+conteo salta a dos lineas. Se podria ensanchar un poco el dialogo para que
+los conteos de dos a nueve quepan en una linea. Es pulido visual, no
+defecto: el numero se lee completo, que era el requisito de seguridad.
+Registrado como pulido, no como bloqueo.
+
+## Correcciones de metodo recurrentes del lead en este frente
+
+Tres, todas del mismo tipo: entregar sin verificar. Uno, tipos explicitos
+en variables locales con inicializador, que este proyecto prohibe, y que
+el autor o su editor corrigieron varias veces. Regla: var o final sin tipo
+cuando hay inicializador, tipo explicito solo sin el. Dos, alcance
+semantico incompleto: la regla de conjunto visible protegia contra operar
+toda la coleccion pero no contra operar el conjunto equivocado, y el autor
+lo detecto preguntando. Regla: el alcance de una accion masiva se valida
+contra la semantica de la accion, no solo contra su tamano. Tres, entregas
+sin ancla: una linea suelta para borrar, que aparece en varios archivos
+donde es legitima. Regla: toda edicion se entrega con bloque unico
+alrededor, o con sustitucion acotada al archivo y contada.

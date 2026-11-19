@@ -91,7 +91,7 @@ class AeroFormField extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        if (field != null) field!,
+        ?field,
         if (errorText != null && errorText!.isNotEmpty) ...[
           const SizedBox(height: 6),
           Row(

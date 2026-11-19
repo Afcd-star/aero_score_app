@@ -13,6 +13,8 @@ import 'package:aero_score_app/src/shared/presentation/widgets/admin/'
 import 'package:aero_score_app/src/shared/presentation/widgets/admin/'
     'section_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
+    'aero_alert_dialog.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
     'aero_button.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
     'aero_empty_state.dart';
@@ -84,6 +86,8 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
     final state = ref.watch(roleManagementProvider);
     final notifier = ref.read(roleManagementProvider.notifier);
     final visible = state.filteredUsers;
+    final toApprove = visible.where((u) => u.status != 'Active').toList();
+    final toReject = visible.where((u) => u.status != 'Inactive').toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -120,6 +124,40 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
               ),
             ),
             const SizedBox(height: 20),
+            const SizedBox(height: 12),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: AeroButton(
+                    label: 'Aprobar (${toApprove.length})',
+                    size: AeroButtonSize.sm,
+                    onPressed: toApprove.isEmpty
+                        ? null
+                        : () => unawaited(
+                            _runBulk(context, notifier, toApprove, 'Active'),
+                          ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: AeroButton(
+                    label: 'Rechazar (${toReject.length})',
+                    size: AeroButtonSize.sm,
+                    variant: AeroButtonVariant.destructive,
+                    onPressed: toReject.isEmpty
+                        ? null
+                        : () => unawaited(
+                            _runBulk(
+                              context,
+                              notifier,
+                              toReject,
+                              'Inactive',
+                            ),
+                          ),
+                  ),
+                ),
+              ],
+            ),
             state.users.when(
               loading: _buildSkeleton,
               error: (err, _) => _buildErrorState(
@@ -322,5 +360,63 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
         );
       },
     );
+  }
+
+  Future<void> _runBulk(
+    BuildContext context,
+    RoleManagementNotifier notifier,
+    List<UserEntity> targets,
+    String target,
+  ) async {
+    final destructive = target == 'Inactive';
+    final verb = destructive ? 'Rechazar' : 'Aprobar';
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AeroAlertDialog(
+        title: '$verb ${targets.length} cuenta(s)',
+        content: destructive
+            ? 'Las cuentas quedan inactivas y no podrán entrar a la app. '
+                  'No se borra ningún registro y puedes reactivarlas.'
+            : 'Las cuentas quedan activas y podrán entrar a la app.',
+        icon: destructive
+            ? Icons.warning_amber_rounded
+            : Icons.check_circle_outline,
+        actions: <Widget>[
+          AeroButton(
+            label: 'Cancelar',
+            variant: AeroButtonVariant.ghost,
+            size: AeroButtonSize.sm,
+            onPressed: () => Navigator.pop(dialogContext, false),
+          ),
+          AeroButton(
+            label: verb,
+            size: AeroButtonSize.sm,
+            variant: destructive
+                ? AeroButtonVariant.destructive
+                : AeroButtonVariant.primary,
+            onPressed: () => Navigator.pop(dialogContext, true),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) {
+      return;
+    }
+    final messenger = ScaffoldMessenger.of(context);
+    final outcome = await notifier.updateUsersStatus(
+      targets,
+      target,
+    );
+    messenger
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            '${outcome.updated} actualizada(s), ${outcome.failed} '
+            'fallida(s), ${outcome.skipped} omitida(s).',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
   }
 }

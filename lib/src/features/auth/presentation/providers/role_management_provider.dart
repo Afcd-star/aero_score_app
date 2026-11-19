@@ -198,4 +198,60 @@ class RoleManagementNotifier extends Notifier<RoleManagementState> {
 
     return success;
   }
+
+  /// Cambia el estado de varias cuentas y recarga al terminar.
+  ///
+  /// Aporta el escritor real a la funcion pura de lote y mantiene la
+  /// marca de actualizacion durante todo el recorrido, con una sola
+  /// recarga al final para no reconstruir la lista en cada escritura.
+  Future<BulkStatusOutcome> updateUsersStatus(
+    List<UserEntity> targets,
+    String newStatus,
+  ) async {
+    state = state.copyWith(isUpdating: true);
+    final outcome = await applyBulkStatus(
+      users: targets,
+      target: newStatus,
+      write: (id, status) async {
+        final result = await _repository.updateUserStatus(
+          userId: id,
+          newStatus: status,
+        );
+        return result.isRight;
+      },
+    );
+    state = state.copyWith(isUpdating: false);
+    await loadUsers();
+    return outcome;
+  }
+}
+
+/// Resultado de un cambio de estado aplicado a varias cuentas.
+typedef BulkStatusOutcome = ({int updated, int failed, int skipped});
+
+/// Aplica un estado a varias cuentas con las reglas de lote acordadas.
+///
+/// Salta a quien ya esta en el estado destino, continua ante fallo y
+/// devuelve los conteos reales. Es pura porque recibe el escritor, asi
+/// que las reglas se prueban sin red ni proveedor.
+Future<BulkStatusOutcome> applyBulkStatus({
+  required List<UserEntity> users,
+  required String target,
+  required Future<bool> Function(String userId, String status) write,
+}) async {
+  var updated = 0;
+  var failed = 0;
+  var skipped = 0;
+  for (final user in users) {
+    if (user.status == target) {
+      skipped++;
+      continue;
+    }
+    if (await write(user.id, target)) {
+      updated++;
+    } else {
+      failed++;
+    }
+  }
+  return (updated: updated, failed: failed, skipped: skipped);
 }

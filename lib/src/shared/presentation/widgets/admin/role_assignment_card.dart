@@ -53,7 +53,8 @@ class RoleAssignmentCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     final roleColor = ThemeHelper.getRoleColor(currentRole, context);
-    final action = _statusAction;
+    final primary = _primaryAction;
+    final secondary = _secondaryAction;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -168,20 +169,37 @@ class RoleAssignmentCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (action != null)
-                AeroButton(
-                  label: action.label,
-                  size: AeroButtonSize.sm,
-                  variant: action.destructive
-                      ? AeroButtonVariant.destructive
-                      : AeroButtonVariant.primary,
-                  icon: Icon(
-                    action.destructive
-                        ? Icons.block
-                        : Icons.check_circle_outline,
-                    size: 16,
-                  ),
-                  onPressed: () => unawaited(_runStatusAction(context, action)),
+              if (primary != null)
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  alignment: WrapAlignment.end,
+                  children: <Widget>[
+                    AeroButton(
+                      label: primary.label,
+                      size: AeroButtonSize.sm,
+                      variant: primary.destructive
+                          ? AeroButtonVariant.destructive
+                          : AeroButtonVariant.primary,
+                      icon: Icon(
+                        primary.destructive
+                            ? Icons.block
+                            : Icons.check_circle_outline,
+                        size: 16,
+                      ),
+                      onPressed: () =>
+                          unawaited(_runStatusAction(context, primary)),
+                    ),
+                    if (secondary != null)
+                      AeroButton(
+                        label: secondary.label,
+                        size: AeroButtonSize.sm,
+                        variant: AeroButtonVariant.destructive,
+                        icon: const Icon(Icons.close, size: 16),
+                        onPressed: () =>
+                            unawaited(_runStatusAction(context, secondary)),
+                      ),
+                  ],
                 ),
             ],
           ),
@@ -216,7 +234,7 @@ class RoleAssignmentCard extends StatelessWidget {
     return scheme.error;
   }
 
-  ({String label, String target, bool destructive})? get _statusAction {
+  ({String label, String target, bool destructive})? get _primaryAction {
     if (user.isPending) {
       return (label: 'Aprobar', target: 'Active', destructive: false);
     }
@@ -229,6 +247,13 @@ class RoleAssignmentCard extends StatelessWidget {
     return null;
   }
 
+  ({String label, String target, bool destructive})? get _secondaryAction {
+    if (user.isPending) {
+      return (label: 'Rechazar', target: 'Inactive', destructive: true);
+    }
+    return null;
+  }
+
   Future<void> _runStatusAction(
     BuildContext context,
     ({String label, String target, bool destructive}) action,
@@ -237,10 +262,12 @@ class RoleAssignmentCard extends StatelessWidget {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (dialogContext) => AeroAlertDialog(
-          title: 'Desactivar cuenta',
-          content:
-              'La persona no podrá entrar a la app hasta que su cuenta '
-              'se reactive. Puedes reactivarla desde esta misma tarjeta.',
+          title: '${action.label} cuenta',
+          content: action.label == 'Rechazar'
+              ? 'La solicitud se rechaza y la cuenta queda inactiva. '
+                    'No se borra el registro y puedes reactivarla.'
+              : 'La persona no podrá entrar a la app hasta que su cuenta '
+                    'se reactive. Puedes reactivarla desde esta tarjeta.',
           icon: Icons.warning_amber_rounded,
           actions: <Widget>[
             AeroButton(

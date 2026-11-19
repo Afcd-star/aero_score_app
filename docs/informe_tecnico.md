@@ -2,10 +2,13 @@
 
 ## 1. Proposito
 
-Radiografia honesta del estado real de la aplicacion, bitacora de
-decisiones tecnicas y base para auditoria de calidad. No es material de
-marketing. Este documento se actualiza en el mismo commit que cierra
-cada funcionalidad, junto con el changelog y la version.
+Radiografia honesta del estado real de la aplicacion y base para auditoria
+de calidad. No es material de marketing. Se actualiza en el mismo commit
+que cierra cada funcionalidad, junto con el changelog y la version.
+
+La bitacora de decisiones, el registro de deuda con precondiciones y las
+correcciones de metodo del lead viven en `docs/intentions.md`. Este
+informe no las duplica: las apunta.
 
 ## 2. Arquitectura
 
@@ -13,131 +16,164 @@ Organizacion feature first con Clean Architecture en cuatro capas por
 funcionalidad: dominio, datos, inyeccion y presentacion. El orden de
 ataque dentro de cada funcionalidad es fijo y no negociable.
 
-- Dominio: tipos, enums, entidades con Freezed y contratos de
-  repositorio. Se valida con analisis estatico y prueba de unidad de
-  igualdad.
-- Datos: modelos con Freezed y json_serializable, implementaciones de
-  repositorio con manejo explicito de errores y lectura segura de mapas.
-  Se valida con analisis estatico y prueba de repositorio con dobles.
-- Inyeccion: proveedores de datos. Se valida que el proveedor sea unico
-  por funcionalidad.
-- Presentacion: estados, notifiers, vistas y widgets del catalogo de
-  marca. Se valida con analisis estatico y prueba de widget.
-- Cierre: commit atomico por capa con mensaje que refleje el cambio real.
+Dominio: tipos, enums, entidades y contratos de repositorio. Se valida con
+analisis estatico y prueba de unidad de igualdad y validacion. El modelado
+es mixto por decision: administracion usa Freezed, equipos y usuario son
+clases manuales con migracion registrada. No se impone Freezed como
+mandato unico mientras esa migracion no se ejecute.
+
+Datos: modelos con mapeo explicito y lectura segura de mapas,
+implementaciones de repositorio con manejo explicito de errores. Se valida
+con analisis estatico. La prueba de repositorio con dobles esta diferida
+por desviacion registrada: el cliente de PocketBase no es inyectable.
+
+Inyeccion: proveedores de datos, unicos por funcionalidad, con cliente
+global inyectado para que todas las consultas lleven token.
+
+Presentacion: estados, notificadores, vistas y widgets del catalogo de
+marca. Se valida con analisis estatico y pase visual. Las pruebas de
+widget se exigen para pieza de catalogo nueva o tocada, con render a ancho
+estrecho; para vistas de feature siguen diferidas al frente de shared.
+
+Cierre: commit atomico por naturaleza con mensaje que refleje el cambio
+real.
 
 Arbol de lib:
 
-- lib/src/core: tema, rutas, inyeccion global, errores de dominio y
-  utilidades transversales.
-- lib/src/shared: catalogo de widgets Aero y componentes comunes.
-- lib/src/features/admin: panel de administracion.
-- lib/src/features/auth: autenticacion, registro, sesion y aprobacion
-  pendiente.
-- lib/src/features/competitors: gestion de competidores.
-- lib/src/features/events: gestion de eventos.
-- lib/src/features/teams: gestion de equipos.
-- lib/src/features/scoring: modulo de calificacion.
+- `lib/src/core`: tema, rutas, inyeccion global, errores y utilidades.
+- `lib/src/shared`: catalogo de widgets Aero y componentes comunes.
+- `lib/src/features/admin`: panel de administracion.
+- `lib/src/features/auth`: autenticacion, sesion, aprobacion y gestion de
+  usuarios con sus roles y estados.
+- `lib/src/features/competitors`: gestion de competidores.
+- `lib/src/features/events`: gestion de eventos.
+- `lib/src/features/teams`: gestion de equipos.
+- `lib/src/features/scoring`: modulo de puntuacion, en construccion.
 
 ## 3. Stack y decisiones
 
-- Estado: Riverpod 3.x con proveedores manuales tipados. La migracion a
-  anotaciones viaja en el frente de toolchain, no dentro de una feature
-  a mitad de ciclo, para no mezclar manual y generado en la misma
-  funcionalidad. Esta decision corrige la especificacion anterior que
-  declaraba las anotaciones como obligatorias de inmediato.
-- Enrutamiento: GoRouter con la ruta como fuente de verdad de la
-  seccion activa donde aplica.
-- Modelado: Freezed para inmutabilidad y equality, json_serializable
-  para mapeo. Regla: nunca editar el generado, regenerar con
-  build_runner.
-- Errores: either_dart con Left de Failure tipado. La clase base Failure
-  implementa Exception para permitir propagar el fallo por throw sin
-  violar el lint de solo lanzar errores.
-- Backend: PocketBase con cliente global que restaura la sesion desde
-  SharedPreferences. Los repositorios reciben el cliente inyectado, no
-  construyen el suyo, para que todas las consultas lleven token.
-- UI: Material 3 con catalogo Aero propio. Regla operativa: si un widget
-  del catalogo cubre la necesidad, se usa el catalogo; si no, se
-  extiende el catalogo antes de improvisar en la vista.
-- Tipografia: Sora para titulos y Manrope para cuerpo, con los quince
-  roles de TextTheme declarados. Un rol ausente anula en silencio
-  tamano, peso y color via copyWith.
-- Idioma: codigo en ingles, comentarios e interfaz en espanol.
+Estado: Riverpod 3.x con proveedores manuales tipados. La migracion a
+anotaciones viaja en el frente de toolchain, no dentro de una feature a
+mitad de ciclo, para no mezclar manual y generado en la misma
+funcionalidad.
 
-## 4. Estado por funcionalidad
+Enrutamiento: GoRouter con la ruta como fuente de verdad de la seccion
+activa donde aplica.
 
-- Autenticacion: flujo de aprobacion cerrado de extremo a extremo, con rechazo, desactivacion, reactivacion y lote sobre el filtro que le da sentido. Entidad documentada y sin codigo muerto. Deuda de raiz registrada: el estado de cuenta es cadena suelta y pide enumerado con conversion desde almacenamiento.
-  Maquina de estados sellada con AuthInitial, AuthLoading,
-  AuthPendingApproval, AuthSuccess y AuthError. Deuda funcional abierta:
-  la clase de aprobacion pendiente no esta marcada como final, la
-  ventana de solapamiento en restauracion de sesion requiere prueba, y
-  el cierre de sesion abandona la llamada remota sin error recuperable.
-- Competidores: saneada en sesiones anteriores. Deuda de cabecera con
-  ruta vieja registrada.
-- Eventos: saneada en sesiones anteriores, con dos bloqueos de
-  compilacion resueltos en el desbloqueo minimo. Deuda de cabecera y de
-  lints internos registrada.
-- Equipos: CERRADA en 0.2.0. Segunda feature bajo checklist completo.
-  Evidencia: cero hallazgos del analizador en la feature y sus pruebas,
-  veintinueve casos nuevos hasta cincuenta en el proyecto, documentacion
-  publica completa, ochenta columnas, salto final y pase visual en claro
-  y oscuro. Orden fijo de capas ejecutado: dominio con validacion
-  unificada e igualdad sobre campos de contenido, datos con modelo
-  tipado contra el esquema vivo y escape de filtros, inyeccion
-  documentada, presentacion con borrado logico coherente y tipos
-  declarados. Incrementos funcionales registrados como frentes propios:
-  disponibilidad de asignaciones y coherencia de modalidad del roster.
-  La planilla es fase obligatoria con precondiciones de las tres capas.
-- Calificacion: pendiente de auditoria. No ha entrado en el ciclo.
-- Administracion: CERRADA. Primer hito bajo checklist completo. Evidencia:
-  cero avisos en el perimetro de la feature, veintiun pruebas de unidad
-  verdes en cinco archivos, documentacion publica en espanol, lineas
-  dentro de ochenta columnas, salto final, y pase visual en modo claro y
-  oscuro. Se ejecuto el orden fijo de capas: dominio con entidades
-  Freezed y contrato podado a dos metodos, datos con DTO manual de
-  actividad, inyeccion con cliente global inyectado y Failure tipado en
-  AsyncValue, presentacion con navegacion tipada derivada del enum y
-  seccion sincronizada desde la ruta. Se reubicaron a sus features las
-  hojas de competidor y equipos, el provider de coaches y la gestion de
-  roles, y los dos casos de uso que estaban mal alojados en auth. Se
-  eliminaron como codigo muerto el provider y el header del panel,
-  probado por grep de consumidores vacio.
+Modelado: mixto y declarado. Freezed en administracion; clases manuales en
+equipos y usuario, con la limitacion de copia nulable registrada y test
+canario que avisara cuando Freezed la resuelva. Regla: nunca editar el
+generado, regenerar con build_runner.
 
-## 5. Deuda tecnica registrada y priorizada
+Errores: either_dart con Left de Failure tipado. La clase base Failure
+implementa Exception para permitir propagar el fallo por throw sin violar
+el lint de solo lanzar errores.
 
-Identificada, escrita y con precondicion. No corregida porque excede el
-alcance del cierre o exige archivos aun no auditados.
+Backend: PocketBase con cliente global que restaura la sesion desde
+SharedPreferences. Los repositorios reciben el cliente inyectado, no
+construyen el suyo.
 
-- Prueba del repositorio de administracion contra PocketBase.
-  Precondicion: cliente http inyectable en el contrato.
-- Heuristica de dos segundos para deducir la accion de actividad.
-  Precondicion: coleccion de auditoria en el backend.
-- AppEnvironment como segunda fuente de verdad de entorno frente al
-  define de compilacion del DI. Frente de core.
-- URL de produccion de AppEnvironment es un marcador. Bloquea cualquier
-  compilacion de release. Frente de release.
-- Notifiers de estado de interfaz alojados dentro de data di, lo que
-  hace que data importe presentacion. Frente de layout.
-- Veintiun avisos de los tres widgets de administracion en shared
-  (admin_quick_action, admin_stats_card, section_card): documentacion y
-  lineas largas. Frente de shared.
-- Vinetas del reglamento usan el primer color del degradado y se
-  camuflan sobre su fondo. Frente de catalogo.
+UI: Material 3 con catalogo Aero propio. Regla operativa: si un widget del
+catalogo cubre la necesidad, se usa el catalogo; si no, se extiende el
+catalogo antes de improvisar en la vista. Toda decision de widget se
+contrasta con el arbol, no con la guia de uso, que describe piezas
+inexistentes.
+
+Tipografia: Sora para titulos y Manrope para cuerpo, con los quince roles
+de TextTheme declarados. Un rol ausente anula en silencio tamano, peso y
+color via copyWith.
+
+Idioma: codigo en ingles, comentarios e interfaz en espanol.
+
+## 4. Estado por modulo
+
+- Administracion: CERRADA en 0.1.0. Panel con navegacion tipada derivada
+  del enum y seccion sincronizada desde la ruta. En 0.3.0 gano la seccion
+  de usuarios, asi que el catalogo de secciones paso de seis a siete.
+- Equipos: CERRADA en 0.2.0. Validacion unificada, igualdad sobre campos
+  de contenido, modelo tipado contra el esquema vivo, escape de filtros y
+  borrado logico coherente. Incrementos funcionales registrados como
+  frentes propios: disponibilidad de asignaciones y coherencia de
+  modalidad del roster. La planilla es fase obligatoria.
+- Usuarios y aprobacion: CERRADA en 0.3.0. Seccion propia con filtros en
+  cliente, busqueda, refrescar y estado vacio del catalogo. Transiciones
+  de cuenta con confirmacion para las destructivas, y lote sobre el filtro
+  que le da sentido.
+- Autenticacion: flujo de aprobacion cerrado de extremo a extremo y
+  entidad documentada. Deuda funcional abierta: la clase de aprobacion
+  pendiente no esta marcada como final, la ventana de solapamiento en
+  restauracion de sesion requiere prueba, y el cierre de sesion abandona
+  la llamada remota sin error recuperable. Deuda de raiz: el estado de
+  cuenta es cadena suelta y pide enumerado con conversion.
+- Competidores: saneada en analisis estatico. Cabecera con ruta vieja y
+  adopcion del escape de filtro pendientes.
+- Eventos: saneada en analisis estatico, con once errores de severidad
+  ocho en presentacion, de las mismas clases ya corregidas en equipos.
+  Cabecera con ruta vieja pendiente.
+- Puntuacion: en construccion, no codigo muerto. Tiene tres modelos,
+  repositorio, notificador, vista y dos widgets en shared, con cincuenta y
+  un errores concentrados en lecturas implicitas de dinamico. Sus rutas ya
+  no se alcanzan por inicio de sesion. Se reaudita y reescribe en su
+  frente, con el esquema real delante.
+- Visitante y resultados: no existe. El espectador acaba en la pantalla de
+  cuenta pendiente aunque este aprobado, lo cual es falso.
+- Sincronizacion: no iniciada.
+
+## 5. Metricas medidas al cierre 0.3.0
+
+- Pruebas: sesenta y nueve, verdes.
+- Errores de analisis: sesenta y seis. Primera bajada de la linea base,
+  que estaba en sesenta y siete.
+- Distribucion de errores: puntuacion cincuenta y uno, eventos once,
+  catalogo compartido cuatro.
+- Modulos en cero avisos: administracion, equipos, seccion de usuarios y
+  tarjeta de asignacion.
+
+## 6. Deuda tecnica, por bloqueo de lanzamiento
+
+Primero lo que impide publicar:
+
+- Manifiesto principal de Android sin permiso de red. Correccion de la
+  deuda previa: depuracion y perfil si lo declaran, asi que el bloqueo es
+  de lanzamiento, no de dispositivo fisico. Depuracion ya permite texto
+  claro para el backend en red local.
+- URL de produccion del entorno como marcador.
+- Rutas de puntuacion hacia pantalla sin construir.
+- Destino del espectador inexistente.
+- Guard de rutas por prefijo, no por permisos dinamicos. La coleccion Roles
+  existe sin datos sembrados ni consumidor.
+- Sincronizacion sin conexion, con precondicion de coleccion de cola.
+
+Despues lo que degrada calidad sin impedir publicar:
+
+- Tokens semanticos de estado y de marca, con el contraste del badge roto
+  en exito y la condicion de atencion invertida.
+- Cuatro piezas de catalogo por crear: aviso temporal con su tema,
+  marcador de modulo, indicador de progreso y hoja modal.
+- Documentacion del catalogo: boton, envoltorio de formulario y los tres
+  widgets de administracion en shared.
+- Guia de uso del catalogo, que describe piezas inexistentes y cuyas
+  referencias rotas llegaron a comentarios del codigo.
+- Enumerado de estado de cuenta.
+- AppEnvironment como segunda fuente de verdad de entorno.
+- Notifiers de interfaz dentro de data di.
+- Prueba del repositorio de administracion contra PocketBase, con
+  precondicion de cliente inyectable.
+- Heuristica de dos segundos de la actividad, con precondicion de
+  coleccion de auditoria.
+- Vinetas del reglamento camufladas sobre su fondo.
 - Monograma fijo en el menu lateral en lugar de avatar de usuario.
-  AeroAvatar existe en el catalogo; la decision de diseno es del frente
-  de catalogo y tema.
-- Catalogo de botones con altura desproporcionada y relleno blanco que
-  desconecta de la marca. Frente de catalogo.
-- Aviso de build_runner que compara el SDK con el analyzer. Causa raiz:
-  analyzer clavado por la cadena riverpod_lint, riverpod_analyzer_utils
-  y custom_lint_visitor. No se resuelve con pub upgrade. Frente de
-  toolchain, con versiones verificadas por pub outdated y gate global.
-- Manifiesto principal de Android sin permiso de red ni texto claro.
-  Bloquea release y dispositivo fisico. Frente de Android.
-- Cabeceras con ruta vieja en cuatro archivos ajenos a administracion.
-  Se corrigen al abrir el frente de cada feature.
+- Selector de tema con persistencia e interruptor.
+- Aviso de build_runner contra el analyzer, clavado por la cadena de
+  riverpod_lint. No se resuelve con actualizacion suelta.
+- Cabeceras con ruta vieja en archivos de competidores y eventos.
+- Registro de rol desconocido solo de depuracion.
+- Prueba de widget del guard de alcance del lote, diferida con ruta y
+  casos escritos.
+- Anchura del dialogo de confirmacion, registrada como pulido y no como
+  bloqueo, porque el conteo ya se lee completo.
 
-## 6. Checklist de cierre de funcionalidad
+## 7. Checklist de cierre de funcionalidad
 
 - Dominio, datos, inyeccion y presentacion en el orden fijo.
 - Proveedores tipados, sin mezcla de manual y generado en la feature.
@@ -145,103 +181,57 @@ alcance del cierre o exige archivos aun no auditados.
 - Documentacion publica en espanol completa.
 - Lineas dentro de ochenta columnas y salto final.
 - Directivas ordenadas alfabeticamente.
-- Pruebas de unidad de dominio y datos, y prueba de widget de
-  presentacion. flutter test en verde es requisito de gate.
+- Pruebas de unidad de dominio y de logica de presentacion. La prueba de
+  repositorio esta diferida por desviacion registrada.
+- Pieza de catalogo nueva o tocada: prueba de render a ancho estrecho,
+  porque el analizador no detecta desbordes.
 - Pase visual en modo claro y oscuro cuando la feature toca superficie.
-- Commit atomico por capa con mensaje descriptivo.
+- Commit atomico por naturaleza con mensaje descriptivo.
 - Cierre documental: un commit que sube version, escribe changelog,
   actualiza este informe e intentions, y etiqueta. Antes de abrir la
   siguiente feature.
 
-## 7. Ritual de gate
+## 8. Ritual de puerta de calidad
 
-- dart run build_runner build con la bandera de salida en conflicto.
-- dart analyze filtrado al perimetro de la feature. Cero severity 8.
-  Los infos de otras features no bloquean el commit de esta, se anotan
-  como deuda de su frente.
-- flutter test en verde.
-- Guardia de estado antes de cada commit: solo las rutas esperadas
-  preparadas, nada suelto inesperado.
-- Mensaje de commit en archivo temporal UTF8 sin BOM, add explicito,
-  commit, borrado del temporal, estado final vacio. Push al cierre de
-  capa o de feature segun la regla acordada.
+- Generador solo cuando el cambio toca fuentes anotadas, clases con partes
+  generadas o el manifiesto. En el resto, analisis mas pruebas.
+- Analisis filtrado al perimetro tocado, sin severity ocho nuevo. Los
+  avisos previos de otros frentes no bloquean, se anotan como deuda de su
+  frente. La linea base del perimetro se mide antes de afirmar que esta
+  vacio.
+- Pruebas en verde.
+- Guardia de estado antes de cada commit: solo las rutas esperadas.
+- Mensaje en archivo temporal UTF8 sin BOM, commit limitado por rutas,
+  borrado del temporal, estado final vacio. Los archivos nuevos se
+  preparan antes porque esa forma solo acepta rutas conocidas.
+- Cada bloque de terminal declara su propia codificacion, ruta y mensaje.
+- Toda prueba viva se reporta declarando el modo de recarga usado.
 
-## 8. Versionado
+## 9. Versionado
 
-- Esquema SemVer previo a 1.0: 0.MINOR.PATCH. Minor por cierre de
-  feature, patch por correccion. 1.0.0 exige esquema de PocketBase
-  congelado y las seis features auditadas con pruebas.
-- Hito actual: 0.1.0, administracion cerrada como primera feature bajo
-  checklist completo con pruebas. El trabajo parcial de auth,
-  competitors y eventos de sesiones anteriores se pliega en el changelog
-  como historico sin etiquetas retroactivas, porque no se planearon para
-  etiquetar.
-- Mecanismo: en el commit de cierre documental se sube la linea version
-  de pubspec.yaml, se anade entrada en docs/changelog.md, se actualiza
-  este informe e intentions, y se crea etiqueta anotada. Un solo gesto
-  ata docs y version.
-- Sufijo de prelanzamiento para estados no auditados que necesiten
-  build: 0.X.0-rc.N.
+Esquema SemVer previo a 1.0: 0.MINOR.PATCH. Minor por cierre de feature,
+patch por correccion. 1.0.0 exige esquema de PocketBase congelado y las
+features auditadas con pruebas.
 
-## 9. Registro de correcciones de metodo del lead
+Hito actual: 0.3.0, gestion de usuarios y flujo de aprobacion cerrados.
+Hitos previos: 0.1.0 administracion, 0.2.0 equipos. El trabajo parcial de
+auth, competidores y eventos de sesiones anteriores se pliega en el
+changelog como historico sin etiquetas retroactivas.
 
-Diez correcciones registradas en esta conversacion, por honestidad de
-auditoria. El patron recurrente es actuar sobre suposicion en vez de
-sobre evidencia leida.
+Mecanismo: en el commit de cierre documental se sube la linea version del
+manifiesto, se anade entrada en el changelog, se actualiza este informe e
+intentions, y se crea etiqueta anotada. Un solo gesto ata docs y version.
 
-1. Inventar el nombre del tipo de retorno de getList en vez de leer la
-   inferencia del repositorio de produccion.
-2. Recomendar pub upgrade que no resolvia el aviso del analyzer y rompia
-   la bandera del ritual de gate.
-3. Comando git restore sin fuente explicita a HEAD, restaurando desde un
-   indice sucio.
-4. Grep que mezclaba comentarios de cabecera con imports reales.
-5. Grep demasiado ancho que casaba la palabra admin en rutas de shared.
-6. Import sin uso entregado en una suite de prueba.
-7. Patron de cascada sobre literal constante en dos suites de prueba.
-8. Afirmar que el catalogo no tenia avatar cuando AeroAvatar existia y
-   se usaba en produccion.
-9. Plan de reescribir provider y header que eran codigo muerto con cero
-   consumidores.
-10. Suponer que los casos de uso no existian cuando estaban mal alojados
-    en auth.
+Sufijo de prelanzamiento para estados no auditados que necesiten build:
+0.X.0-rc.N.
 
-Contramedida adoptada: leer el contrato o el grafo de consumidores antes
-de escribir, y verificar con gate y guardia en vez de con fe.
-## Cierre 0.3.0, gestion de usuarios y flujo de aprobacion
+## 10. Registro de metodo
 
-Estado medido al cierre. Sesenta y nueve pruebas verdes. Sesenta y seis
-errores de analisis, primera bajada de la linea base, que estaba en
-sesenta y siete. Administracion y equipos siguen en cero avisos, y la
-seccion nueva de usuarios y la tarjeta de asignacion tambien.
-
-Lo que entro. Seccion propia de usuarios en el panel, con encabezado,
-contador, busqueda, filtro de estado, filtro de rol, refrescar y estado
-vacio del catalogo. Configuracion reducida a preferencias. Transiciones
-de cuenta: aprobar, desactivar, reactivar y rechazar, con confirmacion
-para las destructivas. Lote de aprobacion y rechazo sobre el filtro de
-pendientes, y de reactivacion sobre el de inactivos, con conteo exacto en
-el rotulo, salto de quien ya esta en destino, continuacion ante fallo y
-resumen honesto.
-
-Catalogo. Dos piezas nuevas con prueba, estado vacio y barra de filtros
-controlada. Cuatro adoptadas donde antes habia crudos. El boton primario
-toma el degradado de marca por defecto, que era la causa real de la
-apariencia inconsistente. El dialogo de alerta toma roles del esquema
-ambiental, con lo que su titulo y sus botones se leen en ambos modos.
-
-Correccion de alcance importante. El lote operaba sobre el conjunto
-visible sin restriccion semantica, asi que con filtro todos podia
-desactivar a miembros activos. Ahora solo aparece en el filtro que le da
-sentido. El guard vive en la vista y su prueba de widget esta diferida
-por decision del autor, con ruta y casos escritos.
-
-Deuda que sigue abierta. Las cuatro piezas de catalogo pendientes, aviso
-temporal con su tema, marcador de modulo, indicador de progreso y hoja
-modal. Los tokens semanticos de estado, porque las variantes del badge
-tienen el contraste roto y la condicion de atencion invertida. La
-documentacion de boton y de envoltorio de formulario. La guia de uso del
-catalogo, que describe piezas inexistentes y cuyas referencias rotas ya
-llegaron a los comentarios del codigo. El destino del espectador en el
-enrutador. El enumerado de estado de cuenta. Y la reclasificacion de este
-informe y del README publico, que siguen declarando estados previos.
+Las correcciones de metodo del lead no se listan aqui. Viven en
+`docs/intentions.md`, con su causa raiz y su contramedida, porque son
+bitacora interna de proceso y no estado del producto. El patron recurrente
+registrado es actuar sobre suposicion en vez de sobre evidencia leida, y
+las contramedidas adoptadas son leer el contrato o el grafo antes de
+escribir, medir la linea base antes de afirmar que un perimetro esta
+limpio, entregar toda edicion con ancla unica, y probar cada contramedida
+en sus dos casos antes de declararla estandar.

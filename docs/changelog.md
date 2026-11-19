@@ -3,6 +3,60 @@
 Formato basado en Keep a Changelog y SemVer. Previo a 1.0 se usa
 0.MINOR.PATCH, con minor por cierre de funcionalidad.
 
+## 0.3.0 - Gestion de usuarios y aprobacion cerradas
+
+### Anadido
+- Seccion propia de usuarios en el panel, con encabezado, contador,
+  busqueda, filtro de estado, filtro de rol, refrescar y estado vacio.
+- Transiciones de cuenta: aprobar, desactivar, reactivar y rechazar, con
+  confirmacion para las destructivas.
+- Lote de aprobacion y rechazo sobre el filtro de pendientes, y de
+  reactivacion sobre el de inactivos, con conteo en el rotulo, salto de
+  quien ya esta en destino, continuacion ante fallo y resumen honesto.
+- Funcion pura de lote con su tipo de resultado, y cuatro pruebas.
+- Doble a mano del contrato de usuarios para pruebas.
+- Catalogo: estado vacio y barra de filtros controlada, con seis pruebas.
+- Dos pruebas de render a ancho estrecho para etiqueta y boton.
+- Texto claro en el manifiesto de depuracion de Android, para alcanzar el
+  backend en red local desde un telefono fisico.
+
+### Cambiado
+- El boton primario toma el degradado de marca por defecto, sin tocar
+  ningun sitio de llamada.
+- Configuracion reducida a preferencias, la gestion de usuarios sale de
+  ahi y gana entrada propia en el menu lateral.
+- La tarjeta pregunta al dominio por el estado en vez de duplicar
+  literales, y sus acciones se apilan con aprobar arriba.
+- El dialogo de alerta toma roles del esquema ambiental, con lo que su
+  titulo y sus botones se leen en claro y en oscuro.
+- Etiqueta de campo y rotulo de boton pasan a texto flexible con salto de
+  linea, nunca truncado.
+- El titulo del dialogo salta de linea en vez de cortarse, porque el
+  conteo de cuentas es dato de seguridad.
+- La seccion de equipos reinicia el desplazamiento al cambiar entre lista
+  y formulario.
+
+### Corregido
+- El flujo de aprobacion: verificar estado ya no manda credenciales
+  vacias, y el aviso se deriva del resultado tipado, no de la pantalla.
+- La accion de aprobar existia en contrato, datos y notificador pero no
+  tenia consumidor en la interfaz.
+- Los fallos de escritura de rol y de estado ya no son silenciosos.
+- El texto de busqueda de usuarios se escapa antes de interpolarse en el
+  filtro.
+- Los tres jurados ya no aterrizan en la pantalla de puntuacion a medio
+  construir al iniciar sesion.
+- El alcance del lote: con filtro todos podia desactivar a miembros
+  activos, ahora solo aparece en el filtro que le da sentido.
+- Dos desbordes de render en el catalogo, invisibles para el analizador.
+
+### Eliminado
+- Getter muerto de expiracion de sesion de la entidad de usuario, mal
+  alojado porque deducia la expiracion del registro y no de la sesion.
+- Maquinaria muerta del envoltorio de campo: clave global de tipo crudo,
+  deteccion interna de errores, escuchador, clase de notificacion sin
+  disparador y parametro de foco sin consumidores.
+- Ternario redundante del icono del dialogo, con las dos ramas identicas.
 ## 0.2.0 - Equipos cerrada
 
 ### Anadido

@@ -66,7 +66,7 @@ Arbol de lib:
 
 ## 4. Estado por funcionalidad
 
-- Autenticacion: corregida y estable a nivel de analisis estatico.
+- Autenticacion: flujo de aprobacion cerrado de extremo a extremo, con rechazo, desactivacion, reactivacion y lote sobre el filtro que le da sentido. Entidad documentada y sin codigo muerto. Deuda de raiz registrada: el estado de cuenta es cadena suelta y pide enumerado con conversion desde almacenamiento.
   Maquina de estados sellada con AuthInitial, AuthLoading,
   AuthPendingApproval, AuthSuccess y AuthError. Deuda funcional abierta:
   la clase de aprobacion pendiente no esta marcada como final, la
@@ -208,3 +208,40 @@ sobre evidencia leida.
 
 Contramedida adoptada: leer el contrato o el grafo de consumidores antes
 de escribir, y verificar con gate y guardia en vez de con fe.
+## Cierre 0.3.0, gestion de usuarios y flujo de aprobacion
+
+Estado medido al cierre. Sesenta y nueve pruebas verdes. Sesenta y seis
+errores de analisis, primera bajada de la linea base, que estaba en
+sesenta y siete. Administracion y equipos siguen en cero avisos, y la
+seccion nueva de usuarios y la tarjeta de asignacion tambien.
+
+Lo que entro. Seccion propia de usuarios en el panel, con encabezado,
+contador, busqueda, filtro de estado, filtro de rol, refrescar y estado
+vacio del catalogo. Configuracion reducida a preferencias. Transiciones
+de cuenta: aprobar, desactivar, reactivar y rechazar, con confirmacion
+para las destructivas. Lote de aprobacion y rechazo sobre el filtro de
+pendientes, y de reactivacion sobre el de inactivos, con conteo exacto en
+el rotulo, salto de quien ya esta en destino, continuacion ante fallo y
+resumen honesto.
+
+Catalogo. Dos piezas nuevas con prueba, estado vacio y barra de filtros
+controlada. Cuatro adoptadas donde antes habia crudos. El boton primario
+toma el degradado de marca por defecto, que era la causa real de la
+apariencia inconsistente. El dialogo de alerta toma roles del esquema
+ambiental, con lo que su titulo y sus botones se leen en ambos modos.
+
+Correccion de alcance importante. El lote operaba sobre el conjunto
+visible sin restriccion semantica, asi que con filtro todos podia
+desactivar a miembros activos. Ahora solo aparece en el filtro que le da
+sentido. El guard vive en la vista y su prueba de widget esta diferida
+por decision del autor, con ruta y casos escritos.
+
+Deuda que sigue abierta. Las cuatro piezas de catalogo pendientes, aviso
+temporal con su tema, marcador de modulo, indicador de progreso y hoja
+modal. Los tokens semanticos de estado, porque las variantes del badge
+tienen el contraste roto y la condicion de atencion invertida. La
+documentacion de boton y de envoltorio de formulario. La guia de uso del
+catalogo, que describe piezas inexistentes y cuyas referencias rotas ya
+llegaron a los comentarios del codigo. El destino del espectador en el
+enrutador. El enumerado de estado de cuenta. Y la reclasificacion de este
+informe y del README publico, que siguen declarando estados previos.

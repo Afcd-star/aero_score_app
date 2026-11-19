@@ -8,7 +8,11 @@ import 'package:aero_score_app/src/features/auth/domain/entities/'
 import 'package:aero_score_app/src/features/auth/domain/entities/'
     'user_role.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
+    'aero_alert_dialog.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
     'aero_avatar.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
+    'aero_button.dart';
 import 'package:flutter/material.dart';
 
 /// Tarjeta de un usuario con su rol actual y la accion de cambiarlo.
@@ -49,6 +53,7 @@ class RoleAssignmentCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     final roleColor = ThemeHelper.getRoleColor(currentRole, context);
+    final action = _statusAction;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -163,14 +168,20 @@ class RoleAssignmentCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (_isPending)
-                TextButton.icon(
-                  onPressed: () => unawaited(_approve(context)),
-                  icon: const Icon(Icons.check_circle_outline, size: 16),
-                  label: const Text('Aprobar'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: AppColors.mint,
+              if (action != null)
+                AeroButton(
+                  label: action.label,
+                  size: AeroButtonSize.sm,
+                  variant: action.destructive
+                      ? AeroButtonVariant.destructive
+                      : AeroButtonVariant.primary,
+                  icon: Icon(
+                    action.destructive
+                        ? Icons.block
+                        : Icons.check_circle_outline,
+                    size: 16,
                   ),
+                  onPressed: () => unawaited(_runStatusAction(context, action)),
                 ),
             ],
           ),
@@ -178,8 +189,6 @@ class RoleAssignmentCard extends StatelessWidget {
       ),
     );
   }
-
-    bool get _isPending => user.isPending;
 
   String get _statusLabel {
     if (user.isApproved) {
@@ -207,15 +216,63 @@ class RoleAssignmentCard extends StatelessWidget {
     return scheme.error;
   }
 
-  Future<void> _approve(BuildContext context) async {
+  ({String label, String target, bool destructive})? get _statusAction {
+    if (user.isPending) {
+      return (label: 'Aprobar', target: 'Active', destructive: false);
+    }
+    if (user.isApproved) {
+      return (label: 'Desactivar', target: 'Inactive', destructive: true);
+    }
+    if (user.isInactive) {
+      return (label: 'Reactivar', target: 'Active', destructive: false);
+    }
+    return null;
+  }
+
+  Future<void> _runStatusAction(
+    BuildContext context,
+    ({String label, String target, bool destructive}) action,
+  ) async {
+    if (action.destructive) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AeroAlertDialog(
+          title: 'Desactivar cuenta',
+          content:
+              'La persona no podrá entrar a la app hasta que su cuenta '
+              'se reactive. Puedes reactivarla desde esta misma tarjeta.',
+          icon: Icons.warning_amber_rounded,
+          actions: <Widget>[
+            AeroButton(
+              label: 'Cancelar',
+              variant: AeroButtonVariant.ghost,
+              size: AeroButtonSize.sm,
+              onPressed: () => Navigator.pop(dialogContext, false),
+            ),
+            AeroButton(
+              label: 'Desactivar',
+              variant: AeroButtonVariant.destructive,
+              size: AeroButtonSize.sm,
+              onPressed: () => Navigator.pop(dialogContext, true),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) {
+        return;
+      }
+    }
+    if (!context.mounted) {
+      return;
+    }
     final messenger = ScaffoldMessenger.of(context);
-    final ok = await onStatusChanged(user.id, 'Active');
+    final ok = await onStatusChanged(user.id, action.target);
     messenger
       ..clearSnackBars()
       ..showSnackBar(
         SnackBar(
           content: Text(
-            ok ? 'Cuenta aprobada.' : 'No se pudo aprobar la cuenta.',
+            ok ? 'Cuenta actualizada.' : 'No se pudo actualizar la cuenta.',
           ),
           behavior: SnackBarBehavior.floating,
         ),

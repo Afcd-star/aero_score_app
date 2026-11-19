@@ -942,3 +942,35 @@ administracion en revision y equipos pendientes, e imponen anotaciones y
 dobles con mocktail que el codigo contradice por decision escrita. La
 fuente de verdad es el repo, no las copias. Su alineacion sigue siendo el
 gesto independiente ya acordado.
+## Regla de bloques autocontenidos en la terminal
+
+Fallo de proceso del lead. Un bloque de commit uso la variable de
+codificacion declarada en un bloque anterior, sin declararla de nuevo. En
+una sesion nueva la variable era nula y la escritura del archivo de
+mensaje fallo con error de argumento nulo, asi que el commit no se creo.
+
+Regla adoptada. Todo bloque que escriba un archivo declara su propia
+codificacion, su propia ruta y su propio mensaje. Ningun bloque depende
+de variables de un bloque anterior, porque el autor puede ejecutarlos en
+sesiones distintas o despues de reiniciar la terminal. Es la misma
+familia que la regla de no entregar preparacion sin commit: cada bloque
+se basta a si mismo.
+
+## Cierre del arreglo del dialogo de alerta
+
+Verificado en ambos modos con capturas. En oscuro el fondo toma la
+superficie del esquema y el titulo, el contenido y Cancelar se leen. En
+claro igual. Los dos sintomas, titulo invisible siempre y Cancelar
+invisible en oscuro, desaparecieron con un solo cambio de roles
+ambientales.
+
+Linea base medida del archivo, nueve avisos previos. Cinco referencias de
+comentario a piezas que no existen en el arbol, tres lineas largas y una
+documentacion faltante del constructor. No se anadio ninguno.
+
+Hallazgo derivado. Las cinco referencias rotas apuntan a dialogo, hoja,
+aviso temporal, banner de alerta y menu contextual, todos descritos en la
+guia de catalogo pero inexistentes. La ficcion de la guia se propago a los
+comentarios de documentacion del codigo, y el analizador la marca como
+referencia no visible. Se corrigen en el pase de documentacion del frente
+de shared, junto con la reescritura de la guia.

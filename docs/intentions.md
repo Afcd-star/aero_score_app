@@ -974,3 +974,36 @@ guia de catalogo pero inexistentes. La ficcion de la guia se propago a los
 comentarios de documentacion del codigo, y el analizador la marca como
 referencia no visible. Se corrigen en el pase de documentacion del frente
 de shared, junto con la reescritura de la guia.
+## Requisito de producto: rechazo de solicitudes y acciones masivas
+
+Requisito del autor, con motivo. Cualquiera que instale la app puede dejar
+una solicitud de acceso sin tener relacion con la federacion, asi que el
+administrador necesita limpiar la cola de pendientes. Y en un evento
+aprobar uno por uno es lento, asi que hacen falta acciones masivas.
+
+Decision de semantica, respondida al autor. Rechazar NO borra el
+registro. El borrado fisico romperia la integridad referencial, porque el
+entrenador de un equipo es una relacion a la coleccion de usuarios, y
+borrarlo dejaria la relacion huerfana y el equipo sin entrenador visible.
+Tambien perderia el rastro de que esa persona pidio acceso y se le nego,
+y permitiria que se registre otra vez de inmediato. Rechazar pasa el
+estado a inactivo, igual que el borrado logico de equipos, asi que la
+cola se limpia, el acceso queda bloqueado y la decision es reversible.
+
+Limitacion conocida. Inactivo no distingue solicitud rechazada de
+miembro desactivado. Si la federacion necesita ese detalle de auditoria,
+hace falta un estado propio de rechazado y un campo de motivo, lo que
+toca esquema del backend y se registra como frente propio, no como
+parche.
+
+Diseno de las acciones masivas, pendiente de aprobacion. Uno, el alcance
+es el conjunto visible tras los filtros activos, nunca toda la
+coleccion; aprobar todos sin filtro aprobara tambien a los inactivos y
+seria irreversible en segundos. Dos, confirmacion obligatoria con el
+numero exacto de cuentas afectadas, destructiva para rechazar. Tres, se
+salta a quien ya esta en el estado destino, para no escribir de balde.
+Cuatro, ante fallo se continua con el resto y se informa el conteo real
+de exitos y fallos, porque parar el lote por un registro malo es peor el
+dia del evento. Cinco, sin cambio de contrato: el notificador itera el
+metodo unitario que ya existe, y el lote del servidor queda como mejora
+de escalabilidad registrada.

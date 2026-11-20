@@ -4,25 +4,25 @@ import 'package:flutter/material.dart';
 
 /// ✅ Variantes semánticas para badges (consistente con sistema de diseño)
 enum BadgeVariant {
-  primary,    // Fucsia: acciones principales, destacado
-  secondary,  // Gris: información neutra, estados por defecto
-  success,    // Verde: completado, activo, éxito
-  info,       // Azul: próximo, informativo, pendiente
-  warning,    // Amarillo: atención, revisión requerida
-  destructive,// Rojo: error, cancelado, crítico
+  primary, // Fucsia: acciones principales, destacado
+  secondary, // Gris: información neutra, estados por defecto
+  success, // Verde: completado, activo, éxito
+  info, // Azul: próximo, informativo, pendiente
+  warning, // Amarillo: atención, revisión requerida
+  destructive, // Rojo: error, cancelado, crítico
 }
 
 /// ✅ Tamaños predefinidos para consistencia visual
 enum BadgeSize {
-  small,   // 20px height, 10px font: listas densas, filtros
-  medium,  // 24px height, 12px font: uso general (default)
-  large,   // 32px height, 14px font: headers, destaque
+  small, // 20px height, 10px font: listas densas, filtros
+  medium, // 24px height, 12px font: uso general (default)
+  large, // 32px height, 14px font: headers, destaque
 }
 
 class AeroBadge extends StatelessWidget {
-
   const AeroBadge({
-    required this.label, super.key,
+    required this.label,
+    super.key,
     this.variant = BadgeVariant.secondary,
     this.size = BadgeSize.medium,
     this.icon,
@@ -41,7 +41,7 @@ class AeroBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     // ✅ Colores por variante (override con custom si se proporciona)
     final colors = _getVariantColors(variant, isDark);
     final textColor = customColor ?? colors.text;
@@ -87,70 +87,83 @@ class AeroBadge extends StatelessWidget {
     );
   }
 
-  /// ✅ Mapeo variante → colores (soporta modo oscuro)
+  /// Mapeo variante a colores, con pares semanticos seguros en contraste.
+  ///
+  /// Success, warning y destructive usan los tokens aditivos de estado.
+  /// Primary e info conservan el fucsia de marca y quedan pendientes del
+  /// frente de tokens de marca, porque su fondo es la marca y cambiarlo
+  /// es decision de paleta, no de contraste.
   ({Color text, Color background, Color border}) _getVariantColors(
     BadgeVariant variant,
     bool isDark,
   ) {
     return switch (variant) {
       BadgeVariant.primary => (
-          text: Colors.white,
-          background: AppColors.fuchsia,
-          border: AppColors.fuchsia,
-        ),
+        text: Colors.white,
+        background: AppColors.fuchsia,
+        border: AppColors.fuchsia,
+      ),
       BadgeVariant.secondary => (
-          text: isDark ? AppColors.foregroundDark : AppColors.foregroundLight,
-          background: isDark ? AppColors.cardDark : Colors.grey.shade100,
-          border: isDark ? AppColors.borderDark : Colors.grey.shade300,
-        ),
+        text: isDark ? AppColors.foregroundDark : AppColors.foregroundLight,
+        background: isDark ? AppColors.cardDark : Colors.grey.shade100,
+        border: isDark ? AppColors.borderDark : Colors.grey.shade300,
+      ),
       BadgeVariant.success => (
-          text: Colors.white,
-          background: AppColors.successLight,
-          border: AppColors.successLight,
-        ),
+        text: AppColors.successOnSolid,
+        background: isDark ? AppColors.successDark : AppColors.successLight,
+        border: isDark ? AppColors.successDark : AppColors.successLight,
+      ),
       BadgeVariant.info => (
-          text: Colors.white,
-          background: AppColors.fuchsia,
-          border: AppColors.fuchsia,
-        ),
+        text: Colors.white,
+        background: AppColors.fuchsia,
+        border: AppColors.fuchsia,
+      ),
       BadgeVariant.warning => (
-          text: isDark ? Colors.black : Colors.white,
-          background: Colors.amber.shade400,
-          border: Colors.amber.shade400,
-        ),
+        text: AppColors.warningOnSolid,
+        background: AppColors.warningSolid,
+        border: AppColors.warningSolid,
+      ),
       BadgeVariant.destructive => (
-          text: Colors.white,
-          background: AppColors.destructiveLight,
-          border: AppColors.destructiveLight,
-        ),
+        text: Colors.white,
+        background: isDark
+            ? AppColors.destructiveDark
+            : AppColors.destructiveLight,
+        border: isDark ? AppColors.destructiveDark : AppColors.destructiveLight,
+      ),
     };
   }
 
   /// ✅ Dimensiones por tamaño predefinido
-  ({double fontSize, double paddingVertical, double paddingHorizontal, double borderRadius, double iconSize}) 
+  ({
+    double fontSize,
+    double paddingVertical,
+    double paddingHorizontal,
+    double borderRadius,
+    double iconSize,
+  })
   _getSizeDimensions(BadgeSize size) {
     return switch (size) {
       BadgeSize.small => (
-          fontSize: 10,
-          paddingVertical: 4,
-          paddingHorizontal: 8,
-          borderRadius: 10,
-          iconSize: 12,
-        ),
+        fontSize: 10,
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+        borderRadius: 10,
+        iconSize: 12,
+      ),
       BadgeSize.medium => (
-          fontSize: 12,
-          paddingVertical: 6,
-          paddingHorizontal: 12,
-          borderRadius: 12,
-          iconSize: 14,
-        ),
+        fontSize: 12,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 12,
+        iconSize: 14,
+      ),
       BadgeSize.large => (
-          fontSize: 14,
-          paddingVertical: 8,
-          paddingHorizontal: 16,
-          borderRadius: 16,
-          iconSize: 16,
-        ),
+        fontSize: 14,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 16,
+        iconSize: 16,
+      ),
     };
   }
 }

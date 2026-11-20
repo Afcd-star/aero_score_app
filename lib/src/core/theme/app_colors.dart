@@ -119,6 +119,22 @@ class AppColors {
   static const Color facultyFTE = Color(0xFFEAB308);
 
   // ═════════════════════════════════════════════════════════════
+  // TOKENS SEMANTICOS DE ESTADO (aditivos, no mutan los de marca)
+  // ═════════════════════════════════════════════════════════════
+  // Pares de texto sobre solido para variantes de estado del catalogo.
+  // Son aditivos: los tokens de marca success y destructive tienen
+  // muchos consumidores fuera del badge y no se mutan aqui.
+
+  /// Texto oscuro seguro sobre solidos de exito en ambos modos.
+  static const Color successOnSolid = Color(0xFF04240F);
+
+  /// Fondo ambar solido de atencion, descableado del badge.
+  static const Color warningSolid = Color(0xFFFFCA28);
+
+  /// Texto oscuro seguro sobre ambar en ambos modos.
+  static const Color warningOnSolid = Color(0xFF422006);
+
+  // ═════════════════════════════════════════════════════════════
   // GRADIENTES
   // ═════════════════════════════════════════════════════════════
   static LinearGradient getGlowGradient({bool diagonal = true}) {

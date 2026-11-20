@@ -119,21 +119,61 @@ class AppColors {
   static const Color facultyFTE = Color(0xFFEAB308);
 
   // ═════════════════════════════════════════════════════════════
-  // TOKENS SEMANTICOS DE ESTADO (aditivos, no mutan los de marca)
+  // TOKENS SEMANTICOS DE ESTADO (tinte suave, aditivos)
   // ═════════════════════════════════════════════════════════════
-  // Pares de texto sobre solido para variantes de estado del catalogo.
-  // Son aditivos: los tokens de marca success y destructive tienen
-  // muchos consumidores fuera del badge y no se mutan aqui.
+  // Pares de contenedor tenue y texto saturado por modo para las
+  // variantes semanticas del catalogo. Son aditivos: los tokens de
+  // marca success y destructive tienen muchos consumidores fuera del
+  // badge y no se mutan aqui. Los valores salen de una escala
+  // consciente del contraste y la prueba numerica los verifica.
 
-  /// Texto oscuro seguro sobre solidos de exito en ambos modos.
-  static const Color successOnSolid = Color(0xFF04240F);
+  /// Contenedor tenue de exito en claro.
+  static const Color successContainerLight = Color(0xFFDCFCE7);
 
-  /// Fondo ambar solido de atencion, descableado del badge.
-  static const Color warningSolid = Color(0xFFFFCA28);
+  /// Texto saturado de exito sobre su contenedor en claro.
+  static const Color successOnContainerLight = Color(0xFF166534);
 
-  /// Texto oscuro seguro sobre ambar en ambos modos.
-  static const Color warningOnSolid = Color(0xFF422006);
+  /// Contenedor tenue de exito en oscuro.
+  static const Color successContainerDark = Color(0xFF052E16);
 
+  /// Texto saturado de exito sobre su contenedor en oscuro.
+  static const Color successOnContainerDark = Color(0xFF4ADE80);
+
+  /// Contenedor tenue informativo en claro.
+  static const Color infoContainerLight = Color(0xFFDBEAFE);
+
+  /// Texto saturado informativo sobre su contenedor en claro.
+  static const Color infoOnContainerLight = Color(0xFF1E40AF);
+
+  /// Contenedor tenue informativo en oscuro.
+  static const Color infoContainerDark = Color(0xFF172554);
+
+  /// Texto saturado informativo sobre su contenedor en oscuro.
+  static const Color infoOnContainerDark = Color(0xFF93C5FD);
+
+  /// Contenedor tenue de atencion en claro.
+  static const Color warningContainerLight = Color(0xFFFEF3C7);
+
+  /// Texto saturado de atencion sobre su contenedor en claro.
+  static const Color warningOnContainerLight = Color(0xFF92400E);
+
+  /// Contenedor tenue de atencion en oscuro.
+  static const Color warningContainerDark = Color(0xFF451A03);
+
+  /// Texto saturado de atencion sobre su contenedor en oscuro.
+  static const Color warningOnContainerDark = Color(0xFFFCD34D);
+
+  /// Contenedor tenue destructivo en claro.
+  static const Color destructiveContainerLight = Color(0xFFFEE2E2);
+
+  /// Texto saturado destructivo sobre su contenedor en claro.
+  static const Color destructiveOnContainerLight = Color(0xFFB91C1C);
+
+  /// Contenedor tenue destructivo en oscuro.
+  static const Color destructiveContainerDark = Color(0xFF450A0A);
+
+  /// Texto saturado destructivo sobre su contenedor en oscuro.
+  static const Color destructiveOnContainerDark = Color(0xFFFCA5A5);
   // ═════════════════════════════════════════════════════════════
   // GRADIENTES
   // ═════════════════════════════════════════════════════════════

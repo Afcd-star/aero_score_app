@@ -87,12 +87,16 @@ class AeroBadge extends StatelessWidget {
     );
   }
 
-  /// Mapeo variante a colores, con pares semanticos seguros en contraste.
+  /// Mapeo variante a colores, con pares de tinte suave por modo.
   ///
-  /// Success, warning y destructive usan los tokens aditivos de estado.
-  /// Primary e info conservan el fucsia de marca y quedan pendientes del
-  /// frente de tokens de marca, porque su fondo es la marca y cambiarlo
-  /// es decision de paleta, no de contraste.
+  /// Success, info, warning y destructive usan fondo de contenedor
+  /// tenue y texto saturado en ambos modos, lo que corrige el contraste
+  /// roto, la condicion de atencion invertida y el cable de ambar de
+  /// Material, y de paso da a info su matiz informativo en vez del
+  /// fucsia de marca que heredo. Primary conserva el solido de marca
+  /// como enfasis y queda pendiente del frente de tokens de marca.
+  /// Secondary conserva el neutro suave; sus grises de Material quedan
+  /// como deuda de descableado.
   ({Color text, Color background, Color border}) _getVariantColors(
     BadgeVariant variant,
     bool isDark,
@@ -109,26 +113,48 @@ class AeroBadge extends StatelessWidget {
         border: isDark ? AppColors.borderDark : Colors.grey.shade300,
       ),
       BadgeVariant.success => (
-        text: AppColors.successOnSolid,
-        background: isDark ? AppColors.successDark : AppColors.successLight,
-        border: isDark ? AppColors.successDark : AppColors.successLight,
+        text: isDark
+            ? AppColors.successOnContainerDark
+            : AppColors.successOnContainerLight,
+        background: isDark
+            ? AppColors.successContainerDark
+            : AppColors.successContainerLight,
+        border: isDark
+            ? AppColors.successOnContainerDark
+            : AppColors.successOnContainerLight,
       ),
       BadgeVariant.info => (
-        text: Colors.white,
-        background: AppColors.fuchsia,
-        border: AppColors.fuchsia,
+        text: isDark
+            ? AppColors.infoOnContainerDark
+            : AppColors.infoOnContainerLight,
+        background: isDark
+            ? AppColors.infoContainerDark
+            : AppColors.infoContainerLight,
+        border: isDark
+            ? AppColors.infoOnContainerDark
+            : AppColors.infoOnContainerLight,
       ),
       BadgeVariant.warning => (
-        text: AppColors.warningOnSolid,
-        background: AppColors.warningSolid,
-        border: AppColors.warningSolid,
+        text: isDark
+            ? AppColors.warningOnContainerDark
+            : AppColors.warningOnContainerLight,
+        background: isDark
+            ? AppColors.warningContainerDark
+            : AppColors.warningContainerLight,
+        border: isDark
+            ? AppColors.warningOnContainerDark
+            : AppColors.warningOnContainerLight,
       ),
       BadgeVariant.destructive => (
-        text: Colors.white,
+        text: isDark
+            ? AppColors.destructiveOnContainerDark
+            : AppColors.destructiveOnContainerLight,
         background: isDark
-            ? AppColors.destructiveDark
-            : AppColors.destructiveLight,
-        border: isDark ? AppColors.destructiveDark : AppColors.destructiveLight,
+            ? AppColors.destructiveContainerDark
+            : AppColors.destructiveContainerLight,
+        border: isDark
+            ? AppColors.destructiveOnContainerDark
+            : AppColors.destructiveOnContainerLight,
       ),
     };
   }

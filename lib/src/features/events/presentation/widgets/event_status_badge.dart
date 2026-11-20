@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 /// ✅ Badge especializado para estados de evento
 /// Acepta EventStatus enum para type-safety y labels en español
 class EventStatusBadge extends StatelessWidget {
-
   const EventStatusBadge({
-    required this.status, super.key,
+    required this.status,
+    super.key,
     this.size = BadgeSize.medium,
     this.showIcon = true,
   });
@@ -19,12 +19,11 @@ class EventStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config = _getEventStatusConfig(status);
-    
+
     // ✅ CORREGIDO: Usar parámetros reales de AeroBadge
     return AeroBadge(
       label: config.label,
-      customColor: config.textColor,
-      customBackgroundColor: config.backgroundColor,
+      variant: config.variant,
       size: size, // ✅ El fontSize se deriva del size
       showIcon: showIcon,
       icon: showIcon ? config.icon : null,
@@ -32,27 +31,24 @@ class EventStatusBadge extends StatelessWidget {
   }
 
   /// ✅ Mapeo enum → config visual (labels en español per Idioma de la App.md)
-  static ({String label, Color textColor, Color backgroundColor, IconData? icon}) 
+  static ({String label, BadgeVariant variant, IconData? icon})
   _getEventStatusConfig(EventStatus status) {
     return switch (status) {
       EventStatus.planned => (
-          label: 'Próximo',
-          textColor: Colors.blue.shade700,
-          backgroundColor: Colors.blue.shade100,
-          icon: Icons.calendar_today_outlined,
-        ),
+        label: 'Próximo',
+        variant: BadgeVariant.info,
+        icon: Icons.calendar_today_outlined,
+      ),
       EventStatus.ongoing => (
-          label: 'En curso',
-          textColor: Colors.green.shade700,
-          backgroundColor: Colors.green.shade100,
-          icon: Icons.play_circle_outline,
-        ),
+        label: 'En curso',
+        variant: BadgeVariant.success,
+        icon: Icons.play_circle_outline,
+      ),
       EventStatus.completed => (
-          label: 'Finalizado',
-          textColor: Colors.grey.shade700,
-          backgroundColor: Colors.grey.shade100,
-          icon: Icons.check_circle_outline,
-        ),
+        label: 'Finalizado',
+        variant: BadgeVariant.secondary,
+        icon: Icons.check_circle_outline,
+      ),
     };
   }
 

@@ -1087,3 +1087,27 @@ su vista si para entonces existe. Organizador, marcador minimo, y su
 funcionalidad queda como frente propio sin fecha. Los tres consumen el
 marcador de modulo del catalogo, asi que el frente depende de que esa
 pieza exista.
+## Cuarta correccion de metodo del lead, mismo vicio que la primera
+
+El defecto de entregar un import que el archivo no nombra se repitio por
+cuarta vez, y por tercera en dos turnos. Primero fue fallos en el
+notificador de lote, donde el escritor devolvia booleano y el tipo
+Failure no intervenia. Ahora fue preferencias en el notificador de tema,
+donde el tipo lo aporta la inferencia del proveedor y tampoco interviene.
+El analizador lo marca como import sin uso y tiene razon.
+
+Causa raiz, comun a las cuatro: razonar el import desde "este tipo
+participa en la operacion" en vez de desde "este archivo escribe el
+nombre del tipo". La inferencia resuelve tipos que el archivo nunca
+nombra, y ahi el import es basura.
+
+Contramedida reforzada: solo se importa lo que el archivo nombra
+explcitamente en una anotacion, un cast, una declaracion o un literal de
+tipo. Si el tipo llega por inferencia de un proveedor o de un metodo, no
+se importa. Verificacion mecanica antes de entregar: correr el analizador
+sobre el perimetro y confirmar que no hay import sin uso nuevo.
+
+Diferencia legitiva que fija la regla: en el punto de entrada el import de
+preferencias SI es correcto, porque ahi se escribe el nombre del tipo en
+una llamada estatica. La misma dependencia, dos archivos, un import
+basura y uno legitimo, y la diferencia es solo si el nombre aparece.

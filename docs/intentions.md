@@ -1271,3 +1271,57 @@ de tabla sin efecto vivo verificada por numero, luego adopcion con gate en
 vivo en eventos y tarjeta de usuario en claro y oscuro. Si solido, un token
 de info solido y adopcion que impone el cambio de look, con gate en vivo y
 aviso de que es cambio de estilo no pedido.
+## Gate del movimiento B de shared, pasado con evidencia
+
+Verificado con capturas en claro y oscuro. Proximo sale azul tenue con
+texto azul profundo y legible en oscuro, antes un parche claro sobre la
+tarjeta oscura. En curso sale verde tenue. Finalizado sale neutro suave.
+La pil dora de categoria queda intacta porque no se migro, y eso es el
+detector de que la migracion no toco de mas. El diff del commit fue un
+solo archivo, event_status_badge, con cinco sustituciones ancladas.
+
+## Aclaracion de la X del miercoles en el selector de fechas
+
+El autor pregunta por que el miercoles sale como X en el calendario. No
+es defecto de la app ni del movimiento B. El diff de B fue un solo
+archivo y el selector lo construye showDateRangePicker de Material con
+locale es_ES. La X es la abreviatura de miercoles que fija CLDR para
+espanol, convencion de la localizacion, no codigo nuestro. Cambiarla
+seria pelear contra CLDR o escribir un builder propio del picker, lo que
+es frente de lenguaje con decision propia, no shared. No se toca aqui.
+Se registra para que no se reintroduzca como duda.
+
+## Decision O3 confirmada para el chip de rol, con vencimiento
+
+El autor apraza O1 y pide confirmacion tras leer la tarjeta. Se confirma
+O3 por ahora, con vencimiento escrito en el frente de autenticacion, no
+indefinido. Motivo de direccion de dependencia: el enumerado de estado
+registra que retira los literales sueltos de entidad, modelo, enrutador,
+filtro y tarjeta, y el codigo lo confirma con Active, Inactive y Pending
+Approval en primaryAction, secondaryAction, statusLabel y statusColor.
+El frente de autenticacion va a reescribir esta tarjeta de todos modos,
+asi que el pase unificado es inminente y real. Diferir el chip un ciclo
+no lo agrava porque ya esta roto hoy, y el pase unificado lo arregla con
+el estado invertido y la adopcion del dialogo y los avisos en una sola
+apertura, en vez de tres. O1 no se pierde: cuando llegue, la decision de
+estilo de nueve roles se toma con el autor viendo la pantalla, no pegada
+a un commit de tokens a ciegas, igual que el badge.
+
+## Defecto de contraste del chip de rol, probado por calculo del lead
+
+No es pulido diferible, es defecto de legibilidad preexistente. El chip
+cablea texto saturado sobre tinte alfa 0.15 mezclado con la superficie.
+Calculo a mano del lead, razon de contraste WCAG para texto pequeno:
+admin claro 2.97, admin oscuro 4.09, espectador claro 3.85, todos bajo
+el umbral de 4.5. El numero es evidencia humana del defecto, no una
+prueba automatizada todavia. La prueba automatizada de roles viaja con
+O1 en el pase unificado de autenticacion, donde el ayudante de tema se
+extiende a pares de contenedor y texto por rol. Se registra el numero
+para que el hallazgo no se evapore y para que O1 lo afirme.
+
+## Deuda de documentacion destapada por el gate de B
+
+El perimetro de event_status_badge trae cuatro avisos de informacion de
+documentacion publica faltante, en el constructor y los tres campos. Son
+previos, no anadidos por B, porque B no creo campos nuevos. Viajan al
+subfrente dos de shared, documentacion publica de piezas existentes.

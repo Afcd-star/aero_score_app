@@ -1149,3 +1149,47 @@ negocia: no se commitea superficie sin haberla visto en vivo.
 Consecuencia para el checklist del informe. La linea del pase visual se
 enmienda para que diga gate previo y no verificacion posterior, en el
 mismo gesto documental.
+## Sexta correccion de metodo del lead, grep de la pieza y no solo de sus tokens
+
+El autor hizo grep de AeroBadge y encontro dos consumidores vivos en
+eventos, mientras yo habia declarado que el badge no tenia consumidor
+vivo. Hice grep de los tokens de estado (consulta que si hice) pero no de
+la pieza. Esa omision es el mismo vicio de suponer, aplicado a la
+superficie de una pieza del catalogo.
+
+Causa raiz: razonar el impacto de mutar una pieza desde "que tokens usa"
+en vez de desde "quien construye la pieza". Una pieza puede tener
+consumidores que la bypassan con parametros custom, y eso cambia por
+completo si un cambio a su tabla interna es observable o no.
+
+Contramedida adoptada: antes de mutar una pieza del catalogo, grep de la
+pieza (su nombre de clase y su constructor), no solo de sus tokens. Y
+leer los consumidores para ver si usan la variante o la sobrescriben con
+custom. El gate de superficie aplica solo a lo que el cambio altera en
+vivo; si los consumidores bypassan, el gate se reduce a no regresión y la
+verificacion real es la prueba numerica.
+
+## Hallazgos del gate del subfrente uno de shared, deuda de subfrentes futuros
+
+EventStatusBadge cablea paleta de Material (blue, green, grey shade100 y
+shade700) sin soporte de modo oscuro. En oscuro esos badges salen como
+parches claros sobre la tarjeta oscura. Es defecto previo, no introducido
+por el subfrente uno. Naturaleza de adopcion y descableado: debe migrar a
+variantes semanticas del catalogo o al menos a tokens de la casa con
+soporte de brillo. Subfrentes cuatro y cinco.
+
+event_list_view destapa inventario de deuda de shared al leerlo: los
+chips de filtro de estado y fecha son crudos (GestureDetector mas
+Container con gradientes cableados, incluido un hex 0xFF8B00FF que
+deberia ser glowViolet) en vez de AeroFilterBar; hay un
+CircularProgressIndicator crudo (deuda de indicador de progreso,
+subfrente tres); un Divider crudo; un debugPrint con un TODO y codigo
+comentado; un Theme anidado en el selector de rango que cablea primary a
+fucsia; y la cabecera del comentario del archivo dice admin cuando la
+ruta real es events, residuo de renombrado. Nada de esto se toca en el
+subfrente uno. Se registra para los subfrentes que les corresponden.
+
+Confirmacion de naturaleza del subfrente uno: es fundamento sin consumidor
+vivo hoy, porque los dos consumidores de eventos bypassan las variantes
+con custom. Su verificacion es la prueba de contraste calculado, no el
+ojo en eventos. El ojo en eventos solo confirma no regresión.

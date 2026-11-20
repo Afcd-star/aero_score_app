@@ -185,7 +185,11 @@ Despues lo que degrada calidad sin impedir publicar:
   repositorio esta diferida por desviacion registrada.
 - Pieza de catalogo nueva o tocada: prueba de render a ancho estrecho,
   porque el analizador no detecta desbordes.
-- Pase visual en modo claro y oscuro cuando la feature toca superficie.
+- Pase visual en modo claro y oscuro como gate PREVIO al commit cuando la
+  feature toca superficie: se ejecuta con la app recargada contra la lista
+  de puntos de riesgo que el lead declara en la entrega, y todo defecto
+  destapado se arregla antes de commitear, no despues. No se commitea
+  superficie sin haberla visto en vivo.
 - Commit atomico por naturaleza con mensaje descriptivo.
 - Cierre documental: un commit que sube version, escribe changelog,
   actualiza este informe e intentions, y etiqueta. Antes de abrir la

@@ -1111,3 +1111,41 @@ Diferencia legitiva que fija la regla: en el punto de entrada el import de
 preferencias SI es correcto, porque ahi se escribe el nombre del tipo en
 una llamada estatica. La misma dependencia, dos archivos, un import
 basura y uno legitimo, y la diferencia es solo si el nombre aparece.
+## Quinta correccion de metodo del lead, pase visual como verificacion posterior
+
+Evidencia. Cuatro commits de correccion destapados por pases visuales
+ejecutados DESPUES de commitear: el desborde de render del catalogo, el
+titulo y el boton invisibles del dialogo, el alcance semantico del lote
+que podia desactivar miembros activos, y la fila de tema descolgada. Un
+quinto hallazgo, el contraste del estado pendiente en claro, se aplazo a
+los tokens semanticos. El autor propone, con razon, que el pase visual sea
+un gate previo al commit, como el arquitecto que revisa antes de mezclar a
+master.
+
+Causa raiz, misma que las cuatro anteriores: actuar sobre suposicion en
+vez de sobre evidencia leida, aplicada a la superficie. El lead entregaba
+codigo de superficie asumiendo que se veria bien, sin haberlo visto en
+vivo y sin declarar los puntos de riesgo que el pase debia verificar. El
+autor descubria el defecto al commitear y generaba un commit de
+correccion. Un commit que se corrige varias veces no esta cerrado, esta
+mal declarado, y viola la atomicidad real aunque el mensaje lo afirme. El
+hot reload existe precisamente para no commitear a ciegas, y el proceso lo
+ignoraba.
+
+Contramedida adoptada. El pase visual pasa a gate PREVIO al commit. Flujo:
+aplicar codigo, correr puerta estatica de analisis y pruebas, recargar la
+app, ejecutar el pase visual en claro y oscuro contra la lista de puntos
+de riesgo que el lead declara en la entrega, arreglar cualquier defecto
+destapado, repetir la puerta estatica si se toco codigo, y commitear una
+sola vez con la superficie ya vista en vivo. Toda entrega de superficie
+del lead incluira esa lista; sin ella el pase es un ritual ciego.
+
+Reconciliacion con el hardware del autor, ocho gigas y gpu integrada. La
+puerta estatica y el pase visual no se apilan, se alternan: la app se
+levanta para el pase y se para para la puerta pesada si el pico de memoria
+molesta, o se acepta el pico puntual al final del ciclo. La regla dura no
+negocia: no se commitea superficie sin haberla visto en vivo.
+
+Consecuencia para el checklist del informe. La linea del pase visual se
+enmienda para que diga gate previo y no verificacion posterior, en el
+mismo gesto documental.

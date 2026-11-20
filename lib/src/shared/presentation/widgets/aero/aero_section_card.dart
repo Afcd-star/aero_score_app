@@ -1,10 +1,10 @@
-// lib/src/shared/presentation/widgets/admin/section_card.dart
+// lib/src/shared/presentation/widgets/aero/aero_section_card.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class SectionCard extends StatelessWidget {
+class AeroSectionCard extends StatelessWidget {
 
-  const SectionCard({
+  const AeroSectionCard({
     required this.child, super.key,
     this.padding = const EdgeInsets.all(20),
     this.borderRadius = 16,

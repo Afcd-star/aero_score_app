@@ -1,4 +1,4 @@
-// lib/src/shared/presentation/widgets/admin/admin_stats_card.dart
+// lib/src/features/admin/presentation/widgets/admin_stats_card.dart
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 

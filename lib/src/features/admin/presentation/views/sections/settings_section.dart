@@ -2,11 +2,10 @@
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/theme_provider.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/'
-    'section_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
     'aero_button.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_filter_bar.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +39,7 @@ class SettingsSection extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SectionCard(
+          AeroSectionCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,

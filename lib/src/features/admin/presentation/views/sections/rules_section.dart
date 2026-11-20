@@ -1,7 +1,7 @@
 // lib/src/features/admin/presentation/views/sections/rules_section.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/section_card.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_section_card.dart';
 import 'package:flutter/material.dart';
 
 /// Seccion tipada del reglamento estatico.
@@ -89,7 +89,7 @@ class RulesSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ✅ CARD BLANCA ENVOLVENTE (consistente con otras secciones)
-          SectionCard(
+          AeroSectionCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,

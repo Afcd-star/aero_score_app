@@ -9,8 +9,8 @@ import 'package:aero_score_app/src/features/teams/presentation/providers/team_fo
 import 'package:aero_score_app/src/features/teams/presentation/widgets/team_competitors_sheet.dart';
 import 'package:aero_score_app/src/features/teams/presentation/widgets/team_form.dart';
 import 'package:aero_score_app/src/features/teams/presentation/widgets/team_list_view.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/section_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,7 +39,7 @@ class TeamsSection extends ConsumerWidget {
     return SingleChildScrollView(
       key: ValueKey<TeamFormMode>(formState.mode),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: SectionCard(
+      child: AeroSectionCard(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

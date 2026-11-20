@@ -8,10 +8,7 @@ import 'package:aero_score_app/src/features/auth/domain/entities/user_entity.dar
 import 'package:aero_score_app/src/features/auth/domain/entities/user_role.dart';
 import 'package:aero_score_app/src/features/auth/presentation/providers/'
     'role_management_provider.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/'
-    'role_assignment_card.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/'
-    'section_card.dart';
+import 'package:aero_score_app/src/features/auth/presentation/widgets/role_assignment_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
     'aero_alert_dialog.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
@@ -20,6 +17,8 @@ import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
     'aero_empty_state.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
     'aero_filter_bar.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
+    'aero_section_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
     'aero_skeleton.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +90,7 @@ class _RoleManagementSectionState extends ConsumerState<RoleManagementSection> {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
-      child: SectionCard(
+      child: AeroSectionCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

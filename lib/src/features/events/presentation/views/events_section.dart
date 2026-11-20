@@ -6,7 +6,7 @@ import 'package:aero_score_app/src/features/events/data/di/event_providers.dart'
 import 'package:aero_score_app/src/features/events/presentation/providers/event_form_state.dart';
 import 'package:aero_score_app/src/features/events/presentation/widgets/event_form.dart';
 import 'package:aero_score_app/src/features/events/presentation/widgets/event_list_view.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/section_card.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,7 +22,7 @@ class EventsSection extends ConsumerWidget {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
-      child: SectionCard(
+      child: AeroSectionCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

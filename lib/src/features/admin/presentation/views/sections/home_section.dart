@@ -4,9 +4,9 @@ import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/features/admin/data/di/admin_providers.dart';
 import 'package:aero_score_app/src/features/admin/domain/entities/activity_item_entity.dart';
 import 'package:aero_score_app/src/features/admin/domain/entities/admin_stats_entity.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/admin_quick_action.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/admin_stats_card.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/admin/section_card.dart';
+import 'package:aero_score_app/src/features/admin/presentation/widgets/admin_quick_action.dart';
+import 'package:aero_score_app/src/features/admin/presentation/widgets/admin_stats_card.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +65,7 @@ class HomeSection extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
 
-          SectionCard(
+          AeroSectionCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

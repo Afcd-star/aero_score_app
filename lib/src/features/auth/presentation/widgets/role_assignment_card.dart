@@ -1,4 +1,4 @@
-// lib/src/shared/presentation/widgets/admin/role_assignment_card.dart
+// lib/src/features/auth/presentation/widgets/role_assignment_card.dart
 import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';

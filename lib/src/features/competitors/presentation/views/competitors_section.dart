@@ -13,9 +13,8 @@ import 'package:aero_score_app/src/features/'
 import 'package:aero_score_app/src/features/'
     'competitors/presentation/widgets/competitor_list_view.dart';
 import 'package:aero_score_app/src/shared/'
-    'presentation/widgets/admin/section_card.dart';
-import 'package:aero_score_app/src/shared/'
     'presentation/widgets/aero/aero_button.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -70,7 +69,7 @@ class CompetitorsSection extends ConsumerWidget {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
-      child: SectionCard(
+      child: AeroSectionCard(
         // SectionCard envuelve encabezado, botón y lista.
         padding: const EdgeInsets.all(24),
         child: Column(

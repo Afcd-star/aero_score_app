@@ -38,9 +38,11 @@ class AeroScoreApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeProvider);
-
+    final brightness = themeMode == ThemeMode.system
+        ? MediaQuery.platformBrightnessOf(context)
+        : (themeMode == ThemeMode.dark ? Brightness.dark : Brightness.light);
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: themeMode == ThemeMode.dark
+      value: brightness == Brightness.dark
           ? SystemUiOverlayStyle.light
           : SystemUiOverlayStyle.dark,
       child: MaterialApp.router(

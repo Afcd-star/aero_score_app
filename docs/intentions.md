@@ -1193,3 +1193,81 @@ Confirmacion de naturaleza del subfrente uno: es fundamento sin consumidor
 vivo hoy, porque los dos consumidores de eventos bypassan las variantes
 con custom. Su verificacion es la prueba de contraste calculado, no el
 ojo en eventos. El ojo en eventos solo confirma no regresión.
+## Gate del subfrente uno de shared, sin regresión y defecto previo confirmado
+
+Verificado con capturas en claro y oscuro. Los dos consumidores de eventos
+sobrescriben texto y fondo con parametros custom, asi que la tabla nueva de
+variantes no altera su aspecto, que es el resultado esperado de un commit
+fundacional sin consumidor vivo. La foto oscura muestra ademas el defecto
+previo registrado, la pil dora de azul claro de Proximo pegada sobre la
+tarjeta oscura, mientras la pil dora de categoria se adapta porque usa
+alfa sobre el fucsia. El defecto es de EventStatusBadge, que cablea tintas
+claras de la paleta de Material sin ajuste por modo, no del subfrente uno.
+
+## Septima correccion de metodo del lead, decidir estilo antes que tokens
+
+El lead arreglo el contraste de las variantes semanticas del badge eligiendo
+relleno solido por aritmetica de razon, sin contrastar esa eleccion con el
+estilo que ya vive en la app ni con el contexto de render. El unico badge
+vivo y los chips hechos a mano son de tinte suave, y el badge se usa a diez
+y doce puntos en listas densas, donde el relleno solido anade ruido visual.
+El lead fijo solido. La inversion es de orden, no de calculo: el conjunto de
+tokens depende del estilo, asi que la decision de estilo debia preceder a
+subfrente uno, no seguirlo.
+
+Causa raiz, misma familia que las seis anteriores pero en una dimensión
+nueva: verificar solo lo que la herramienta mide. La prueba de contraste
+afirma razon mayor o igual a cuatro punto cinco y paso en verde, porque el
+relleno solido es legible, pero legible no es lo mismo que adecuado al
+contexto y al estilo del sistema. El numero no caza la inadecuación de
+estilo.
+
+Contramedida adoptada. Al corregir el estilo visual de una pieza del
+catalogo, evaluar contra tres cosas antes de escribir, no solo contra la
+razon de contraste. Uno, el uso vivo existente de esa pieza, por grep de la
+pieza y lectura de sus consumidores. Dos, el contexto de talla y densidad
+donde se renderiza. Tres, el estilo de facto del sistema. Y toda eleccion de
+estilo que propague a muchos sitios va al autor antes de codificarse, porque
+el gate caza defectos en superficie viva pero no puede cazar una
+inconsistencia de estilo en un commit fundacional que aun no tiene
+consumidor, ya que no hay nada que ver en vivo. Para commits fundacionales
+la verificacion de estilo y contexto es del lead antes de commitear.
+
+## Decision de estilo del badge abierta, pendiente del autor
+
+La adopcion de insignia en chips de rol y estado, y la migracion de
+EventStatusBadge a variantes, propagan el estilo de la tabla de variantes a
+todas las superficies de estado de la app. Eso es identidad visual del
+autor, no suposicion del lead. El lead no escribe codigo de estilo hasta que
+el autor elija.
+
+Opcion recomendada, tinte suave por modo. Restilar la tabla a fondo tenue y
+texto saturado por modo para success, warning, destructive e info, retirar
+los tres tokens de relleno solido de subfrente uno que quedan sin uso,
+anadir ocho pares suaves, y actualizar la prueba de contraste para afirmar
+cada par en su modo. Primario queda solido de enfasis y secondary queda
+suave, que es la mezcla coherente de sistema. La adopcion preserva el look
+suave de hoy y solo corrige el defecto de modo oscuro. Costo honesto: el
+commit de correccion deja sin efecto la eleccion de tokens de subfrente uno,
+por el error de orden del lead, no por defecto del diseño suave.
+
+Opcion alternativa, relleno solido. Subfrente uno queda en pie, se anade un
+token de azul solido para info con texto blanco, y la adopcion convierte las
+insignias de eventos y los chips de estado en pil dora solida, un cambio de
+look visible que el autor aceptaria en el gate. Menos agitacion, pero impone
+un estilo no pedido, y si el autor lo rechaza en el gate, la agitacion
+vuelve igual.
+
+Sub decision de rol, declarada para no adivinarla. El rol es identidad con
+nueve colores propios, no semantica de estado. No se inventan nueve variantes
+de badge. Se enruta el color de rol a traves del contenedor de la insignia
+con custom, usando el token de rol por modo que ya aporta el ayudante de
+tema, de modo que la insignia pone forma, talla y tipografia y el rol pone
+color. Variantes de rol explicitas se consideran sobreingenieria salvo que el
+autor las pida.
+
+Plan de ejecucion tras la eleccion. Si suave, dos commits, primero correccion
+de tabla sin efecto vivo verificada por numero, luego adopcion con gate en
+vivo en eventos y tarjeta de usuario en claro y oscuro. Si solido, un token
+de info solido y adopcion que impone el cambio de look, con gate en vivo y
+aviso de que es cambio de estilo no pedido.

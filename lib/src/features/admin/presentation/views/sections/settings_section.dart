@@ -114,54 +114,74 @@ class SettingsSection extends ConsumerWidget {
     ThemeMode.dark => 2,
   };
 
+  IconData _themeIcon(ThemeMode mode) => switch (mode) {
+    ThemeMode.system => Icons.brightness_auto_outlined,
+    ThemeMode.light => Icons.wb_sunny_outlined,
+    ThemeMode.dark => Icons.nightlight_outlined,
+  };
+
   Widget _buildThemeRow(BuildContext context, WidgetRef ref) {
     final scheme = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     final mode = ref.watch(themeModeProvider);
     final index = _themeIndex(mode);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(
-              Icons.dark_mode_outlined,
-              color: scheme.onSurface,
-              size: 24,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Tema',
-                    style: text.titleSmall?.copyWith(
-                      color: scheme.onSurface,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _themeLabels[index],
-                    style: text.bodySmall?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: scheme.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  gradient: AppColors.getGlowGradient(),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(_themeIcon(mode), color: Colors.white, size: 22),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        AeroFilterBar(
-          options: _themeLabels,
-          selectedIndex: index,
-          onChanged: (i) =>
-              ref.read(themeModeProvider.notifier).setThemeMode(_themeModes[i]),
-        ),
-      ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Tema',
+                      style: text.titleSmall?.copyWith(
+                        color: scheme.onSurface,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _themeLabels[index],
+                      style: text.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          AeroFilterBar(
+            options: _themeLabels,
+            selectedIndex: index,
+            onChanged: (i) => ref
+                .read(themeModeProvider.notifier)
+                .setThemeMode(_themeModes[i]),
+          ),
+        ],
+      ),
     );
   }
 

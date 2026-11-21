@@ -1,10 +1,11 @@
 // ✅ ACTUALIZADO: lib/src/shared/presentation/widgets/aero/aero_select.dart
+import 'dart:async';
+
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class AeroSelectItem<T> {
-
   const AeroSelectItem({
     required this.value,
     required this.label,
@@ -15,11 +16,15 @@ class AeroSelectItem<T> {
   final IconData? icon;
 }
 
-class AeroSelect<T> extends StatefulWidget { // Validator para modo múltiple
+class AeroSelect<T> extends StatefulWidget {
+  // Validator para modo múltiple
 
   // ✅ Constructor para selección simple (default)
   const AeroSelect({
-    required this.items, required this.value, required this.onChanged, super.key,
+    required this.items,
+    required this.value,
+    required this.onChanged,
+    super.key,
     this.label,
     this.hint,
     this.errorText,
@@ -29,41 +34,46 @@ class AeroSelect<T> extends StatefulWidget { // Validator para modo múltiple
     this.values,
     this.onMultiChanged,
     this.multiValidator,
-  }) : assert(!multiple || (onChanged == null && onMultiChanged != null), 
-             'En modo múltiple, use onMultiChanged en lugar de onChanged');
+  }) : assert(
+         !multiple || (onChanged == null && onMultiChanged != null),
+         'En modo múltiple, use onMultiChanged en lugar de onChanged',
+       );
 
   // ✅ Constructor nombrado para selección múltiple (API más clara)
   const AeroSelect.multi({
-    required List<AeroSelectItem<T>> items, required List<T>? values, required ValueChanged<List<T>?> onMultiChanged, Key? key,
+    required List<AeroSelectItem<T>> items,
+    required List<T>? values,
+    required ValueChanged<List<T>?> onMultiChanged,
+    Key? key,
     String? label,
     String? hint,
     String? errorText,
     bool required = false,
     String? Function(List<T>?)? validator,
   }) : this(
-    key: key,
-    items: items,
-    value: null,
-    onChanged: null,
-    multiple: true,
-    values: values,
-    onMultiChanged: onMultiChanged,
-    label: label,
-    hint: hint,
-    errorText: errorText,
-    required: required,
-    multiValidator: validator,
-  );
+         key: key,
+         items: items,
+         value: null,
+         onChanged: null,
+         multiple: true,
+         values: values,
+         onMultiChanged: onMultiChanged,
+         label: label,
+         hint: hint,
+         errorText: errorText,
+         required: required,
+         multiValidator: validator,
+       );
   // ✅ Parámetros para selección simple (default)
   final List<AeroSelectItem<T>> items;
   final T? value; // Para selección simple
   final ValueChanged<T?>? onChanged; // Para selección simple
-  
+
   // ✅ Parámetros para selección múltiple
   final bool multiple;
   final List<T>? values; // Para selección múltiple
   final ValueChanged<List<T>?>? onMultiChanged; // Para selección múltiple
-  
+
   final String? label;
   final String? hint;
   final String? errorText;
@@ -122,7 +132,10 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
                 const SizedBox(width: 2),
                 Text(
                   '*',
-                  style: TextStyle(color: theme.colorScheme.error, fontSize: 14),
+                  style: TextStyle(
+                    color: theme.colorScheme.error,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ],
@@ -130,42 +143,68 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
           const SizedBox(height: 6),
         ],
         DropdownButtonFormField<T>(
-          initialValue: widget.value == null || 
-                        (widget.value is String && (widget.value! as String).isEmpty) 
-                           ? null 
-                           : widget.value,
+          initialValue:
+              widget.value == null ||
+                  (widget.value is String && (widget.value! as String).isEmpty)
+              ? null
+              : widget.value,
           hint: widget.hint != null
-              ? Text(widget.hint!,
+              ? Text(
+                  widget.hint!,
                   style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5)))
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                )
               : null,
           decoration: InputDecoration(
             filled: true,
-            fillColor: isDark ? AppColors.inputDark : AppColors.inputBackgroundLight,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            fillColor: isDark
+                ? AppColors.inputDark
+                : AppColors.inputBackgroundLight,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
             border: _buildBorder(theme),
             enabledBorder: _buildBorder(theme),
             focusedBorder: _buildBorder(theme, focused: true),
             errorBorder: _buildBorder(theme, error: true),
             errorText: widget.errorText,
           ),
-          items: widget.items.map((item) => DropdownMenuItem<T>(
-            value: item.value,
-            child: Row(children: [
-              if (item.icon != null) ...[
-                Icon(item.icon, size: 18, 
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
-                const SizedBox(width: 8),
-              ],
-              Text(item.label, style: AppTextStyles.baseTextTheme.bodyMedium),
-            ]),
-          )).toList(),
+          items: widget.items
+              .map(
+                (item) => DropdownMenuItem<T>(
+                  value: item.value,
+                  child: Row(
+                    children: [
+                      if (item.icon != null) ...[
+                        Icon(
+                          item.icon,
+                          size: 18,
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                      Text(
+                        item.label,
+                        style: AppTextStyles.baseTextTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
           onChanged: widget.onChanged,
           dropdownColor: theme.colorScheme.surface,
           style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurface),
-          icon: Icon(Icons.expand_more, 
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+            color: theme.colorScheme.onSurface,
+          ),
+          icon: Icon(
+            Icons.expand_more,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+          ),
         ),
       ],
     );
@@ -175,7 +214,8 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
   Widget _buildMultiSelect(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final hasError = widget.errorText != null || 
+    final hasError =
+        widget.errorText != null ||
         (widget.multiValidator?.call(widget.values) != null);
 
     return Column(
@@ -184,65 +224,92 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
         if (widget.label != null) ...[
           Row(
             children: [
-              Text(widget.label!,
+              Text(
+                widget.label!,
                 style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(
-                  color: theme.colorScheme.onSurface)),
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
               if (widget.required) ...[
                 const SizedBox(width: 2),
-                Text('*', style: TextStyle(color: theme.colorScheme.error, fontSize: 14)),
+                Text(
+                  '*',
+                  style: TextStyle(
+                    color: theme.colorScheme.error,
+                    fontSize: 14,
+                  ),
+                ),
               ],
             ],
           ),
           const SizedBox(height: 6),
         ],
-        
+
         // ✅ Contenedor principal con estilo de input
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: isDark ? AppColors.inputDark : AppColors.inputBackgroundLight,
+            color: isDark
+                ? AppColors.inputDark
+                : AppColors.inputBackgroundLight,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: hasError 
-                  ? theme.colorScheme.error 
+              color: hasError
+                  ? theme.colorScheme.error
                   : (theme.colorScheme.outline.withValues(alpha: 0.5)),
               width: hasError ? 2 : 1,
             ),
           ),
           child: InkWell(
-            onTap: () => _showMultiSelectModal(context),
+            onTap: () => unawaited(_showMultiSelectModal(context)),
             child: Row(
               children: [
                 Expanded(
                   child: _tempSelected.isEmpty
-                      ? Text(widget.hint ?? 'Seleccionar...',
-                          style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5)))
+                      ? Text(
+                          widget.hint ?? 'Seleccionar...',
+                          style: AppTextStyles.baseTextTheme.bodyMedium
+                              ?.copyWith(
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.5,
+                                ),
+                              ),
+                        )
                       : Wrap(
                           spacing: 6,
                           runSpacing: 6,
                           children: _tempSelected.map((selectedValue) {
                             final item = widget.items.firstWhere(
                               (i) => i.value == selectedValue,
-                              orElse: () => AeroSelectItem(value: selectedValue, label: 'Desconocido'),
+                              orElse: () => AeroSelectItem(
+                                value: selectedValue,
+                                label: 'Desconocido',
+                              ),
                             );
-                            return _buildChip(item.label, () => _removeItem(selectedValue));
+                            return _buildChip(
+                              item.label,
+                              () => _removeItem(selectedValue),
+                            );
                           }).toList(),
                         ),
                 ),
-                Icon(Icons.expand_more, 
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+                Icon(
+                  Icons.expand_more,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
               ],
             ),
           ),
         ),
-        
+
         // ✅ Mensaje de error
         if (hasError)
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(
-              widget.errorText ?? widget.multiValidator?.call(widget.values) ?? '',
+              widget.errorText ??
+                  widget.multiValidator?.call(widget.values) ??
+                  '',
               style: TextStyle(color: theme.colorScheme.error, fontSize: 12),
             ),
           ),
@@ -251,10 +318,10 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
   }
 
   // ✅ Modal para selección múltiple con checkboxes
-  void _showMultiSelectModal(BuildContext context) {
+  Future<void> _showMultiSelectModal(BuildContext context) async {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
-    showModalBottomSheet(
+
+    await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -279,9 +346,13 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(widget.label ?? 'Seleccionar',
+                  Text(
+                    widget.label ?? 'Seleccionar',
                     style: AppTextStyles.baseTextTheme.titleMedium?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w600)),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   IconButton(
                     icon: const Icon(Icons.close, color: Colors.white),
                     onPressed: () => Navigator.pop(ctx),
@@ -291,7 +362,7 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
                 ],
               ),
             ),
-            
+
             // Lista de checkboxes
             Expanded(
               child: ListView(
@@ -305,7 +376,10 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
                           Icon(item.icon, size: 18, color: AppColors.fuchsia),
                           const SizedBox(width: 8),
                         ],
-                        Text(item.label, style: AppTextStyles.baseTextTheme.bodyMedium),
+                        Text(
+                          item.label,
+                          style: AppTextStyles.baseTextTheme.bodyMedium,
+                        ),
                       ],
                     ),
                     value: isSelected,
@@ -324,14 +398,16 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
                 }).toList(),
               ),
             ),
-            
+
             // Botones de acción
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: isDark ? AppColors.borderDark : Colors.grey.shade200)),
+                    color: isDark ? AppColors.borderDark : Colors.grey.shade200,
+                  ),
+                ),
               ),
               child: Row(
                 children: [
@@ -340,15 +416,19 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
                       onPressed: () {
                         setState(() => _tempSelected.clear());
                       },
-                      child: const Text('Limpiar selección',
-                        style: TextStyle(color: AppColors.destructiveLight)),
+                      child: const Text(
+                        'Limpiar selección',
+                        style: TextStyle(color: AppColors.destructiveLight),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        widget.onMultiChanged?.call(List<T>.from(_tempSelected));
+                        widget.onMultiChanged?.call(
+                          List<T>.from(_tempSelected),
+                        );
                         Navigator.pop(ctx);
                       },
                       style: ElevatedButton.styleFrom(
@@ -356,8 +436,10 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: const Text('Confirmar',
-                        style: TextStyle(fontWeight: FontWeight.w600)),
+                      child: const Text(
+                        'Confirmar',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                 ],
@@ -381,9 +463,13 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(label, 
+          Text(
+            label,
             style: AppTextStyles.baseTextTheme.bodySmall?.copyWith(
-              color: AppColors.fuchsia, fontSize: 12)),
+              color: AppColors.fuchsia,
+              fontSize: 12,
+            ),
+          ),
           const SizedBox(width: 4),
           GestureDetector(
             onTap: onRemove,
@@ -400,12 +486,16 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
   }
 
   // ✅ Helper: border reusable
-  OutlineInputBorder _buildBorder(ThemeData theme, {bool focused = false, bool error = false}) {
+  OutlineInputBorder _buildBorder(
+    ThemeData theme, {
+    bool focused = false,
+    bool error = false,
+  }) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(
-        color: error 
-            ? theme.colorScheme.error 
+        color: error
+            ? theme.colorScheme.error
             : (focused ? AppColors.fuchsia : theme.colorScheme.outline),
         width: focused || error ? 2 : 1,
       ),

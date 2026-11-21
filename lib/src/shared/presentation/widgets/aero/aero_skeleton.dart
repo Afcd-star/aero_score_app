@@ -1,8 +1,9 @@
 // lib/src/shared/presentation/widgets/aero/aero_skeleton.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class AeroSkeleton extends StatefulWidget {
-
   const AeroSkeleton({
     super.key,
     this.width,
@@ -32,7 +33,7 @@ class _AeroSkeletonState extends State<AeroSkeleton>
       vsync: this,
     );
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
-    _controller.repeat();
+    unawaited(_controller.repeat());
   }
 
   @override

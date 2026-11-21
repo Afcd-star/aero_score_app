@@ -76,8 +76,8 @@ construyen el suyo.
 UI: Material 3 con catalogo Aero propio. Regla operativa: si un widget del
 catalogo cubre la necesidad, se usa el catalogo; si no, se extiende el
 catalogo antes de improvisar en la vista. Toda decision de widget se
-contrasta con el arbol, no con la guia de uso, que describe piezas
-inexistentes.
+contrasta con el arbol y con la guia de uso, que ya inventaria solo lo
+que existe.
 
 Tipografia: Sora para titulos y Manrope para cuerpo, con los quince roles
 de TextTheme declarados. Un rol ausente anula en silencio tamano, peso y
@@ -111,8 +111,8 @@ Idioma: codigo en ingles, comentarios e interfaz en espanol.
   ocho en presentacion, de las mismas clases ya corregidas en equipos.
   Cabecera con ruta vieja pendiente.
 - Puntuacion: en construccion, no codigo muerto. Tiene tres modelos,
-  repositorio, notificador, vista y dos widgets en shared, con cincuenta y
-  un errores concentrados en lecturas implicitas de dinamico. Sus rutas ya
+  repositorio, notificador, vista y dos widgets en su carpeta de
+presentacion, con cincuenta y dos errores concentrados en lecturas implicitas de dinamico. Sus rutas ya
   no se alcanzan por inicio de sesion. Se reaudita y reescribe en su
   frente, con el esquema real delante.
 - Visitante y resultados: no existe. El espectador acaba en la pantalla de
@@ -121,13 +121,21 @@ Idioma: codigo en ingles, comentarios e interfaz en espanol.
 
 ## 5. Metricas medidas al cierre 0.3.0
 
-- Pruebas: sesenta y nueve, verdes.
+- Pruebas: setenta y nueve, verdes.
 - Errores de analisis: sesenta y seis. Primera bajada de la linea base,
   que estaba en sesenta y siete.
-- Distribucion de errores: puntuacion cincuenta y uno, eventos once,
-  catalogo compartido cuatro.
-- Modulos en cero avisos: administracion, equipos, seccion de usuarios y
-  tarjeta de asignacion.
+- Distribucion de errores: puntuacion cincuenta y dos, eventos once,
+catalogo compartido tres. Los once de eventos son cinco en la vista de
+lista y seis en el formulario.
+Advertencias: cuatro, todas de estilo de comentario por hacer.
+Informaciones: ochocientas ochenta del analizador. El editor muestra
+ochocientas ochenta y cinco porque sintetiza cinco entradas desde
+comentarios por hacer, que no son diagnosticos del analizador. La
+autoridad de este informe es el analizador, no el contador del editor.
+- Modulos en cero avisos: solo equipos. Administracion dejo de serlo al
+recibir los dos widgets del panel con dieciseis informaciones, y la
+seccion de usuarios con su tarjeta tampoco, porque la tarjeta vive ahora
+en autenticacion, que suma veinte.
 
 ## 6. Deuda tecnica, por bloqueo de lanzamiento
 
@@ -146,15 +154,17 @@ Primero lo que impide publicar:
 
 Despues lo que degrada calidad sin impedir publicar:
 
-- Tokens semanticos de estado y de marca, con el contraste del badge roto
-  en exito y la condicion de atencion invertida.
+- Tokens semanticos de marca. Los de estado ya se cerraron: las variantes
+del badge usan tinte suave con texto saturado por modo y su contraste
+esta verificado por prueba numerica. Queda el fucsia de la variante
+primaria, marginal con blanco para texto pequeno.
 - Cuatro piezas de catalogo por crear: aviso temporal con su tema,
   marcador de modulo, indicador de progreso y hoja modal.
-- Documentacion del catalogo: boton, envoltorio de formulario y los tres
-  widgets de administracion en shared.
-- Guia de uso del catalogo, que describe piezas inexistentes y cuyas
-  referencias rotas llegaron a comentarios del codigo.
-- Enumerado de estado de cuenta.
+- Documentacion publica: boton, envoltorio de formulario y tarjeta de
+seccion en el catalogo; los dos widgets del panel en administracion; la
+tarjeta de asignacion en autenticacion; y la insignia de estado en
+eventos, con cuatro avisos.
+- - Enumerado de estado de cuenta.
 - AppEnvironment como segunda fuente de verdad de entorno.
 - Notifiers de interfaz dentro de data di.
 - Prueba del repositorio de administracion contra PocketBase, con

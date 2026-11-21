@@ -40,8 +40,8 @@ sin conexion no esta iniciada.
 - Eventos: saneada en analisis estatico, con once errores de presentacion
   pendientes, de las mismas clases ya corregidas en equipos.
 - Puntuacion: en construccion. Tiene modelos, repositorio, notificador y
-  vista, con cincuenta y un errores concentrados en lecturas de datos sin
-  tipar. Sus rutas ya no se alcanzan por inicio de sesion: los cuatro
+  vista y dos widgets en su carpeta de presentacion, con cincuenta y dos
+errores concentrados en lecturas de datos sin tipar. Sus rutas ya no se alcanzan por inicio de sesion: los cuatro
   roles de juez aterrizan en un marcador.
 - Visitante y resultados: no existe. El rol espectador no tiene destino
   propio y hoy acaba en la pantalla de cuenta pendiente, que le miente.
@@ -50,11 +50,15 @@ sin conexion no esta iniciada.
 
 ## Metricas medidas
 
-- Pruebas automatizadas: sesenta y nueve, verdes.
-- Errores de analisis estatico: sesenta y seis, concentrados en
-  puntuacion, eventos y catalogo compartido.
-- Modulos en cero avisos: administracion, equipos, y la seccion de
-  usuarios con su tarjeta.
+- Pruebas automatizadas: setenta y nueve, verdes.
+- Errores de analisis estatico: sesenta y seis, repartidos en puntuacion
+cincuenta y dos, eventos once y catalogo compartido tres. Ademas cuatro
+advertencias y ochocientas ochenta informaciones del analizador. El
+editor suma cinco entradas mas porque sintetiza los comentarios por
+hacer, que no son diagnosticos.
+- Modulos en cero avisos: solo equipos. Administracion recibio los dos
+widgets del panel con dieciseis informaciones, y la tarjeta de
+asignacion se movio a autenticacion, que suma veinte.
 
 Las pruebas cubren entidades de dominio, notificadores, logica de lote,
 escape de filtros y piezas de catalogo con render a ancho estrecho. Los
@@ -128,17 +132,16 @@ Primero lo que impide publicar:
 
 Despues lo que degrada calidad sin impedir publicar:
 
-- Tokens semanticos de estado y de marca. El badge tiene el contraste
-  roto en exito y la condicion de atencion invertida, y el fucsia con
-  blanco queda marginal para texto pequeno.
+- Tokens semanticos de marca. Los de estado ya se cerraron con tinte
+suave y prueba de contraste calculado. Queda el fucsia de la variante
+primaria del badge, marginal con blanco para texto pequeno.
 - Cuatro piezas de catalogo por crear: aviso temporal con su tema,
   marcador de modulo, indicador de progreso y hoja modal.
-- Documentacion publica del catalogo, con avisos acumulados en boton y
-  envoltorio de formulario, y veintiun avisos en los tres widgets de
-  administracion en shared.
-- La guia de uso del catalogo describe piezas que no existen en el arbol,
-  y sus referencias rotas ya llegaron a comentarios del codigo.
-- Enumerado de estado de cuenta, para retirar los literales sueltos de
+- Documentacion publica del catalogo, con avisos acumulados en boton,
+envoltorio de formulario y tarjeta de seccion. Los dos widgets del panel
+viajaron a administracion con dieciseis avisos, y la tarjeta de
+asignacion a autenticacion.
+- - Enumerado de estado de cuenta, para retirar los literales sueltos de
   entidad, modelo, enrutador, filtro y tarjeta.
 - AppEnvironment como segunda fuente de verdad de entorno frente al
   define de compilacion.

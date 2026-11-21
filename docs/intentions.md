@@ -169,6 +169,7 @@ Nueva deuda registrada con precondicion:
 Decision de versionado adoptada: 0.MINOR.PATCH previo a 1.0, minor por
 cierre de feature, 1.0.0 con esquema de backend congelado y las seis
 features auditadas. Hito actual 0.1.0.
+
 ## Norma de EOL para registrantes generados
 
 Se anadio .gitattributes con text eol=lf para los diez registrantes
@@ -465,6 +466,7 @@ conversiones estrictas son error de analisis y ademas riesgo de fallo
 en ejecucion si el backend entrega otro tipo. Los de shared estan en el
 catalogo que consumen todas las features, asi que su arreglo tiene el
 mayor apalancamiento por error corregido.
+
 ## Estado de puntuacion: en construccion, no codigo muerto
 
 El modulo tiene codigo real: tres modelos de datos, repositorio,
@@ -500,6 +502,7 @@ redireccionamiento del router manda al rol de juez a una ruta de
 puntuacion al iniciar sesion, entonces no hace falta escribir la URL,
 es el camino normal, y un juez que entre hoy cae en la pantalla a
 medias. Hasta leer el router no se afirma ni se descarta.
+
 ## Hallazgos del enrutador, medidos sobre el archivo real
 
 Uno, defecto de inicio de sesion de tres roles de juez. El mapa de
@@ -540,6 +543,7 @@ bloqueo de lanzamiento, porque se alcanza por uso normal. Se corrige
 enrutando a los tres jueces a un marcador, igual que ya esta el
 principal, y se mantienen diferidos los 51 errores del modulo. Los
 hallazgos tres a seis se registran como deuda de core y de producto.
+
 ## Hallazgo uno del enrutador: RESUELTO
 
 Los cuatro roles de juez aterrizan ahora en el marcador generalizado,
@@ -552,6 +556,7 @@ Deuda menor derivada: el nombre de la clase del marcador conserva la
 palabra principal aunque sirve a los cuatro roles. No se renombra
 porque la vista esta destinada a ser absorbida por el marcador de
 modulo del catalogo al auditar shared, y ese bloque ya lo registra.
+
 ## Frente de producto: gestion de usuarios como pantalla propia
 
 Decision del autor, aceptada con evidencia visual. La gestion de roles
@@ -597,6 +602,7 @@ informacion.
 Nota de naming. El widget actual se llama gestion de roles, pero pasa a
 gestionar usuarios, roles y estados. Su nombre queda corto y se evalua
 renombrarlo en este frente, no antes.
+
 ## Errata de historia: registro mezclado en un commit de arreglo
 
 El commit 8cb9270 se publico con tres archivos cuando su mensaje declara
@@ -639,6 +645,7 @@ verdoso. El resultado es que pendiente parece exito y activo parece
 neutro, semantica invertida por accidente del esquema. Se corrige en el
 frente de tema con roles semanticos de exito y advertencia, no con
 colores cableados.
+
 ## Regla operativa de recarga tras cambiar codigo
 
 Tres defectos falsos se reportaron por compilar viejo: el boton de
@@ -676,6 +683,7 @@ enumeraciones exige reinicio en caliente antes de juzgar el resultado.
 Cambio de manifiesto, de recursos, de definiciones de compilacion o de
 codigo nativo exige parada completa. Y ninguna prueba viva se reporta
 como fallo sin declarar antes que modo de recarga se uso.
+
 ## Regla de generacion: no correr el generador sin necesidad
 
 Evidencia: las ultimas corridas del generador en cada puerta de calidad
@@ -693,6 +701,7 @@ Contexto. El demonio de Flutter del editor se cayo durante este frente.
 Es tooling, no la app ni el backend ni el repositorio. La hipotesis
 principal es presion de memoria por procesos de Dart apilados, y se
 confirma midiendo procesos residentes y memoria libre, no afirmando.
+
 ## Cierre del flujo de aprobacion de cuentas
 
 Cerrado con evidencia en las dos ramas. Rama de exito: aprobar desde el
@@ -737,6 +746,7 @@ sobre un sistema ya al noventa por ciento. La omision del generador
 cuando no hay fuentes anotadas baja ese pico. Y cerrar las pestanas del
 navegador que no se usan, en especial el panel del backend cuando no se
 esta consultando.
+
 ## Cierre de la hipotesis de memoria con bytes privados medidos
 
 Medicion de compromiso. Los cinco procesos de Dart suman unos
@@ -777,6 +787,7 @@ Alternativa con contrapartida. Ejecutar en escritorio Windows evita el
 navegador, pero se pierde la emulacion de dispositivo y la verificacion
 de ancho movil, que es justo lo que se usa para el pase visual. No se
 adopta sin decidir esa contrapartida.
+
 ## Correccion de la deuda de Android con el manifiesto leido
 
 Medicion. El manifiesto de depuracion y el de perfil SI declaran el
@@ -803,6 +814,7 @@ Nota de seguridad. El texto claro no se declara en el manifiesto
 principal ni de forma global. Abrir HTTP sin cifrar en produccion seria
 cambio de postura de seguridad, no ajuste de desarrollo, y exigia antes
 decidir si el backend de produccion sirve HTTPS.
+
 ## Correccion mayor: la guia de catalogo describe widgets inexistentes
 
 Inventario real medido por arbol. Catalogo Aero: doce archivos, alerta
@@ -852,6 +864,7 @@ Accion pendiente. Reescribir la guia de uso para que refleje el
 inventario real y la lista de lo que falta, con su justificacion. Mientras
 no se reescriba, la guia no es fuente de verdad del catalogo y toda
 decision de widget se contrasta con el arbol.
+
 ## Salvedad de la forma de commit limitada por rutas
 
 La contramedida adoptada tras la errata del commit mezclado era
@@ -875,6 +888,7 @@ Correccion de metodo del lead. Adoptar una contramedida sin probar su
 caso de archivo nuevo es el mismo vicio de afirmar sin verificar que esta
 bitacora viene registrando. Toda contramedida se prueba en los dos casos,
 archivo modificado y archivo nuevo, antes de declararla estandar.
+
 ## Cierre de codigo del frente de gestion de usuarios y hallazgos del catalogo
 
 Publicado con diez rutas, mas el refactor y la documentacion de la
@@ -942,6 +956,7 @@ administracion en revision y equipos pendientes, e imponen anotaciones y
 dobles con mocktail que el codigo contradice por decision escrita. La
 fuente de verdad es el repo, no las copias. Su alineacion sigue siendo el
 gesto independiente ya acordado.
+
 ## Regla de bloques autocontenidos en la terminal
 
 Fallo de proceso del lead. Un bloque de commit uso la variable de
@@ -974,6 +989,7 @@ guia de catalogo pero inexistentes. La ficcion de la guia se propago a los
 comentarios de documentacion del codigo, y el analizador la marca como
 referencia no visible. Se corrigen en el pase de documentacion del frente
 de shared, junto con la reescritura de la guia.
+
 ## Requisito de producto: rechazo de solicitudes y acciones masivas
 
 Requisito del autor, con motivo. Cualquiera que instale la app puede dejar
@@ -1007,6 +1023,7 @@ de exitos y fallos, porque parar el lote por un registro malo es peor el
 dia del evento. Cinco, sin cambio de contrato: el notificador itera el
 metodo unitario que ya existe, y el lote del servidor queda como mejora
 de escalabilidad registrada.
+
 ## Cierre del frente de gestion de usuarios, con pase visual verificado
 
 Cerrado de punta a punta. Catalogo extendido con estado vacio y barra de
@@ -1058,6 +1075,7 @@ contra la semantica de la accion, no solo contra su tamano. Tres, entregas
 sin ancla: una linea suelta para borrar, que aparece en varios archivos
 donde es legitima. Regla: toda edicion se entrega con bloque unico
 alrededor, o con sustitucion acotada al archivo y contada.
+
 ## Prioridad del interruptor de tema, pedida por el autor
 
 El autor cambia el tema del sistema operativo a mano en cada pase
@@ -1087,6 +1105,7 @@ su vista si para entonces existe. Organizador, marcador minimo, y su
 funcionalidad queda como frente propio sin fecha. Los tres consumen el
 marcador de modulo del catalogo, asi que el frente depende de que esa
 pieza exista.
+
 ## Cuarta correccion de metodo del lead, mismo vicio que la primera
 
 El defecto de entregar un import que el archivo no nombra se repitio por
@@ -1111,6 +1130,7 @@ Diferencia legitiva que fija la regla: en el punto de entrada el import de
 preferencias SI es correcto, porque ahi se escribe el nombre del tipo en
 una llamada estatica. La misma dependencia, dos archivos, un import
 basura y uno legitimo, y la diferencia es solo si el nombre aparece.
+
 ## Quinta correccion de metodo del lead, pase visual como verificacion posterior
 
 Evidencia. Cuatro commits de correccion destapados por pases visuales
@@ -1149,6 +1169,7 @@ negocia: no se commitea superficie sin haberla visto en vivo.
 Consecuencia para el checklist del informe. La linea del pase visual se
 enmienda para que diga gate previo y no verificacion posterior, en el
 mismo gesto documental.
+
 ## Sexta correccion de metodo del lead, grep de la pieza y no solo de sus tokens
 
 El autor hizo grep de AeroBadge y encontro dos consumidores vivos en
@@ -1193,6 +1214,7 @@ Confirmacion de naturaleza del subfrente uno: es fundamento sin consumidor
 vivo hoy, porque los dos consumidores de eventos bypassan las variantes
 con custom. Su verificacion es la prueba de contraste calculado, no el
 ojo en eventos. El ojo en eventos solo confirma no regresión.
+
 ## Gate del subfrente uno de shared, sin regresión y defecto previo confirmado
 
 Verificado con capturas en claro y oscuro. Los dos consumidores de eventos
@@ -1271,6 +1293,7 @@ de tabla sin efecto vivo verificada por numero, luego adopcion con gate en
 vivo en eventos y tarjeta de usuario en claro y oscuro. Si solido, un token
 de info solido y adopcion que impone el cambio de look, con gate en vivo y
 aviso de que es cambio de estilo no pedido.
+
 ## Gate del movimiento B de shared, pasado con evidencia
 
 Verificado con capturas en claro y oscuro. Proximo sale azul tenue con
@@ -1325,3 +1348,131 @@ El perimetro de event_status_badge trae cuatro avisos de informacion de
 documentacion publica faltante, en el constructor y los tres campos. Son
 previos, no anadidos por B, porque B no creo campos nuevos. Viajan al
 subfrente dos de shared, documentacion publica de piezas existentes.
+
+## Cierre del frente de pertenencia de shared, con evidencia mecanica y visual
+
+El commit 69f2615 vacia shared de las seis piezas que no le pertenecian. Evidencia convergente de dos naturalezas independientes. Mecanica: el reescaneo de similitud no deja ningun renombrado al cien (95, 97, 99, 98, 99, 86), el grep de aceptacion sobre shared devuelve vacio, errores sin variar en sesenta y seis y pruebas en setenta y nueve, y el commit registra trece cambios efectivos con seis renombrados que conservan su porcentaje. Visual: el autor corrigio a mano las dos cabeceras que mentian (scoring_card y scoring_form_sheet) y presento capturas de su linea uno apuntando a features/scoring/presentation/widgets. Las dos senales coinciden, asi que la correccion esta probada por numero y por ojo a la vez, no por una sola fuente.
+
+Valor del gate previo, primera aplicacion exitosa en superficie documental. El gate previo al commit, adoptado tras la quinta correccion, cumplio su funcion exacta: el escaneo de similitud detecto dos cabeceras al cien antes de commitear, o sea dos comentarios mintiendo sobre la ubicacion, que el analizador no ve porque son comentarios. El autor las arreglo a mano y el reescaneo confirmo la bajada por debajo del cien. Sin el gate, esas dos mentiras hubieran quedado horneadas en el arbol, sumando dos cabeceras con ruta vieja a las cuatro ya registradas. Esto valida la contramedida en el caso documental, no solo en el de render.
+
+Octava correccion de metodo, cerrada con dato. El defecto era planificar un frente desde que piezas tocar en vez de desde que piezas pertenecen aqui. El grep de pertenencia detecto el acoplamiento tipado en dos archivos, pero la lectura completa destapo un tercero, scoring_card, que importa limpio y contrabandea semantica de dominio por su API y por hardcodear la maquina de estados con textos de negocio. Contramedida aplicada y verificada: antes de dividir un frente en subfrentes, correr el grep de pertenencia Y leer las piezas ambiguas, porque el grep solo ve acoplamiento tipado y no ve el contrabando semantico. El frente se cerro con las tres salidas por inversion (role_assignment_card a auth, scoring_card y scoring_form_sheet a scoring) y las tres por proposito (admin_quick_action y admin_stats_card a features/admin, section_card renombrada a aero_section_card dentro de shared).
+
+Salvedad de atomicidad, gesto unico por estraddle de un consumidor. role_management_section importa a la vez role_assignment_card (inversion) y aero_section_card (proposito), asi que partir el cierre en dos commits por naturaleza dejaria un commit intermedio con un import apuntando a un archivo inexistente en ese commit, o sea compilacion rota en el bisect. Como nada estaba publicado, la atomicidad real se logra con un solo gesto que declara las dos razones en el mensaje, no con dos gestos que se rompen entre si. Esto no contradice la regla de commit atomico por naturaleza: la naturaleza aqui es un unico movimiento estructural de reubicacion con dos motivaciones, y el estraddle de un consumidor lo fuerza a ser uno.
+
+## Deuda documental destapada por el frente de pertenencia, pendiente de edicion contra texto vivo
+
+El movimiento de seis piezas fuera de shared deja obsoletos tres documentos que aun las listan como parte de shared. No se editan desde memoria ni desde las copias subidas como referencia, porque esas copias no son el texto vivo despues de 69f2615: la copia de widgets_usage subida es la guia aspiracional vieja de unas cincuenta y tres piezas, no la reescrita de veinte archivos; y las copias de README e informe aparecen duplicadas entre la version vieja que miente y la reclasificada, ninguna garantizada como la actual en disco. Se pide el texto vivo de los tres archivos y se edita con anclas contadas contra el, midiendo antes de afirmar numeros.
+
+Puntos obsoletos detectados, para que la edicion sea dirigida y no adivinada.
+
+widgets_usage.md, guia del catalogo que debe inventariar solo lo vivo en shared: el encabezado de veinte archivos baja a quince; el grupo Catalogo Aero de catorce sube a quince al entrar aero_section_card como contenedor puro; los grupos Administracion (cuatro) y Puntuacion (dos) salen por completo porque sus piezas ya no viven en shared; la linea que hablaba de deuda de documentacion de esos grupos se reescribe, pues esa deuda viaja ahora con las piezas a sus features y se registra en el informe y el README, no en la guia del catalogo; y se anade una linea de contrato que diga que este documento solo inventaria lo vivo en shared y que las piezas que salieron por pertenencia se buscan en su feature.
+
+informe_tecnico.md: la linea de Puntuacion que dice dos widgets en shared pasa a dos widgets en su propia carpeta de presentacion; la distribucion de errores del cierre debe volver a medirse por archivo sobre el arbol vivo, porque el movimiento traslada el error de scoring_form_sheet del cubo de shared al cubo de puntuacion, pasando shared de cuatro a tres y puntuacion de cincuenta y uno a cincuenta y dos, con total estable en sesenta y seis; y existe una discrepancia previa entre el inventario global (shared cinco errores) y la metrica del cierre (shared cuatro) que solo una medicion fresca resuelve, asi que no se escribe ningun numero de distribucion sin volver a medirlo por archivo.
+
+README.md: la linea de deuda que dice veintiun avisos en los tres widgets de administracion en shared queda obsoleta porque esos tres ya no estan en shared (dos en features/admin, uno renombrado a aero_section_card en shared), y esos avisos viajan con ellos; la concentracion de errores en puntuacion, eventos y catalogo compartido se ajusta tras la remedicion; y la linea de Puntuacion en estado por modulo incorpora los dos widgets y su error trasladado.
+
+intentions.md misma: el bloque historico del delta al cierre de administracion menciona los tres widgets de administracion en shared como hecho; se anota, no se borra, que tras el frente de pertenencia admin_quick_action y admin_stats_card viven en features/admin y section_card paso a aero_section_card en shared, preservando el rastro historico sin mentir sobre el presente. El bloque de cabeceras con ruta vieja (competitor_repository, event_list_view, team_repository_impl, team_repository) no se ve afectado por pertenencia, porque son archivos distintos que no se movieron; y pertenencia no anadio cabeceras obsoletas netas, porque las dos que introdujo el movimiento fueron detectadas por el gate y corregidas antes de commitear.
+
+Verificacion cosmetica pendiente. El arbol de trabajo debe quedar sin las subcarpetas admin y scoring de shared, vacias tras el movimiento. git no rastrea directorios vacios, asi que la limpieza es del explorador y de futuras listas de archivo; se confirma con el cmdlet Test-Path en falso sobre ambas rutas y con git status en vacio despues del commit, que el pegado anterior no mostro.
+
+## Decima correccion de metodo del lead, confiar en un parser sin verificar que captura todo
+
+Evidencia. El contador estricto con regex devolvio 880 infos a mano mientras el
+editor del autor marca 885, con warnings (4) y errores (66) casando. El hueco de
+cinco cae todo en info, o sea mi regex perdio cinco lineas de diagnóstico y las
+descarto en silencio al no casar con el patron estricto. Es la misma familia que
+la novena: usar la salida de un comando de medicion como verdad sin corroborarla
+contra una cifra externa conocida (aqui, el 885 del editor) ni contra su propio
+total.
+
+Causa raiz. Razonar el conteo desde "mi regex extrae severidad, ruta y posicion"
+en vez de desde "el comando emite N lineas de diagnostico y debo capturar las N".
+Un parser lossy subcuenta, y un subcuento usado como verdad para afirmar booleans
+de docs (cero avisos) puede dar por cero un area que en realidad tiene una de las
+lineas perdidas.
+
+Contramedida adoptada. Toda medicion que alimente una afirmacion de docs se
+corrobora con un contador no lossy (toda linea que empiece por severidad) contra
+una cifra externa conocida (el badge del editor) ANTES de fijar numero alguno.
+Y las booleans de "cero avisos" se verifican listando las lineas de esa area con
+el contador no lossy, no asumiendo que la ausencia en la tabla estricta significa
+cero.
+
+## Hallazgos de la medicion no lossy y del analysis_options leido, deuda de docs y de config
+
+Distribucion de errores medida y fiable (strict y loose coinciden en error y
+warning): total 66, shared 3, events 11, scoring 52. Valida el anexo del cierre
+del frente de pertenencia (shared 4 a 3, scoring 51 a 52) y corrige con dato
+fresco la discrepancia historica del inventario global (shared 5). Los infos por
+area quedan pendientes del contador no lossy de esta vuelta.
+
+Colapso de la afirmacion de cero avisos, destapado por la lectura del desglose.
+Tras el frente de pertenencia, administracion ya no es cero (16 infos de
+admin_quick_action y admin_stats_card movidos hacia dentro de la feature), la
+seccion de usuarios y la tarjeta de asignacion tampoco (ahora en auth, 20 infos),
+y solo equipos sobrevive en cero entre las areas con codigo. La linea de README e
+informe que lista "administracion, equipos, seccion de usuarios y tarjeta de
+asignacion" en cero avisos es falsa desde el commit 69f2615 y se corrige con el
+desglose no lossy confirmado.
+
+Typo real en analysis_options.yaml, latente. El exclude declara [build/,
+/.g.dart, **/.freezed.dart]. El segundo patron, /.g.dart, no excluye nada util:
+en glob, la barra inicial ancla a raiz y /.g.dart buscaba un archivo literal
+llamado .g.dart en la raiz, no los generados. El patron correcto es
+**/*.g.dart. Hoy es inocuo porque no hay .g.dart en disco (gen=0 y el listado de
+generados lo confirman o lo desmienten segun esta vuelta), pero en cuanto corra
+build_runner los .g.dart se analizaran sin excluir mientras los .freezed.dart si
+quedan excluidos por el tercer patron, una asimetria que inflara los conteos de
+info y warning sin que nadie lo espere. Correccion de una linea, naturaleza de
+config, commit aparte del de docs, y sin cambio de conteo hoy.
+
+Segunda mentira documental hallada leyendo el texto vivo, ajena a pertenencia.
+Tanto el informe como el README listan todavia, en su bloque de deuda que degrada
+calidad, la linea "guia de uso del catalogo, que describe piezas inexistentes y
+cuyas referencias rotas llegaron a comentarios del codigo". Esa ficcion ya estaba
+cerrada por los commits e3529f9 (reesitura de la guia al inventario real) y
+e746fd0 (retirada de las referencias rotas de los comentarios). La linea sobra y
+miente sobre deuda abierta; se elimina en el commit de docs. La regla operativa
+del informe que remata "no con la guia de uso, que describe piezas inexistentes"
+tambien se reescribe, porque la guia ya no describe inexistentes.
+
+Deuda de documentacion reubicada por pertenencia. La linea de deuda "los tres
+widgets de administracion en shared" (21 avisos) se desdobla tras el movimiento:
+16 avisos viajan con admin_quick_action y admin_stats_card a features/admin, y 5
+quedan en shared como aero_section_card; role_assignment_card llevava sus avisos
+a auth. La guia del catalogo ya no inventaria esas piezas, asi que su deuda de
+documentacion publica se registra en el informe y el README por feature, no en la
+guia. La linea de deuda de catalogo se reescribe a "boton y envoltorio de
+formulario" mas la nota de las piezas reubicadas.
+
+## Reconciliacion de conteos cerrada, con causa exacta de las dos mitades
+
+La diferencia entre el editor y el analizador tenia dos causas distintas,
+no una. Los cinco que solo aparecian en el editor son entradas de tipo
+por hacer que la extension sintetiza desde comentarios, no diagnosticos
+del analizador; el CLI nunca las emite, asi que ochocientas ochenta mas
+cinco igual a ochocientas ochenta y cinco. Los seis que solo aparecian en
+el CLI son errores del formulario de evento que la exportacion del editor
+no traia, porque esa exportacion era una instantanea vieja: sus errores
+suman sesenta, no sesenta y seis, mientras el contador actual del editor
+dice sesenta y seis e iguala al CLI. El editor ya los ve, el archivo
+exportado no.
+
+Aritmetica final verificada. Errores sesenta y seis, repartidos en
+puntuacion cincuenta y dos, eventos once y catalogo compartido tres. Los
+once de eventos son cinco de la vista de lista y seis del formulario.
+Advertencias cuatro, todas de estilo de comentario por hacer.
+Informaciones ochocientas ochenta del analizador, mas cinco marcadores
+que solo el editor surfacea.
+
+Regla de autoridad adoptada. Los numeros de los documentos son los del
+analizador del CLI con el alcance del config. Los marcadores de por hacer
+se declaran aparte como deuda, no se suman a la informacion del
+analizador, porque mezclarlos fue lo que lanzo la persecucion de
+fantasmas. El contador del editor corrobora, no subordina.
+
+Numero caduco destapado en esta vuelta. Los tres documentos declaraban
+sesenta y nueve pruebas cuando hoy son setenta y nueve: el frente de tema
+sumo cuatro y el de contraste cinco mas uno. Se corrige en el mismo gesto
+documental. Leccion: al cerrar un frente hay que remedir tambien el
+conteo de pruebas, no solo el de errores, porque ambos se mueven.

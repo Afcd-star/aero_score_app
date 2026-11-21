@@ -15,9 +15,14 @@ la pieza. Si no la cubre, se extiende el catalogo antes de improvisar en
 la vista. Y toda decision se contrasta con el arbol, no con este
 documento.
 
-## Inventario real, veinte archivos
+## Inventario real, quince archivos
 
-Catalogo Aero, catorce archivos:
+Este documento inventaria solo lo que vive en `shared`. Las piezas que
+salieron por pertenencia se buscan en su feature: la tarjeta de
+asignacion en auth, la accion rapida y la tarjeta de metrica del panel en
+admin, y la tarjeta y la hoja de puntuacion en scoring.
+
+Catalogo Aero, quince archivos:
 
 - aero_alert_dialog: confirmacion de accion destructiva o error que
   exige decision. Fondo, borde y textos del esquema ambiental, asi que
@@ -27,43 +32,34 @@ Catalogo Aero, catorce archivos:
   de reserva.
 - aero_background: fondo decorativo de la casa, con variante de panel.
 - aero_badge: etiqueta pequena de estado o rol, con variantes
-  semanticas y tres tamanos. Deuda abierta: su contraste esta roto en
-  exito y la condicion de atencion esta invertida, asi que hoy no es
-  seguro para texto pequeno en claro. Se corrige con tokens semanticos.
+  semanticas y tres tamanos. Sus variantes de estado usan tinte suave
+  con texto saturado por modo, verificado por prueba de contraste
+  calculado. La variante primaria conserva el fucsia de marca, cuyo
+  contraste con blanco queda marginal y es deuda de marca abierta.
 - aero_button: accion. Cinco variantes y tres tamanos, con modo solo
   icono y estado de carga. El primario toma el degradado de marca por
   defecto; el parametro de degradado explicito puede sobrescribirlo.
 - aero_card: contenedor de superficie agrupada.
-- aero_form: envoltorio de formulario con autovalidacion. Este archivo
-  aloja dos piezas, el envoltorio y el par etiqueta y campo. El par
-  muestra error externo opcional; el error interno del campo lo muestra
-  el propio campo, no el envoltorio.
-- aero_input: entrada de texto de una linea.
-- aero_select: seleccion de una opcion en lista.
-- aero_skeleton: marcador de carga con forma de contenido.
-- aero_switch: interruptor de encendido y apagado.
-- aero_textarea: entrada de texto multilinea.
 - aero_empty_state: ausencia de datos o busqueda sin resultado, con
   icono, titulo, mensaje opcional y accion opcional.
 - aero_filter_bar: filtro de seleccion unica con desplazamiento
   horizontal y titulo opcional. Es controlada: el indice activo lo
   decide el consumidor, nunca el propio widget.
+- aero_form: envoltorio de formulario con autovalidacion. Este archivo
+  aloja dos piezas, el envoltorio y el par etiqueta y campo. El par
+  muestra error externo opcional; el error interno del campo lo muestra
+  el propio campo, no el envoltorio.
+- aero_input: entrada de texto de una linea.
+- aero_section_card: contenedor de seccion, con hijo, relleno y radio.
+  Pieza generica de superficie, sin semantica de ningun modulo.
+- aero_select: seleccion de una opcion en lista.
+- aero_skeleton: marcador de carga con forma de contenido.
+- aero_switch: interruptor de encendido y apagado.
+- aero_textarea: entrada de texto multilinea.
 
-Administracion, cuatro archivos:
-
-- admin_quick_action: accion rapida del panel.
-- admin_stats_card: tarjeta de metrica del panel.
-- role_assignment_card: tarjeta de usuario con rol, estado y
-  transiciones de cuenta, con confirmacion para las destructivas.
-- section_card: contenedor de seccion del panel.
-
-Puntuacion, dos archivos:
-
-- scoring_card y scoring_form_sheet: pertenecen a un modulo en
-  construccion. Se reauditan en su frente, no se adoptan como estables.
-
-Los tres ultimos grupos arrastran deuda de documentacion publica y de
-lineas largas. Se resuelve en el frente de shared.
+El catalogo arrastra deuda de documentacion publica y de lineas largas,
+mas tres errores de severidad ocho en el selector y el esqueleto. Se
+resuelve en el frente de shared.
 
 ## Que falta crear, cuatro piezas con uso crudo probado
 
@@ -80,8 +76,11 @@ lineas largas. Se resuelve en el frente de shared.
 
 ## Que existe y falta adoptar
 
-- Insignia para los chips de rol y estado hechos a mano, cuando sus
-  tokens de contraste esten corregidos.
+- Insignia para los chips de rol y estado hechos a mano. Sus tokens de
+contraste ya estan corregidos y verificados por prueba numerica, asi que
+la adopcion esta desbloqueada. El color de rol se enruta por parametro
+custom, porque el rol es identidad con nueve colores propios, no
+semantica de estado.
 - Tarjeta para los contenedores crudos de listas y selectores.
 - Avatar para los avatares crudos fuera de la tarjeta de usuario, que
   ya lo usa.

@@ -1476,3 +1476,37 @@ sesenta y nueve pruebas cuando hoy son setenta y nueve: el frente de tema
 sumo cuatro y el de contraste cinco mas uno. Se corrige en el mismo gesto
 documental. Leccion: al cerrar un frente hay que remedir tambien el
 conteo de pruebas, no solo el de errores, porque ambos se mueven.
+
+## Regla de separacion de titulos, con su causa mecanica
+
+El autor corrigio a mano titulos pegados al parrafo anterior. La causa no
+era olvido del espacio, era el patron de escritura: la cadena de bloque
+terminaba sin salto final, asi que cada anexion nueva pegaba su titulo a
+la ultima linea del archivo. El defecto era reproducible y mio.
+
+Contramedida determinista. Toda anexion lee el archivo, recorta el final
+con TrimEnd, y escribe el contenido recortado mas dos saltos, mas el
+bloque, mas un salto. Asi la separacion queda garantizada sin depender de
+como termino el archivo antes. Y todo titulo lleva linea vacia antes y
+despues dentro del propio bloque.
+
+## Mapa medido del frente de documentacion de shared
+
+Desglose de informaciones por archivo, medido y verificado contra el
+total de shared, que suma ciento noventa y tres. Selector treinta y seis,
+area de texto treinta y tres, boton veintiseis, interruptor diecinueve,
+entrada de texto diecinueve, insignia dieciocho, envoltorio de formulario
+doce, tarjeta siete, esqueleto seis, avatar cinco, tarjeta de seccion
+cinco, dialogo de alerta cuatro, fondo tres.
+
+Los tres errores de shared estan en dos archivos: dos en el selector y
+uno en el esqueleto. Son los de mayor apalancamiento del arbol porque el
+catalogo lo consumen todas las features, y van primero como arreglo, no
+como documentacion. Bajararian la linea base de sesenta y seis a sesenta
+y tres.
+
+Leccion de costo. Las dos piezas que nacieron documentadas, estado vacio
+y barra de filtros, tienen cero avisos. Las trece heredadas suman
+ciento noventa y tres. Se adopta que toda pieza nueva nace con
+documentacion publica completa, porque retrofitar cuesta dos ordenes de
+magnitud mas que documentar al nacer.

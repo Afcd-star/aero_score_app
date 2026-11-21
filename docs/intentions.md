@@ -1510,3 +1510,34 @@ y barra de filtros, tienen cero avisos. Las trece heredadas suman
 ciento noventa y tres. Se adopta que toda pieza nueva nace con
 documentacion publica completa, porque retrofitar cuesta dos ordenes de
 magnitud mas que documentar al nacer.
+
+## Hallazgos de la lectura del selector y el esqueleto, deuda de otros subfrentes
+
+Defecto de modo oscuro del esqueleto. Cablea grises claros fijos en su
+degradado, sin ajuste por brillo, asi que en oscuro el marcador de carga
+sale como parche claro sobre la superficie oscura. Es el mismo defecto que
+tenia la insignia de estado de evento. Naturaleza de descableado, no de
+arreglo de errores, y no se toca en el commit que resuelve los futuros.
+
+Hueco de validacion del selector, por verificar. La pieza expone texto de
+error pero no expone validador, asi que un desplegable marcado como
+obligatorio pinta el asterisco pero no participa en la validacion del
+formulario que lo envuelve. Antes de afirmarlo como defecto hay que leer
+sus consumidores y ver si validan por su cuenta en el notificador. Se
+registra como verificacion pendiente, no como defecto probado.
+
+Duplicacion de hoja modal confirmada con evidencia. El modal de seleccion
+multiple del selector reproduce encabezado con color de marca, boton de
+cierre y fila de acciones, el mismo patron que las hojas de competidor y
+de equipos. Es la tercera ocurrencia leida, asi que la pieza de hoja modal
+del catalogo tiene su justificacion probada y no especulativa.
+
+Piezas por crear, cuatro, con regla de nacimiento. Marcador de modulo y
+aviso temporal primero, porque el marcador desbloquea los destinos de rol
+y el aviso temporal limpia los avisos crudos repetidos; hoja modal e
+indicador de progreso despues, la hoja con tres ocurrencias probadas y el
+indicador con uso crudo en la vista de lista de eventos. Las cuatro nacen
+con documentacion publica completa y con prueba de render a ancho
+estrecho, por la regla de costo adoptada: las dos piezas nacidas
+documentadas tienen cero avisos y las trece heredadas suman ciento
+noventa y tres.

@@ -3,19 +3,30 @@ import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
-/// ✅ Avatar circular con gradiente fucsia-coral (siguiendo EventForm.tsx)
-/// Muestra inicial del nombre si no hay imagen
+/// Avatar circular con la inicial del nombre sobre el degradado de marca.
+///
+/// No tiene soporte de imagen: la inicial es lo unico que pinta. El
+/// parametro de imagen queda reservado y sin efecto.
 class AeroAvatar extends StatelessWidget {
-
+  /// Crea el avatar con el texto del que toma la inicial.
   const AeroAvatar({
-    required this.fallbackText, super.key,
+    required this.fallbackText,
+    super.key,
     this.imageUrl,
     this.radius = 20,
     this.onTap,
   });
+
+  /// Imagen reservada, sin efecto en el render actual.
   final String? imageUrl;
+
+  /// Texto del que se toma la inicial. Vacio pinta un icono de persona.
   final String fallbackText;
+
+  /// Radio del circulo. Por defecto veinte.
   final double radius;
+
+  /// Accion al tocar el avatar.
   final VoidCallback? onTap;
 
   @override

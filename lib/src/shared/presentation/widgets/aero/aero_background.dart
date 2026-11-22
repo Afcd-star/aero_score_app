@@ -2,15 +2,23 @@
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-/// Fondo decorativo con efectos de glow para pantallas de auth y dashboard.
-/// ✅ Widget puro: sin lógica de estado, sin dependencias de tema.
+/// Fondo decorativo con circulos de brillo para autenticacion y panel.
+///
+/// Su base es un color fijo oscuro y no sigue el brillo del tema, asi que
+/// en modo claro se ve como marco alrededor del contenido. Es decision de
+/// diseno pendiente de confirmacion, no defecto corregido aqui.
 class AeroBackground extends StatelessWidget {
-
+  /// Crea el fondo con su contenido y su variante de panel.
   const AeroBackground({
-    required this.child, super.key,
+    required this.child,
+    super.key,
     this.isDashboard = false,
   });
+
+  /// Contenido que se pinta sobre el fondo.
   final Widget child;
+
+  /// Si es verdadero, usa la variante de panel, con menos brillo.
   final bool isDashboard;
 
   @override
@@ -28,49 +36,49 @@ class AeroBackground extends StatelessWidget {
     final circles = <Widget>[];
     final opacity = isDashboard ? 0.2 : 0.3;
 
-    circles..add(
-      Positioned(
-        top: -128,
-        left: -128,
-        child: Opacity(
-          opacity: opacity,
-          child: Container(
-            width: 256,
-            height: 256,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [AppColors.glowFuchsia, AppColors.glowViolet],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+    circles
+      ..add(
+        Positioned(
+          top: -128,
+          left: -128,
+          child: Opacity(
+            opacity: opacity,
+            child: Container(
+              width: 256,
+              height: 256,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [AppColors.glowFuchsia, AppColors.glowViolet],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    )
-
-    ..add(
-      Positioned(
-        bottom: -192,
-        right: -192,
-        child: Opacity(
-          opacity: opacity,
-          child: Container(
-            width: 384,
-            height: 384,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [AppColors.glowFuchsia, AppColors.glowViolet],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+      )
+      ..add(
+        Positioned(
+          bottom: -192,
+          right: -192,
+          child: Opacity(
+            opacity: opacity,
+            child: Container(
+              width: 384,
+              height: 384,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [AppColors.glowFuchsia, AppColors.glowViolet],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
     if (!isDashboard) {
       circles.add(

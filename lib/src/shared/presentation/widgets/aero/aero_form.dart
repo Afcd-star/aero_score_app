@@ -2,11 +2,12 @@
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
-// ═════════════════════════════════════════════════════════════
-// AERO FORM - Wrapper que envuelve Form con autovalidación
-// ═════════════════════════════════════════════════════════════
-
+/// Envoltorio de formulario con autovalidacion y envio por gesto de salida.
+///
+/// Si se pasa un aviso de envio, el gesto de retroceso no cierra la
+/// pantalla: valida el formulario y, solo si pasa, dispara el envio.
 class AeroForm extends StatelessWidget {
+  /// Crea el envoltorio con su hijo y su clave de formulario opcionales.
   const AeroForm({
     required this.child,
     super.key,
@@ -14,9 +15,17 @@ class AeroForm extends StatelessWidget {
     this.autovalidateMode = AutovalidateMode.onUserInteraction,
     this.onSubmit,
   });
+
+  /// Contenido del formulario, normalmente una columna de campos.
   final Widget child;
+
+  /// Clave del formulario, necesaria para validar desde fuera.
   final GlobalKey<FormState>? formKey;
+
+  /// Politica de autovalidacion. Por defecto tras la primera interaccion.
   final AutovalidateMode autovalidateMode;
+
+  /// Envio al intentar salir con el formulario valido.
   final VoidCallback? onSubmit;
 
   @override
@@ -43,11 +52,12 @@ class AeroForm extends StatelessWidget {
   }
 }
 
-// ═════════════════════════════════════════════════════════════
-// AERO FORM FIELD - Etiqueta más campo, con error externo opcional
-// ═════════════════════════════════════════════════════════════
-
+/// Par de etiqueta y campo, con marca de obligatorio y error externo.
+///
+/// El error interno del campo lo muestra el propio campo. Este par solo
+/// muestra el error que el consumidor le pase desde fuera.
 class AeroFormField extends StatelessWidget {
+  /// Crea el par con su etiqueta y su campo obligatorios.
   const AeroFormField({
     required this.label,
     required this.field,
@@ -55,9 +65,17 @@ class AeroFormField extends StatelessWidget {
     this.errorText,
     this.required = false,
   });
+
+  /// Texto de la etiqueta sobre el campo.
   final String label;
+
+  /// Campo que se envuelve. Si es nulo, no se pinta nada bajo la etiqueta.
   final Widget? field;
+
+  /// Error externo que se muestra bajo el campo.
   final String? errorText;
+
+  /// Si es verdadero, anade la marca de obligatorio a la etiqueta.
   final bool required;
 
   @override

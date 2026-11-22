@@ -1,21 +1,34 @@
 // lib/src/shared/presentation/widgets/aero/aero_card.dart
 import 'package:flutter/material.dart';
 
-/// Card contenedor con sombra y bordes redondeados.
-/// ✅ Simplificado: sin lógica compleja, solo contenedor visual.
+/// Tarjeta contenedora, con superficie del esquema, borde y sombra.
+///
+/// Solo envuelve un hijo. Si se pasa una accion, la superficie responde
+/// al toque con onda.
 class AeroCard extends StatelessWidget {
-
+  /// Crea la tarjeta con su hijo y su geometria opcionales.
   const AeroCard({
-    required this.child, super.key,
+    required this.child,
+    super.key,
     this.padding,
     this.bordered = true,
-    this.onTap, 
+    this.onTap,
     this.margin,
   });
+
+  /// Contenido de la tarjeta.
   final Widget child;
+
+  /// Relleno interior. Por defecto veinte en todos los lados.
   final EdgeInsetsGeometry? padding;
+
+  /// Si es verdadero, dibuja el borde del esquema.
   final bool bordered;
+
+  /// Accion al tocar la tarjeta. Nulo deja la superficie inerte.
   final VoidCallback? onTap;
+
+  /// Margen exterior de la tarjeta.
   final EdgeInsetsGeometry? margin;
 
   @override
@@ -34,7 +47,9 @@ class AeroCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
-            border: bordered ? Border.all(color: theme.colorScheme.outline) : null,
+            border: bordered
+                ? Border.all(color: theme.colorScheme.outline)
+                : null,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.08),

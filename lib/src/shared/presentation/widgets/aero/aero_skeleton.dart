@@ -3,7 +3,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+/// Marcador de carga con brillo animado, con forma de contenido.
+///
+/// Su degradado usa grises fijos y no sigue el brillo del tema, deuda de
+/// descableado registrada.
 class AeroSkeleton extends StatefulWidget {
+  /// Crea el marcador con su geometria opcional.
   const AeroSkeleton({
     super.key,
     this.width,
@@ -11,9 +16,17 @@ class AeroSkeleton extends StatefulWidget {
     this.borderRadius,
     this.margin,
   });
+
+  /// Ancho del marcador. Nulo deja que lo decida el padre.
   final double? width;
+
+  /// Alto del marcador. Nulo deja que lo decida el padre.
   final double? height;
+
+  /// Radio de las esquinas. Por defecto ocho.
   final BorderRadius? borderRadius;
+
+  /// Margen exterior del marcador.
   final EdgeInsetsGeometry? margin;
 
   @override

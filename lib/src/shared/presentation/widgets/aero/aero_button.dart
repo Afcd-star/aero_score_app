@@ -1,5 +1,6 @@
 // lib/src/shared/presentation/widgets/aero/aero_button.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
+import 'package:aero_score_app/src/core/theme/app_dimens.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -140,7 +141,7 @@ class AeroButton extends StatelessWidget {
         // ✅ Fixed size si se especifica width/height
         minimumSize: Size(
           width ?? (iconOnly ? 44 : 0),
-          height ?? (iconOnly ? 44 : 0),
+          height ?? (iconOnly ? 44 : AppDimens.controlHeight),
         ),
       ),
       child: _buildChild(isLoading, textColor),

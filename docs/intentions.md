@@ -1829,3 +1829,102 @@ Duplicacion de pares. Los pares de icono y etiqueta aparecen en la
 expresion de seleccion y otra vez en los elementos del menu. Se
 registran para extraerlos a una lista constante en el subfrente de
 descableado.
+
+## Frente de altura minima de control, y el error de caparla
+
+Decision del autor aplicada. Se crea un archivo de dimensiones en el
+tema, porque no existia y la altura no pertenece a la paleta. La
+constante de cuarenta y ocho se aplica a la entrada de texto, al
+selector simple, al boton y a la pastilla de tema.
+
+Error de diseno del lead, cazado por el gate de ojo. La primera version
+fijaba minimo y maximo a cuarenta y ocho para forzar igualdad exacta. Un
+tope duro sobre un campo decorado es fragil, porque su alto natural
+varia con la pista, el texto de error, el icono y las metricas de la
+fuente; cuando el natural supera el tope, el decorador comprime la caja.
+El autor lo reporto con capturas: los campos se encogian segun su
+estado. La puerta estatica habia pasado sin variacion, asi que el
+defecto solo era visible en pantalla, que es exactamente para lo que
+existe el gate de ojo.
+
+Contramedida. Se aplica solo el minimo, nunca el tope. La uniformidad se
+cumple como todos los controles de al menos cuarenta y ocho, y una
+diferencia de uno o dos pixeles por metricas de fuente es imperceptible.
+Forzar igualdad exacta era el objetivo equivocado. Con solo el minimo,
+la condicional de etiqueta flotante y multilinea deja de hacer falta y
+el codigo queda constante. La documentacion de la constante se corrige
+para decir minimo y no alto fijo.
+
+Pieza pendiente registrada. El modo solo icono del boton sigue en
+cuarenta y cuatro porque sus consumidores pasan cuarenta y cuatro
+explicito, y subirlo sin tocarlos provocaria conflicto de
+restricciones. Exige grep de consumidores y prueba de render.
+
+## Deuda de variante en el formulario de equipo
+
+Reporte del autor con captura. La accion de agregar competidores del
+formulario de crear equipo usa la variante primaria, con degradado de
+marca, cuando debe seguir el mismo estilo de contorno que la accion de
+agregar equipos del formulario de crear evento. Es una accion
+secundaria que abre un selector, no la accion principal de enviar, asi
+que competir visualmente con el envio rompe la jerarquia.
+
+Naturaleza de adopcion de variante en una vista de feature, no de
+catalogo. Exige leer el archivo del formulario de equipo. Se registra
+para tratarlo en el subfrente de descableado y adopcion.
+
+## Cola confirmada por el autor
+
+El frente de fuentes empaquetadas queda detras de este. Esta confirmado
+por medicion que la tipografia se pide en tiempo de ejecucion, lo que
+produce salto de layout en el arranque y deja la app con fuentes de
+reserva si no hay red. Es bloqueo de lanzamiento por arranque sin
+conexion, no solo estetica.
+
+## Defecto de validacion destapado por el pase visual del frente de altura
+
+Causa leida en codigo, no supuesta. El envoltorio de formulario declara
+el modo de autovalidacion en interaccion del usuario a nivel de
+formulario, y en Flutter eso valida todos los campos en cuanto cualquiera
+recibe interaccion. Sintoma reportado por el autor con capturas: escribe
+en un campo y saltan los errores de los que no toco.
+
+Correccion propuesta. Cambiar el modo por defecto a validacion al perder
+el foco, que valida cada campo cuando sale de el y deja en paz los no
+tocados. El envio sigue validando todo porque eso lo hace la llamada
+explicita de validacion. Es una linea, pero cambia el comportamiento de
+todos los formularios, asi que exige gate de ojo propagado y verificacion
+de que el valor existe en la version de Flutter del proyecto, cosa que el
+analizador confirma solo.
+
+## Deuda de coherencia de mensajes, frente propio
+
+Peticion del autor. Las validaciones y los textos de los dialogos y
+avisos estan dispersos y cada vista inventa su redaccion, asi que un
+mensaje dice una cosa y otro dice otra para la misma situacion. Pide un
+catalogo de mensajes con plantilla fija y un punto unico de validacion,
+para que la estructura sea igual en toda la app.
+
+Naturaleza: frente propio de dominio y presentacion, no parche. Mezclarlo
+con un arreglo de formulario esconderia el alcance real, que es
+transversal a todas las features.
+
+## Hallazgo de tipografia, empaquetar no elimina el salto
+
+La biblioteca de fuentes carga siempre de forma asincrona, incluso con
+los archivos empaquetados en su carpeta convencional. Asi que
+empaquetar cura el arranque sin red y la dependencia de la red, pero no
+elimina el salto de metricas del primer fotograma.
+
+Via correcta para eliminar el salto. Declarar las familias en la seccion
+de fuentes del manifiesto y referenciarlas por nombre en el estilo de
+texto, retirando la dependencia de la biblioteca. Las fuentes cargan con
+el motor, sin paso asincrono, sin salto y sin red.
+
+Pesos que el archivo de tipografia pide: Sora seiscientos y setecientos;
+Manrope cuatrocientos, quinientos y seiscientos. Cinco archivos.
+
+Verificacion pendiente. El metodo de precarga dice en su documentacion
+que evita el parpadeo del primer fotograma, y eso no es cierto con carga
+asincrona. Hay que comprobar si alguien lo llama y corregir su
+documentacion o retirarlo segun el dato.

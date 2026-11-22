@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
+import 'package:aero_score_app/src/core/theme/app_dimens.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/core/theme/theme_provider.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
@@ -538,6 +539,10 @@ class _ThemeModeSelector extends ConsumerWidget {
         ),
       ],
       child: Container(
+        constraints: const BoxConstraints(
+          minHeight: AppDimens.controlHeight,
+        ),
+        alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(
           horizontal: 10,
           vertical: 6,

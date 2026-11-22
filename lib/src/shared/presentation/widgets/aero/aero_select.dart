@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
+import 'package:aero_score_app/src/core/theme/app_dimens.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -189,6 +190,9 @@ class _AeroSelectState<T> extends State<AeroSelect<T>> {
                 )
               : null,
           decoration: InputDecoration(
+            constraints: const BoxConstraints(
+              minHeight: AppDimens.controlHeight,
+            ),
             filled: true,
             fillColor: isDark
                 ? AppColors.inputDark

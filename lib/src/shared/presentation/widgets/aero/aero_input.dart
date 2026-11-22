@@ -1,5 +1,6 @@
 // lib/src/shared/presentation/widgets/aero/aero_input.dart
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
+import 'package:aero_score_app/src/core/theme/app_dimens.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -92,6 +93,9 @@ class _AeroInputState extends State<AeroInput> {
       inputFormatters: widget.inputFormatters,
       style: AppTextStyles.baseTextTheme.bodyMedium,
       decoration: InputDecoration(
+        constraints: const BoxConstraints(
+          minHeight: AppDimens.controlHeight,
+        ),
         hintText: widget.hintText,
         labelText: widget.labelText,
         prefixIcon: widget.prefixIcon,

@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 /// ✅ Accesible: etiquetas semánticas y navegación por teclado.
 ///
 /// ## Cuándo usarlo:
-/// - Confirmar acciones destructivas (eliminar, cancelar)
-/// - Mostrar errores críticos que requieren atención inmediata
-/// - Alertas de seguridad o validación de negocio
+/// Sirve para confirmar acciones destructivas como eliminar o cancelar,
+/// para mostrar errores criticos que exigen atencion inmediata, y para
+/// alertas de seguridad o de validacion de negocio.
 ///
 /// No usarlo para formularios complejos, para información que no exige
 /// una decisión, ni para menús de opciones. Esas responsabilidades
@@ -25,11 +25,16 @@ import 'package:flutter/material.dart';
 ///   content: '¿Estás seguro? Esta acción no se puede deshacer.',
 ///   actions: [
 ///     AeroButton(label: 'Cancelar', onPressed: () => Navigator.pop(context)),
-///     AeroButton(label: 'Eliminar', onPressed: _handleDelete, variant: AeroButtonVariant.destructive),
+///     AeroButton(
+///       label: 'Eliminar',
+///       onPressed: _handleDelete,
+///       variant: AeroButtonVariant.destructive,
+///     ),
 ///   ],
 /// )
 /// ```
 class AeroAlertDialog extends StatelessWidget {
+  /// Crea el dialogo con titulo, contenido y acciones obligatorias.
   const AeroAlertDialog({
     required this.title,
     required this.content,
@@ -146,7 +151,8 @@ class AeroAlertDialog extends StatelessWidget {
   }
 
   /// ✅ Factory preconfigurado para alertas de confirmación destructiva
-  /// ⚠️ IMPORTANTE: Este método solo crea el widget. El caller debe manejar Navigator.pop()
+  /// Importante: este metodo solo crea el widget. Quien lo llama debe
+  /// cerrar el dialogo con Navigator.pop.
   AeroAlertDialog destructive({
     required String title,
     required String content,
@@ -179,7 +185,8 @@ class AeroAlertDialog extends StatelessWidget {
   }
 
   /// ✅ Factory preconfigurado para alertas de éxito/información
-  /// ⚠️ IMPORTANTE: Este método solo crea el widget. El caller debe manejar Navigator.pop()
+  /// Importante: este metodo solo crea el widget. Quien lo llama debe
+  /// cerrar el dialogo con Navigator.pop.
   AeroAlertDialog success({
     required String title,
     required String content,

@@ -2,24 +2,48 @@
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-/// ✅ Variantes semánticas para badges (consistente con sistema de diseño)
+/// Variantes semanticas de la insignia.
 enum BadgeVariant {
-  primary, // Fucsia: acciones principales, destacado
-  secondary, // Gris: información neutra, estados por defecto
-  success, // Verde: completado, activo, éxito
-  info, // Azul: próximo, informativo, pendiente
-  warning, // Amarillo: atención, revisión requerida
-  destructive, // Rojo: error, cancelado, crítico
+  /// Enfasis de marca, con fondo fucsia solido y texto blanco.
+  ///
+  /// Su contraste con blanco es marginal para texto pequeno y queda
+  /// como deuda del frente de tokens de marca.
+  primary,
+
+  /// Informacion neutra y estados por defecto, en gris suave por modo.
+  secondary,
+
+  /// Exito, activo o completado, en verde de tinte suave por modo.
+  success,
+
+  /// Informativo o proximo, en azul de tinte suave por modo.
+  info,
+
+  /// Atencion o revision requerida, en ambar de tinte suave por modo.
+  warning,
+
+  /// Error, cancelado o critico, en rojo de tinte suave por modo.
+  destructive,
 }
 
-/// ✅ Tamaños predefinidos para consistencia visual
+/// Tamanos predefinidos de la insignia.
 enum BadgeSize {
-  small, // 20px height, 10px font: listas densas, filtros
-  medium, // 24px height, 12px font: uso general (default)
-  large, // 32px height, 14px font: headers, destaque
+  /// Listas densas y filtros, con texto de diez puntos.
+  small,
+
+  /// Uso general y valor por defecto, con texto de doce puntos.
+  medium,
+
+  /// Encabezados y destaque, con texto de catorce puntos.
+  large,
 }
 
+/// Insignia de estado o rol, con forma, talla y tipografia del catalogo.
+///
+/// El color sale de la variante semantica, salvo que el consumidor pase
+/// color y fondo propios, que es como se enruta la identidad de rol.
 class AeroBadge extends StatelessWidget {
+  /// Crea la insignia con su etiqueta obligatoria y su variante.
   const AeroBadge({
     required this.label,
     super.key,
@@ -30,24 +54,38 @@ class AeroBadge extends StatelessWidget {
     this.customColor,
     this.customBackgroundColor,
   });
+
+  /// Texto que se muestra dentro de la insignia.
   final String label;
+
+  /// Variante semantica que decide el par de colores.
   final BadgeVariant variant;
+
+  /// Talla que decide tipografia, relleno y radio.
   final BadgeSize size;
+
+  /// Icono opcional a la izquierda del texto.
   final IconData? icon;
+
+  /// Si es falso, oculta el icono aunque se haya pasado.
   final bool showIcon;
+
+  /// Color de texto propio, sobrescribe el de la variante.
   final Color? customColor;
+
+  /// Fondo propio, sobrescribe el de la variante.
   final Color? customBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // ✅ Colores por variante (override con custom si se proporciona)
+    // Colores por variante, con sobrescritura propia si se proporciona.
     final colors = _getVariantColors(variant, isDark);
     final textColor = customColor ?? colors.text;
     final bgColor = customBackgroundColor ?? colors.background;
 
-    // ✅ Dimensiones por tamaño
+    // Dimensiones por talla.
     final dimensions = _getSizeDimensions(size);
 
     return Container(
@@ -159,7 +197,7 @@ class AeroBadge extends StatelessWidget {
     };
   }
 
-  /// ✅ Dimensiones por tamaño predefinido
+  /// Dimensiones por talla predefinida.
   ({
     double fontSize,
     double paddingVertical,

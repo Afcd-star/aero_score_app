@@ -1928,3 +1928,73 @@ Verificacion pendiente. El metodo de precarga dice en su documentacion
 que evita el parpadeo del primer fotograma, y eso no es cierto con carga
 asincrona. Hay que comprobar si alguien lo llama y corregir su
 documentacion o retirarlo segun el dato.
+
+## Validacion por campo al perder el foco, causa y correccion
+
+Causa confirmada en el archivo. El envoltorio de formulario declaraba el
+modo de interaccion del usuario a nivel de formulario, y su propia
+documentacion lo anunciaba como caracteristica, por defecto tras la
+primera interaccion. En Flutter ese modo a nivel de formulario valida
+todos los campos en cuanto cualquiera recibe interaccion, asi que la
+documentacion describia como virtud lo que era el defecto reportado.
+
+Correccion. Modo por defecto de validacion al perder el foco, que valida
+cada campo cuando sale de el y deja quietos los no tocados. El envio
+sigue validando todo por la llamada explicita. Se corrige la
+documentacion del campo para describir la conducta real.
+
+Alternativa probada si el modo no propaga. Dejar el formulario con
+autovalidacion desactivada y pasar interaccion del usuario por campo, que
+rastrea solo la interaccion de ese campo y funciona en cualquier version.
+Cuesta tres archivos en vez de uno, y por eso se prueba primero la via de
+una linea. El analizador delata si el valor no existe en la version del
+proyecto, y el ojo delata si no propaga.
+
+## Precarga de fuentes muerta, medida
+
+El metodo de precarga aparece solo en su propia definicion, cero
+llamadores en todo el arbol. Es codigo muerto, y su documentacion promete
+evitar el parpadeo del primer fotograma, algo que una carga asincrona no
+puede cumplir. Mintiendo y muerta a la vez.
+
+Decision. No se borra en este gesto porque el archivo de tipografia se
+reescribe completo en el frente de fuentes, y borrarlo ahora duplicaria
+el trabajo. Queda registrado con su medicion para que no se evapore.
+
+## Manifiesto sin seccion de fuentes, medido
+
+El manifiesto solo declara recursos, no familias ni pesos ni archivos de
+fuente. Confirma que la tipografia se pide en tiempo de ejecucion. El
+frente de fuentes declarara las familias con los cinco pesos que el
+archivo de tipografia pide, retirara la dependencia de la biblioteca y
+verificara arranque sin red y sin salto de metricas.
+
+## Residual de la validacion al perder el foco, defecto real y no perfeccionismo
+
+Reporte del autor tras el pase visual. El modo al perder el foco valida
+solo en el desenfoque, nunca al cambiar el texto, asi que un error ya
+mostrado no se limpia mientras el usuario lo corrige; hay que tocar otro
+campo para que se reevalue. No es defecto de nuestro codigo, es
+inherente al modo elegido.
+
+Juicio del lead. Es defecto real de retroalimentacion, no perfeccionismo:
+un error que persiste tras corregirse le dice al usuario que sigue mal
+cuando esta bien, y con jueces mayores eso genera duda. Pero no es
+bloqueo de lanzamiento.
+
+Via barata, descartada por lateral. Formulario con autovalidacion
+desactivada y modo de interaccion por campo. Tres lineas, limpia en vivo
+y deja quietos los no tocados, pero grita durante el primer tecleo, por
+ejemplo correo invalido desde la primera letra. Cambia una molestia por
+otra, no mejora.
+
+Via correcta, hibrida. El campo calla hasta su primer desenfoque y desde
+ahi valida en vivo, asi que el error aparece al salir y desaparece
+mientras se corrige. Cuesta unas cincuenta lineas en tres piezas del
+catalogo porque hay que rastrear el primer desenfoque con nodo de foco,
+y la entrada multilinea pasaria a tener estado. De paso justifica el
+estado de la entrada de texto registrado como muerto.
+
+Prioridad decidida. Va detras del frente de tipografia, que bloquea el
+arranque sin conexion. Se commitea el arreglo del defecto gordo, ya
+aprobado por ojo, y el residual queda registrado con sus dos vias.

@@ -12,7 +12,7 @@ class AeroForm extends StatelessWidget {
     required this.child,
     super.key,
     this.formKey,
-    this.autovalidateMode = AutovalidateMode.onUserInteraction,
+    this.autovalidateMode = AutovalidateMode.onUnfocus,
     this.onSubmit,
   });
 
@@ -22,7 +22,12 @@ class AeroForm extends StatelessWidget {
   /// Clave del formulario, necesaria para validar desde fuera.
   final GlobalKey<FormState>? formKey;
 
-  /// Politica de autovalidacion. Por defecto tras la primera interaccion.
+  /// Politica de autovalidacion.
+  ///
+  /// Por defecto valida cada campo al perder el foco, no al primer
+  /// toque en cualquier campo, que es lo que disparaba los errores de
+  /// campos aun no tocados. El envio sigue validando todo porque eso lo
+  /// hace la llamada explicita de validacion.
   final AutovalidateMode autovalidateMode;
 
   /// Envio al intentar salir con el formulario valido.

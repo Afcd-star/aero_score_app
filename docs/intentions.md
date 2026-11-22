@@ -1571,3 +1571,34 @@ reindentar fue inutil, porque los archivos eran heredados sin formatear y
 cualquier corrida del formateador los reflowea igual. Lo correcto es
 declarar el reflujo, no intentar evitarlo, porque la puerta exige
 formatear.
+
+## Refinamiento de la regla de medicion, cruce aritmetico antes de teorizar
+
+Evidencia. Tras aplicar el lote uno de documentacion, una lectura del
+analizador devolvio novecientas setenta y seis informaciones y cinco
+avisos, cuando el lote debia bajar de ochocientas sesenta y tres a
+ochocientas treinta y seis. El lead formulo la hipotesis de un registrante
+de plugins bajo la carpeta de herramientas, regenerado por la corrida de
+pruebas y no cubierto por la exclusion.
+
+La medicion mato la hipotesis. El alcance de lib dio el mismo total que el
+workspace completo, ochocientas treinta y seis, asi que nada fuera de lib
+aporta diagnosticos. Y el numero coincide exactamente con la aritmetica
+del cambio: dieciocho de la insignia, cinco de la tarjeta de seccion y
+cuatro del dialogo, veintisiete en total. La lectura inflada fue
+transitoria y no reproducible, con el analizador recien escritas tres
+veces las mismas rutas y formateado despues. No hay causa probada y no se
+inventa.
+
+Refinamiento adoptado. Cuando un conteo contradice la aritmetica del
+cambio, se remide antes de formular hipotesis, y la autoridad es una
+lectura que cumple dos condiciones a la vez: autoconsistente entre
+alcances, con lib mas test igual al total, y cuadrada con la delta
+prevista del cambio. Una sola lectura no es evidencia, y toda hipotesis
+sobre la causa de un conteo anomalo se somete a la medicion por alcance
+antes de escribirse como hallazgo.
+
+Nota de proceso. El bloque de diagnostico no corrio las pruebas, asi que
+la puerta del commit debe incluirlas siempre, aunque el bloque previo
+hubiera medido analisis. Un bloque de diagnostico no sustituye a la
+puerta.

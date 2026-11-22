@@ -1,25 +1,39 @@
-// ✅ ACTUALIZADO: lib/src/shared/presentation/widgets/aero/aero_select.dart
+// lib/src/shared/presentation/widgets/aero/aero_select.dart
 import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
+/// Opcion de la lista del selector, con valor tipado y etiqueta visible.
 class AeroSelectItem<T> {
+  /// Crea la opcion con su valor y su etiqueta obligatorios.
   const AeroSelectItem({
     required this.value,
     required this.label,
     this.icon,
   });
+
+  /// Valor que se devuelve al elegir esta opcion.
   final T value;
+
+  /// Texto que se muestra en la lista y en el chip.
   final String label;
+
+  /// Icono opcional a la izquierda de la etiqueta.
   final IconData? icon;
 }
 
+/// Selector de una o varias opciones, con etiqueta y error externo.
+///
+/// En modo simple pinta un desplegable nativo. En modo multiple pinta
+/// chips y abre una hoja con casillas que se confirma con un boton, asi
+/// que el efecto es diferido hasta confirmar.
+///
+/// Deuda registrada: el modo simple no expone validador, asi que la
+/// marca de obligatorio es solo visual y el error llega de fuera.
 class AeroSelect<T> extends StatefulWidget {
-  // Validator para modo múltiple
-
-  // ✅ Constructor para selección simple (default)
+  /// Crea el selector simple con sus opciones y su valor actual.
   const AeroSelect({
     required this.items,
     required this.value,
@@ -39,7 +53,7 @@ class AeroSelect<T> extends StatefulWidget {
          'En modo múltiple, use onMultiChanged en lugar de onChanged',
        );
 
-  // ✅ Constructor nombrado para selección múltiple (API más clara)
+  /// Crea el selector multiple, con valores y aviso de cambio de lista.
   const AeroSelect.multi({
     required List<AeroSelectItem<T>> items,
     required List<T>? values,
@@ -64,20 +78,38 @@ class AeroSelect<T> extends StatefulWidget {
          required: required,
          multiValidator: validator,
        );
-  // ✅ Parámetros para selección simple (default)
+
+  /// Opciones disponibles, en el orden en que se pintan.
   final List<AeroSelectItem<T>> items;
-  final T? value; // Para selección simple
-  final ValueChanged<T?>? onChanged; // Para selección simple
 
-  // ✅ Parámetros para selección múltiple
+  /// Valor elegido en modo simple. Nulo muestra la pista.
+  final T? value;
+
+  /// Aviso al elegir en modo simple. Nulo deja el desplegable inerte.
+  final ValueChanged<T?>? onChanged;
+
+  /// Si es verdadero, usa el modo multiple de chips y hoja.
   final bool multiple;
-  final List<T>? values; // Para selección múltiple
-  final ValueChanged<List<T>?>? onMultiChanged; // Para selección múltiple
 
+  /// Valores elegidos en modo multiple.
+  final List<T>? values;
+
+  /// Aviso al confirmar la seleccion multiple.
+  final ValueChanged<List<T>?>? onMultiChanged;
+
+  /// Etiqueta sobre el selector.
   final String? label;
+
+  /// Texto de pista cuando no hay seleccion.
   final String? hint;
+
+  /// Error externo que se muestra bajo el selector.
   final String? errorText;
+
+  /// Si es verdadero, anade la marca de obligatorio a la etiqueta.
   final bool required;
+
+  /// Validador del modo multiple, llamado con los valores actuales.
   final String? Function(List<T>?)? multiValidator;
 
   @override

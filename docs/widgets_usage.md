@@ -15,14 +15,14 @@ la pieza. Si no la cubre, se extiende el catalogo antes de improvisar en
 la vista. Y toda decision se contrasta con el arbol, no con este
 documento.
 
-## Inventario real, quince archivos
+## Inventario real, catorce archivos
 
 Este documento inventaria solo lo que vive en `shared`. Las piezas que
 salieron por pertenencia se buscan en su feature: la tarjeta de
 asignacion en auth, la accion rapida y la tarjeta de metrica del panel en
 admin, y la tarjeta y la hoja de puntuacion en scoring.
 
-Catalogo Aero, quince archivos:
+Catalogo Aero, catorce archivos:
 
 - aero_alert_dialog: confirmacion de accion destructiva o error que
   exige decision. Fondo, borde y textos del esquema ambiental, asi que
@@ -54,7 +54,6 @@ Catalogo Aero, quince archivos:
   Pieza generica de superficie, sin semantica de ningun modulo.
 - aero_select: seleccion de una opcion en lista.
 - aero_skeleton: marcador de carga con forma de contenido.
-- aero_switch: interruptor de encendido y apagado.
 - aero_textarea: entrada de texto multilinea.
 
 El catalogo ya no arrastra errores de severidad ocho: los tres que tenia
@@ -93,6 +92,9 @@ semantica de estado.
 
 - Tabla y paginacion, para resultados de visitante.
 - Deslizador, para captura de puntuacion.
+- Interruptor de preferencias, para ajustes binarios de efecto inmediato
+  como notificaciones. El que existia se retiro porque no tenia
+  consumidores y nunca se renderizo.
 
 No se crean antes de que exista la pantalla que los consume, porque
 crear catalogo sin consumidor es codigo muerto con otro nombre.

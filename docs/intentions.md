@@ -1602,3 +1602,47 @@ Nota de proceso. El bloque de diagnostico no corrio las pruebas, asi que
 la puerta del commit debe incluirlas siempre, aunque el bloque previo
 hubiera medido analisis. Un bloque de diagnostico no sustituye a la
 puerta.
+
+## Regla de los tres controles binarios, y por que se retiro el interruptor
+
+Interruptor. Ajuste binario con efecto inmediato, sin boton de guardar.
+El usuario lo toca y ya esta aplicado. Consumidores legitimos previstos:
+notificaciones activadas, sincronizar solo con wifi cuando exista
+sincronizacion, recordar sesion. Hoy esas filas de preferencias son
+marcadores, asi que el consumidor no existe.
+
+Casilla. Booleano cuyo efecto es diferido, porque forma parte de un
+formulario con boton de guardar o de una seleccion multiple que se
+confirma. Por eso la seleccion multiple del selector usa casillas.
+
+Barra de filtros. Eleccion entre dos o mas alternativas nombradas. Por
+eso el selector de tema usa la barra con sistema, claro y oscuro, y no un
+interruptor, que solo representaria dos estados.
+
+Boton con confirmacion. Transicion de estado destructiva, como activar o
+desactivar una cuenta. Un toque no debe bastar para dejar a alguien sin
+acceso, asi que la tarjeta de usuario usa boton y dialogo, nunca
+interruptor.
+
+Retiro del interruptor. El grep de la clase y de la ruta devolvio seis
+coincidencias, todas dentro del propio archivo. Cero consumidores,
+diecinueve avisos, nunca renderizado, mezcla de la API heredada de color
+con la de propiedad de estado sin prueba que la valide, y semantica
+incoherente en la fila, donde el aviso recibido solo se dispara al tocar
+el interruptor y no al tocar la fila. Se retira y queda en el historial,
+recuperable con un comando. Cuando preferencias tenga ajustes reales se
+reescribe con consumidor, documentado al nacer y con prueba de render.
+
+## Piezas muertas detectadas al documentar, pendientes de grep
+
+Boton. El parametro isRequired esta declarado y documentado como
+marcador sin efecto, porque no interviene en ningun punto del render.
+Quitarlo exige grep de consumidores, porque es API expuesta, y es
+naturaleza de refactor, no de documentacion.
+
+Entrada de texto. Su clase con estado no guarda ningun estado, asi que
+podria ser sin estado. Simplificarla es refactor con prueba de render, no
+forma.
+
+Ambas se registran aqui para que no se evaporen y se traten en el
+subfrente de piezas muertas con su grep y su prueba.

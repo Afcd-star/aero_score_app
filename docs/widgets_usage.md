@@ -57,9 +57,11 @@ Catalogo Aero, quince archivos:
 - aero_switch: interruptor de encendido y apagado.
 - aero_textarea: entrada de texto multilinea.
 
-El catalogo arrastra deuda de documentacion publica y de lineas largas,
-mas tres errores de severidad ocho en el selector y el esqueleto. Se
-resuelve en el frente de shared.
+El catalogo ya no arrastra errores de severidad ocho: los tres que tenia
+el selector y el esqueleto se resolvieron. Queda deuda de documentacion
+publica y de lineas largas en las piezas aun no documentadas, que se
+resuelve por lotes. La insignia, la tarjeta de seccion y el dialogo de
+alerta ya estan documentados.
 
 ## Que falta crear, cuatro piezas con uso crudo probado
 

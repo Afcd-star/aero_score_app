@@ -24,11 +24,13 @@ double _ratio(Color a, Color b) {
   return (math.max(la, lb) + 0.05) / (math.min(la, lb) + 0.05);
 }
 
-/// Punto de entrada de la suite de contraste de las variantes suaves.
+/// Punto de entrada de la suite de contraste de las variantes suaves y de
+/// los pares de superficie de control.
 ///
 /// El analizador no mide contraste, asi que esta prueba fija
 /// numericamente que cada par de tinte suave es legible en ambos modos,
-/// y que primary con fucsia queda pendiente del frente de marca.
+/// que la pestana de acceso es legible en ambos modos, y que primary con
+/// fucsia queda pendiente del frente de marca.
 void main() {
   group('contraste WCAG de las variantes de tinte suave', () {
     test('success es seguro en claro y en oscuro', () {
@@ -106,6 +108,19 @@ void main() {
 
     test('primary con fucsia NO llega al umbral, deuda de marca', () {
       expect(_ratio(AppColors.fuchsia, Colors.white), lessThan(_kMinRatio));
+    });
+  });
+
+  group('contraste WCAG de la pestana de acceso', () {
+    test('la pestana es segura en claro y en oscuro', () {
+      expect(
+        _ratio(AppColors.mutedLight, AppColors.foregroundLight),
+        greaterThanOrEqualTo(_kMinRatio),
+      );
+      expect(
+        _ratio(AppColors.mutedDark, AppColors.mutedForegroundDark),
+        greaterThanOrEqualTo(_kMinRatio),
+      );
     });
   });
 }

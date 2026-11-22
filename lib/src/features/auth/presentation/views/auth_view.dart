@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
+import 'package:aero_score_app/src/core/theme/theme_provider.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
 import 'package:aero_score_app/src/features/auth/presentation/providers/auth_notifier.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_background.dart';
@@ -54,9 +55,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
     if (!mounted || _errorShown) {
       return;
     }
-
     _errorShown = true;
-
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -67,7 +66,6 @@ class _AuthViewState extends ConsumerState<AuthView> {
         ),
       ),
     );
-
     unawaited(
       Future.delayed(const Duration(seconds: 4), () {
         if (mounted) {
@@ -77,26 +75,20 @@ class _AuthViewState extends ConsumerState<AuthView> {
     );
   }
 
-  ({String firstName, String lastName}) _splitFullName(
-    String fullName,
-  ) {
+  ({String firstName, String lastName}) _splitFullName(String fullName) {
     final parts = fullName
         .trim()
         .split(RegExp(r'\s+'))
         .where((p) => p.isNotEmpty)
         .toList();
-
     if (parts.isEmpty) {
       return (firstName: '', lastName: '');
     }
-
     if (parts.length == 1) {
       return (firstName: parts.first, lastName: '');
     }
-
     final lastName = parts.removeLast();
     final firstName = parts.join(' ');
-
     return (firstName: firstName, lastName: lastName);
   }
 
@@ -104,13 +96,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
     if (!mounted) {
       return;
     }
-
     if (!_formKey.currentState!.validate()) {
       return;
     }
-
     final notifier = ref.read(authProvider.notifier);
-
     if (_isLogin) {
       await notifier.login(
         _usernameCtrl.text.trim(),
@@ -118,7 +107,6 @@ class _AuthViewState extends ConsumerState<AuthView> {
       );
       return;
     }
-
     final names = _splitFullName(_fullNameCtrl.text.trim());
     await notifier.register(
       username: _usernameCtrl.text.trim(),
@@ -134,7 +122,6 @@ class _AuthViewState extends ConsumerState<AuthView> {
     if (!mounted) {
       return;
     }
-
     setState(() {
       _isLogin = !_isLogin;
       _errorShown = false;
@@ -158,19 +145,20 @@ class _AuthViewState extends ConsumerState<AuthView> {
           if (!mounted || _errorShown) {
             return;
           }
-
           _errorShown = true;
-
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: const Row(
                 children: [
-                  Icon(Icons.check_circle, color: Colors.white),
+                  Icon(
+                    Icons.check_circle,
+                    color: Colors.white,
+                  ),
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Registro exitoso. Tu cuenta está '
-                      'pendiente de aprobación.',
+                      'Registro exitoso. Tu cuenta '
+                      'está pendiente de aprobación.',
                     ),
                   ),
                 ],
@@ -184,18 +172,19 @@ class _AuthViewState extends ConsumerState<AuthView> {
               ),
             ),
           );
-
           unawaited(
-            Future.delayed(const Duration(seconds: 4), () {
-              if (mounted) {
-                ref.read(authProvider.notifier).clearRegistrationSuccess();
-                _errorShown = false;
-              }
-            }),
+            Future.delayed(
+              const Duration(seconds: 4),
+              () {
+                if (mounted) {
+                  ref.read(authProvider.notifier).clearRegistrationSuccess();
+                  _errorShown = false;
+                }
+              },
+            ),
           );
           return;
         }
-
         if (next is AuthError) {
           _showError(next.failure.message);
         }
@@ -208,20 +197,41 @@ class _AuthViewState extends ConsumerState<AuthView> {
     return AeroBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildLogo(),
-                  const SizedBox(height: 32),
-                  _buildAuthCard(isLoading, isDark),
-                ],
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildLogo(),
+                      const SizedBox(height: 32),
+                      _buildAuthCard(
+                        isLoading,
+                        isDark,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
+            const Positioned(
+              top: 0,
+              right: 12,
+              child: SafeArea(
+                bottom: false,
+                left: false,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 12),
+                  child: _ThemeModeSelector(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -276,14 +286,26 @@ class _AuthViewState extends ConsumerState<AuthView> {
       ),
       child: Row(
         children: [
-          _buildTabOption('Iniciar sesión', true, isDark),
-          _buildTabOption('Registrarse', false, isDark),
+          _buildTabOption(
+            'Iniciar sesión',
+            true,
+            isDark,
+          ),
+          _buildTabOption(
+            'Registrarse',
+            false,
+            isDark,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTabOption(String label, bool isLoginTab, bool isDark) {
+  Widget _buildTabOption(
+    String label,
+    bool isLoginTab,
+    bool isDark,
+  ) {
     final isActive = _isLogin == isLoginTab;
     final activeShadow = <BoxShadow>[
       BoxShadow(
@@ -291,7 +313,6 @@ class _AuthViewState extends ConsumerState<AuthView> {
         blurRadius: 15,
       ),
     ];
-
     return Expanded(
       child: GestureDetector(
         onTap: _toggleMode,
@@ -346,7 +367,9 @@ class _AuthViewState extends ConsumerState<AuthView> {
                 _obscurePass ? Icons.visibility_off : Icons.visibility,
               ),
               onPressed: () {
-                setState(() => _obscurePass = !_obscurePass);
+                setState(
+                  () => _obscurePass = !_obscurePass,
+                );
               },
             ),
             validator: (v) => v?.isEmpty == true ? 'Campo requerido' : null,
@@ -389,11 +412,9 @@ class _AuthViewState extends ConsumerState<AuthView> {
               if (v?.isEmpty == true) {
                 return 'Campo requerido';
               }
-
               if (!_emailPattern.hasMatch(v!)) {
                 return 'Email inválido';
               }
-
               return null;
             },
           ),
@@ -420,11 +441,9 @@ class _AuthViewState extends ConsumerState<AuthView> {
               if (v?.isEmpty == true) {
                 return 'Campo requerido';
               }
-
               if (v!.length < 8) {
                 return 'Mínimo 8 caracteres';
               }
-
               return null;
             },
           ),
@@ -441,11 +460,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
               if (v?.isEmpty == true) {
                 return 'Campo requerido';
               }
-
               if (v != _passwordCtrl.text) {
-                return 'Las contraseñas no coinciden';
+                return 'Las contraseñas '
+                    'no coinciden';
               }
-
               return null;
             },
           ),
@@ -457,6 +475,130 @@ class _AuthViewState extends ConsumerState<AuthView> {
             label: 'Registrarse',
             onPressed: isLoading ? null : () => unawaited(_handleSubmit()),
             isLoading: isLoading,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Selector compacto de modo de tema para la
+/// esquina superior derecha.
+class _ThemeModeSelector extends ConsumerWidget {
+  const _ThemeModeSelector();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final (icon, label) = switch (themeMode) {
+      ThemeMode.light => (
+        Icons.light_mode_rounded,
+        'Claro',
+      ),
+      ThemeMode.dark => (
+        Icons.dark_mode_rounded,
+        'Oscuro',
+      ),
+      _ => (
+        Icons.brightness_auto_rounded,
+        'Sistema',
+      ),
+    };
+
+    return PopupMenuButton<ThemeMode>(
+      tooltip: 'Cambiar tema: $label',
+      initialValue: themeMode,
+      onSelected: (mode) {
+        ref.read(themeModeProvider.notifier).setThemeMode(mode);
+      },
+      itemBuilder: (ctx) => [
+        const PopupMenuItem<ThemeMode>(
+          value: ThemeMode.system,
+          child: _ThemeOption(
+            icon: Icons.brightness_auto_rounded,
+            label: 'Sistema',
+          ),
+        ),
+        const PopupMenuItem<ThemeMode>(
+          value: ThemeMode.light,
+          child: _ThemeOption(
+            icon: Icons.light_mode_rounded,
+            label: 'Claro',
+          ),
+        ),
+        const PopupMenuItem<ThemeMode>(
+          value: ThemeMode.dark,
+          child: _ThemeOption(
+            icon: Icons.dark_mode_rounded,
+            label: 'Oscuro',
+          ),
+        ),
+      ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 6,
+        ),
+        decoration: BoxDecoration(
+          color: isDark
+              ? scheme.surfaceContainerHighest.withValues(alpha: 0.85)
+              : Colors.white.withValues(
+                  alpha: 0.9,
+                ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: scheme.outlineVariant.withValues(alpha: 0.4),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: scheme.onSurface,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: scheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Opción individual dentro del menú emergente.
+class _ThemeOption extends StatelessWidget {
+  const _ThemeOption({
+    required this.icon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: scheme.primary),
+        const SizedBox(width: 12),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            color: scheme.onSurface,
           ),
         ),
       ],

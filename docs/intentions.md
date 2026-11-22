@@ -1783,3 +1783,49 @@ O sea el frente de Android no tiene que montar el overlay, solo verificar
 en dispositivo fisico que los iconos de la barra de estado se ven bien en
 los tres modos. Eso reduce el bloqueo de lanzamiento a verificacion y no
 a construccion.
+
+## Selector de tema en el acceso, aprobado por ojo en los tres modos
+
+El selector emergente de la esquina superior derecha sustituye la barra
+inferior rechazada por el autor. Muestra la opcion activa con su icono y
+su etiqueta, abre menu con las tres opciones y marca la elegida, y al
+cambiar afecta a toda la app incluido el propio acceso. Gate de ojo
+pasado con capturas en claro, oscuro y sistema. El error de tipo del
+intento previo fue inyectar un reference por constructor en un widget
+consumidor, que ya lo recibe en su construccion; se borro el parametro.
+
+## Area segura del selector, riesgo que el navegador no puede verificar
+
+El posicionado estaba fuera del area segura, a doce pixeles del origen
+del cuerpo, asi que en un telefono con muesca o barra de estado alta la
+pastilla podia quedar debajo. Las capturas del autor son de navegador,
+donde los recortes son cero, asi que ahi se ve bien y en dispositivo
+podria no verse.
+
+Se envuelve la pastilla en area segura con abajo e izquierda en falso y
+relleno superior de doce. Con recortes cero el render es identico al
+aprobado, porque el area segura no anade nada y el relleno devuelve los
+mismos doce pixeles. Su efecto real solo aparece en dispositivo, y esa
+verificacion vive en el frente de Android, que sigue siendo bloqueo de
+lanzamiento.
+
+## Deudas del selector, registradas y no mezcladas
+
+Asimetria de fondo. La rama clara cablea blanco puro mientras la oscura
+usa el esquema de color. Naturaleza de descableado.
+
+Tipografia cruda. La pastilla y las opciones del menu usan estilo de
+texto directo en vez del catalogo tipografico de la casa. Naturaleza de
+descableado.
+
+Alto de toque insuficiente. La pastilla mide unos treinta pixeles, por
+debajo del minimo accesible de cuarenta y ocho, que importa porque los
+usuarios finales pueden ser jueces mayores. No se sube aqui porque
+cambiaria el aspecto que el autor acaba de aprobar; entra en el frente
+de altura de control de cuarenta y ocho ya aceptado, junto con entrada
+de texto, selector simple y boton, con su gate de ojo propagado.
+
+Duplicacion de pares. Los pares de icono y etiqueta aparecen en la
+expresion de seleccion y otra vez en los elementos del menu. Se
+registran para extraerlos a una lista constante en el subfrente de
+descableado.

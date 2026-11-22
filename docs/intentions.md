@@ -1747,3 +1747,39 @@ multiple quedan fuera por ser de alto variable.
 
 No se mezcla con el arreglo de contraste de la pestana, que es local de la
 vista y no toca el catalogo.
+
+## Alcance del proveedor de tema confirmado, el control de acceso es local
+
+Hecho medido, no asumido. El proveedor de tema se monta en el alcance
+raiz: el ProviderScope de main envuelve el widget raiz, que construye el
+MaterialApp.router, y la ruta de acceso es una ruta de ese router. La
+vista de acceso ya es un widget consumidor con acceso al alcance, asi
+que puede observar el proveedor de tema y escribir en el notificador sin
+tocar infraestructura. La hipotesis de que el acceso viviera fuera del
+alcance, planteada como riesgo a medir y no como afirmacion, queda muerta
+por el codigo. El control de tema en el acceso es un anadido local a la
+vista, no un refactor de montaje.
+
+Esto valida el metodo de medir antes de afirmar: la hipotesis se declaro
+como riesgo pendiente de dato, y el dato la resolvio a favor de un gesto
+pequeno, igual que resolvio la hipotesis del registrante de herramientas.
+
+## Deudas de adopcion del catalogo destapadas en el enrutador
+
+Dos hallazgos de la lectura del archivo de rutas, naturaleza de
+descableado, no del gesto actual. Las rutas de entrenador y organizador
+pintan texto crudo del Material en vez de tipografia de la casa. El
+constructor de error del enrutador usa un boton elevado crudo con
+navegacion, en vez de la pieza del catalogo. Ambas se registran para que
+no se evaporen y se tratan en el subfrente de descableado con su grep de
+consumidores.
+
+## Evidencia positiva del frente de Android
+
+El estilo de la barra de estado ya esta montado a nivel de app con logica
+de los tres modos: cuando el modo es sistema se lee el brillo de
+plataforma, y cuando es claro u oscuro se fija el estilo correspondiente.
+O sea el frente de Android no tiene que montar el overlay, solo verificar
+en dispositivo fisico que los iconos de la barra de estado se ven bien en
+los tres modos. Eso reduce el bloqueo de lanzamiento a verificacion y no
+a construccion.

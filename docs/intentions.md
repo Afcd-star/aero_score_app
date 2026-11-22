@@ -1673,3 +1673,27 @@ lead acababa de escribir. Los cinco marcadores reales estaban en la
 lista. Contramedida: toda busqueda de marcadores en ingles se hace con
 distincion de mayusculas, porque el codigo esta en ingles y la prosa en
 espanol, y sin ella la prosa contamina el conteo.
+
+## Borde muerto del boton primario, hallado leyendo la vista de acceso
+
+Hecho cerrado y verificable sin paleta. El metodo de colores del boton
+devuelve un borde fucsia de dos pixeles para la variante primaria, pero
+el render lo descarta cuando hay degradado, con la condicion de lado
+ninguno si hay degradado. O sea el borde de la variante primaria es
+codigo muerto dentro de la propia pieza: se calcula y nunca se pinta,
+igual que el marcador sin efecto del boton y la imagen reservada del
+avatar.
+
+La duda del autor sobre si hace falta borde queda respondida con el
+codigo y no con opinion. No hace falta, porque el degradado delimita la
+forma, y el feedback de presionado lo da la onda de Material interna del
+boton elevado, activa aunque se ponga elevacion cero, mientras el giro de
+carga es la capa de validando. Dos capas distintas, ambas presentes. El
+borde solo volveria a importar si el degradado no contrasta con el fondo,
+y eso se verifica con la prueba numerica en el frente de fondo.
+
+Accion pendiente, naturaleza de refactor. Quitar el borde muerto exige
+grep de consumidores de la variante primaria y prueba de render, porque
+es API expuesta. Se registra aqui para que no se evapore y se trata en el
+subfrente de piezas muertas junto con el marcador del boton y la imagen
+del avatar.

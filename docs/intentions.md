@@ -1541,3 +1541,33 @@ con documentacion publica completa y con prueba de render a ancho
 estrecho, por la regla de costo adoptada: las dos piezas nacidas
 documentadas tienen cero avisos y las trece heredadas suman ciento
 noventa y tres.
+
+## Errata de magnitud en el arreglo del catalogo, ya publicado
+
+El commit 6a0a542 declara seis sustituciones contadas y su diff real es de
+ciento setenta y cuatro inserciones y ochenta y tres borrados. La
+diferencia es el formateador canonico, que refloweo completos dos archivos
+heredados que nunca habian pasado por el. El arreglo funcional son seis
+lineas; el resto es forma absorbida por ser el mismo archivo.
+
+No es afirmacion falsa, es omision de magnitud. Las seis sustituciones
+existen, pero el mensaje no dice que el formateador aporta el grueso del
+diff. Se registra como errata y no se reescribe, porque el commit ya esta
+empujado y la regla de la casa prohibe reescribir historia publicada.
+
+Causa de proceso, del lead y nueva. Se entregaron en el mismo turno un
+bloque de correccion del mensaje y un bloque de empuje, sin encadenarlos.
+Con conexion inestable el autor empujo en cuanto pudo, que es conducta
+razonable, y la ventana de correccion gratuita se cerro. El defecto es del
+diseño del turno, no de la conducta del autor.
+
+Contramedida adoptada. Cuando exista una correccion de mensaje pendiente
+sobre commits locales, el empuje no se ofrece en paralelo: se entrega
+dentro del mismo bloque, despues de la correccion, o se retira del turno
+hasta que la correccion este hecha.
+
+Leccion tecnica de paso. Elegir espera en vez de envoltura para evitar
+reindentar fue inutil, porque los archivos eran heredados sin formatear y
+cualquier corrida del formateador los reflowea igual. Lo correcto es
+declarar el reflujo, no intentar evitarlo, porque la puerta exige
+formatear.

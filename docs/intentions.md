@@ -1646,3 +1646,30 @@ forma.
 
 Ambas se registran aqui para que no se evaporen y se traten en el
 subfrente de piezas muertas con su grep y su prueba.
+
+## Hallazgos del lote tres de documentacion, deuda de otros subfrentes
+
+Avatar. Declara un parametro de imagen que no interviene en ningun punto
+del render, y su documentacion afirmaba que mostraba la inicial si no
+habia imagen, lo que es falso porque no hay soporte de imagen. La
+documentacion se corrigio con la verdad y el parametro se marco como
+reservado sin efecto. Quitarlo exige grep de consumidores y es refactor.
+Su degradado ademas esta cableado a mano en vez de tomar el de la casa.
+
+Fondo decorativo. Su base es un color fijo oscuro y no sigue el brillo del
+tema, asi que en modo claro se ve como marco oscuro alrededor del
+contenido, visible en las capturas del autor. Su documentacion afirmaba no
+depender del tema, que era literalmente cierto pero ocultaba que no se
+adaptaba. Se documento la verdad. Cambiar la base es decision de diseno
+del autor, no defecto que el lead corrija en silencio.
+
+Esqueleto. Sus grises fijos siguen sin seguir el brillo, ya registrado.
+
+Nota de instrumento, bajo la regla de medicion. La verificacion de
+marcadores por hacer devolvio cuarenta y tres en vez de cinco porque la
+busqueda de cadenas es insensible a mayusculas por defecto, y casaba con
+metodo, todo y todos dentro de la documentacion en espanol que el propio
+lead acababa de escribir. Los cinco marcadores reales estaban en la
+lista. Contramedida: toda busqueda de marcadores en ingles se hace con
+distincion de mayusculas, porque el codigo esta en ingles y la prosa en
+espanol, y sin ella la prosa contamina el conteo.

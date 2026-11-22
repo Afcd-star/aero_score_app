@@ -188,9 +188,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
           unawaited(
             Future.delayed(const Duration(seconds: 4), () {
               if (mounted) {
-                ref
-                    .read(authProvider.notifier)
-                    .clearRegistrationSuccess();
+                ref.read(authProvider.notifier).clearRegistrationSuccess();
                 _errorShown = false;
               }
             }),
@@ -219,7 +217,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
                 children: [
                   _buildLogo(),
                   const SizedBox(height: 32),
-                  _buildAuthCard(isLoading),
+                  _buildAuthCard(isLoading, isDark),
                 ],
               ),
             ),
@@ -249,7 +247,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
     );
   }
 
-  Widget _buildAuthCard(bool isLoading) {
+  Widget _buildAuthCard(bool isLoading, bool isDark) {
     return AeroCard(
       padding: const EdgeInsets.all(24),
       child: AeroForm(
@@ -257,7 +255,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildToggleSwitch(),
+            _buildToggleSwitch(isDark),
             const SizedBox(height: 24),
             if (_isLogin)
               _buildLoginForm(isLoading)
@@ -269,23 +267,23 @@ class _AuthViewState extends ConsumerState<AuthView> {
     );
   }
 
-  Widget _buildToggleSwitch() {
+  Widget _buildToggleSwitch(bool isDark) {
     return Container(
       height: 44,
       decoration: BoxDecoration(
-        color: AppColors.mutedDark,
+        color: isDark ? AppColors.mutedDark : AppColors.mutedLight,
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
         children: [
-          _buildTabOption('Iniciar sesión', true),
-          _buildTabOption('Registrarse', false),
+          _buildTabOption('Iniciar sesión', true, isDark),
+          _buildTabOption('Registrarse', false, isDark),
         ],
       ),
     );
   }
 
-  Widget _buildTabOption(String label, bool isLoginTab) {
+  Widget _buildTabOption(String label, bool isLoginTab, bool isDark) {
     final isActive = _isLogin == isLoginTab;
     final activeShadow = <BoxShadow>[
       BoxShadow(
@@ -312,7 +310,9 @@ class _AuthViewState extends ConsumerState<AuthView> {
                 fontSize: 14,
                 color: isActive
                     ? Colors.white
-                    : AppColors.textOnWhite.withValues(alpha: 0.7),
+                    : (isDark
+                          ? AppColors.mutedForegroundDark
+                          : AppColors.foregroundLight),
               ),
             ),
           ),
@@ -343,16 +343,13 @@ class _AuthViewState extends ConsumerState<AuthView> {
             obscureText: _obscurePass,
             suffixIcon: IconButton(
               icon: Icon(
-                _obscurePass
-                    ? Icons.visibility_off
-                    : Icons.visibility,
+                _obscurePass ? Icons.visibility_off : Icons.visibility,
               ),
               onPressed: () {
                 setState(() => _obscurePass = !_obscurePass);
               },
             ),
-            validator: (v) =>
-                v?.isEmpty == true ? 'Campo requerido' : null,
+            validator: (v) => v?.isEmpty == true ? 'Campo requerido' : null,
           ),
         ),
         const SizedBox(height: 24),
@@ -360,8 +357,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
           width: double.infinity,
           child: AeroButton(
             label: 'Iniciar sesión',
-            onPressed:
-                isLoading ? null : () => unawaited(_handleSubmit()),
+            onPressed: isLoading ? null : () => unawaited(_handleSubmit()),
             isLoading: isLoading,
           ),
         ),
@@ -378,8 +374,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
           field: AeroInput(
             controller: _fullNameCtrl,
             hintText: 'Escriba su nombre completo',
-            validator: (v) =>
-                v?.isEmpty == true ? 'Campo requerido' : null,
+            validator: (v) => v?.isEmpty == true ? 'Campo requerido' : null,
           ),
         ),
         const SizedBox(height: 16),
@@ -410,8 +405,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
           field: AeroInput(
             controller: _usernameCtrl,
             hintText: 'Inserte su usuario',
-            validator: (v) =>
-                v?.isEmpty == true ? 'Campo requerido' : null,
+            validator: (v) => v?.isEmpty == true ? 'Campo requerido' : null,
           ),
         ),
         const SizedBox(height: 16),
@@ -461,8 +455,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
           width: double.infinity,
           child: AeroButton(
             label: 'Registrarse',
-            onPressed:
-                isLoading ? null : () => unawaited(_handleSubmit()),
+            onPressed: isLoading ? null : () => unawaited(_handleSubmit()),
             isLoading: isLoading,
           ),
         ),

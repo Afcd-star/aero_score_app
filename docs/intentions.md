@@ -1697,3 +1697,53 @@ grep de consumidores de la variante primaria y prueba de render, porque
 es API expuesta. Se registra aqui para que no se evapore y se trata en el
 subfrente de piezas muertas junto con el marcador del boton y la imagen
 del avatar.
+
+## Contraste de la pestana de acceso, bug de la vista y no de la paleta
+
+Hecho medido. El contenedor de la pestana era un color fijo oscuro y el
+texto inactivo un token de texto sobre blanco con alfa cero coma siete.
+Calculados con la formula de luminancia de WCAG, ambos modos daban un
+ratio de uno coma cuatro, o sea ilegibilidad probada por numero, no por
+ojo, y eso explica el reporte del autor de que era ilegible en los dos
+modos.
+
+El arreglo no muta la paleta. Los tokens correctos ya existian:
+superficie tenue por modo y texto de superficie tenue por modo. Con
+contenedor por brillo y texto inactivo por token de cada modo, los ratios
+suben a cuatro coma seis ocho en oscuro y trece en claro, ambos por
+encima del umbral de cuatro coma cinco que exige texto de catorce puntos
+normal. El defecto era que la vista usaba un token de texto sobre blanco,
+con alfa, sobre un fondo gris fijo.
+
+Dependencia registrada con el frente de fondo. El logo de la vista de
+acceso usa un token de texto casi blanco, legible hoy porque el fondo del
+acceso es oscuro fijo. Si el fondo pasa a seguir el brillo, ese logo
+blanco sobre claro seria ilegible, asi que el frente de fondo debe
+decidir el color del logo por modo y no solo el del fondo.
+
+Respuesta a la duda del borde muerto del boton. Funcionalmente no
+importa, el render ya lo anula con la condicion de lado ninguno cuando
+hay degradado. Legiblemente si importa, porque confunde a quien lea el
+metodo de colores. No se quita ahora porque tocar el catalogo exige gate
+de ojo y grep de consumidores del retorno del metodo de colores. Viaja al
+subfrente de piezas muertas junto con el marcador sin efecto del boton y
+la imagen reservada del avatar.
+
+## Altura de control uniforme, frente de catalogo y no arreglo local
+
+Decision del autor aceptada: un mismo campo de altura para campo y boton,
+propuesta de cuarenta y ocho pixeles, que sube el campo desde unos
+cuarenta y dos y conserva el suelo accesible del boton, importante para
+los jueces mayores.
+
+No es un arreglo local del acceso. Fijar la altura en la entrada de texto,
+el selector simple y el boton propaga a todos los formularios del arbol,
+eventos, competidores, equipos y acceso, porque son piezas del catalogo
+con multiples consumidores. Por eso va como frente aparte, con una
+constante compartida de altura de control, gate de ojo propagado y
+medicion en telefono fisico, donde el campo de texto puede comportarse
+distinto que en navegador. La entrada de texto multilinea y el selector
+multiple quedan fuera por ser de alto variable.
+
+No se mezcla con el arreglo de contraste de la pestana, que es local de la
+vista y no toca el catalogo.

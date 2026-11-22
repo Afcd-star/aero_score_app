@@ -3,11 +3,39 @@ import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
-enum AeroButtonVariant { primary, outline, destructive, ghost, secondary }
+/// Variantes visuales del boton.
+enum AeroButtonVariant {
+  /// Accion principal. Toma el degradado de marca por defecto.
+  primary,
 
-enum AeroButtonSize { sm, md, lg }
+  /// Accion de contorno, fondo transparente y borde del esquema.
+  outline,
 
+  /// Accion destructiva, tinte rojo suave con texto rojo.
+  destructive,
+
+  /// Accion discreta, sin fondo ni borde.
+  ghost,
+
+  /// Accion de apoyo sobre superficie secundaria.
+  secondary,
+}
+
+/// Tallas del boton, que deciden relleno vertical y tamano de texto.
+enum AeroButtonSize {
+  /// Compacta, para filas densas y dialogos.
+  sm,
+
+  /// Media, valor por defecto.
+  md,
+
+  /// Grande, para acciones destacadas.
+  lg,
+}
+
+/// Boton del catalogo, con variantes, tallas, carga y modo solo icono.
 class AeroButton extends StatelessWidget {
+  /// Crea el boton. Exige etiqueta, modo solo icono o un icono.
   const AeroButton({
     super.key,
     this.label, // ✅ Sin required
@@ -28,19 +56,47 @@ class AeroButton extends StatelessWidget {
          label != null || iconOnly || icon != null,
          'Debe proporcionar label, iconOnly=true, o un icon',
        );
-  final String? label; // ✅ CAMBIO: Hacer label opcional
+
+  /// Texto del boton. Opcional si hay icono o modo solo icono.
+  final String? label;
+
+  /// Accion al pulsar. Nulo deja el boton deshabilitado.
   final VoidCallback? onPressed;
+
+  /// Variante visual que decide fondo, texto y borde.
   final AeroButtonVariant variant;
+
+  /// Talla que decide relleno vertical y tamano de texto.
   final AeroButtonSize size;
+
+  /// Si es verdadero, muestra progreso y bloquea la pulsacion.
   final bool isLoading;
+
+  /// Icono a la izquierda del texto, o unico en modo solo icono.
   final Widget? icon;
+
+  /// Si es verdadero, ocupa todo el ancho disponible.
   final bool fullWidth;
+
+  /// Degradado explicito. Sobrescribe el de la variante primaria.
   final LinearGradient? gradient;
+
+  /// Alto fijo opcional.
   final double? height;
+
+  /// Ancho fijo opcional.
   final double? width;
+
+  /// Relleno explicito. Sobrescribe el de la talla.
   final EdgeInsetsGeometry? padding;
+
+  /// Icono a la derecha del texto.
   final IconData? trailingIcon;
-  final bool iconOnly; // ✅ NUEVO: Para botones solo-ícono
+
+  /// Si es verdadero, muestra solo el icono centrado.
+  final bool iconOnly;
+
+  /// Marcador heredado sin efecto en el render actual.
   final bool isRequired;
 
   @override

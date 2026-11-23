@@ -2018,3 +2018,50 @@ que solo existia para servir a la biblioteca. Los dos registros de
 plugins de escritorio cambian como consecuencia mecanica y no se pueden
 verificar en esta maquina por falta de cadena de C++; no afectan a
 Android ni a web.
+
+## Barra de estado del acceso, y la regla de acoplamiento al fondo
+
+Defecto cazado solo en dispositivo. En modo claro los iconos de la barra
+de estado eran oscuros sobre el fondo morado oscuro del acceso,
+ilegibles. Causa leida: el ajuste global fija el estilo de la barra segun
+el brillo, pero el fondo del acceso no sigue el brillo, asi que en claro
+chocan.
+
+Arreglo acotado a la vista de acceso, no al fondo decorado. Si se
+envolviera el fondo, cualquier pantalla con superficie clara que lo use
+heredaria iconos claros sobre fondo claro y romperia su modo claro. En el
+acceso el fondo es oscuro con certeza, asi que el ajuste vive ahi con
+estilo claro fijo.
+
+Regla de acoplamiento. Lo que vive sobre el fondo del acceso, barra de
+estado y texto del logo, debe ignorar el brillo mientras el fondo lo
+ignore. Cuando el fondo llegue a seguir el brillo en su frente, la barra
+y el logo deben volver a seguirlo, y este ajuste fijo debe retirarse.
+
+## Veredicto estetico y rol del arte original
+
+Veredicto sincero del lead a peticion del autor: el arte original se ve
+mejor que el fondo actual, y por bastante. Es arte de arranque con
+cintas de degradado y profundidad; el fondo actual de circulos duros
+parece marcador de posicion.
+
+Distincion de rol que cambia la conclusion. Esa imagen es una pantalla
+de arranque, sin interfaz encima. Poner cintas densas detras de un
+formulario hundiria la legibilidad de los campos y cargaria un raster
+pesado por fotograma. El rol correcto de un fondo de formulario es ser
+discreto.
+
+La premisa de que no se podia es falsa. Como imagen empaquetada es un
+recurso mas; lo dificil era reproducirla por codigo, y eso no hace falta.
+Se registra como frente propio de pantalla de arranque, pendiente de que
+el autor entregue el archivo de imagen.
+
+## Deuda de proceso: la decision del fondo claro se dejo morir
+
+El autor y el lead acordaron que el fondo seguiria el brillo si los
+colores claros daban buen contraste verificado. La decision quedo
+registrada y se dejo starving detras de tipografia y validaciones sin
+volver a ella. Es fallo de proceso del lead. Se reabre como el frente
+inmediato siguiente: variante clara del fondo con circulos atenuados y
+desenfocados, texto del logo siguiendo el brillo, y barra de estado
+volviendo a seguir el brillo.

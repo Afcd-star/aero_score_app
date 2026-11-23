@@ -52,15 +52,19 @@ class JudgePrincipalPlaceholderView extends ConsumerWidget {
                   const SizedBox(height: 16),
                   Text(
                     role.label,
-                    style: AppTextStyles.baseTextTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w700),
+                    style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Este módulo está en desarrollo. '
                     'Aún no permite $_pendingAction.',
-                    style: AppTextStyles.baseTextTheme.bodyMedium,
+                    style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),

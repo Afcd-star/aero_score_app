@@ -2134,3 +2134,123 @@ Frente pendiente con herramienta correcta: flutter_native_splash, que
 genera el drawable nativo y cubre el hueco anterior al motor. Una splash
 dentro de Flutter solo tapa despues del arranque del motor, no el negro
 nativo, asi que no sirve para este defecto.
+
+## Casco oscuro fijo como identidad de marca, cierre del frente
+
+Decision del autor tras ver la niebla clara: el casco vuelve a ser oscuro
+en ambos modos. El modo claro aclara tarjetas, campos y controles, nunca
+el casco. La variante clara del fondo queda retirada por completo, no
+oculta, porque un casco que apenas asoma entre tarjetas opacas no puede
+cargar atmosfera: se lee como mancha.
+
+Se conservan los lavados radiales que el autor aprobo en oscuro, que son
+vectoriales y no pagan raster ni desenfoque. La base es oscura fija y las
+fuerzas de lavado son las de oscuro en ambos modos.
+
+Tres instancias de la regla de acoplamiento. La barra de estado queda con
+iconos claros siempre en el ajuste global, porque toda parte superior es
+oscura o saturada. El texto del marcador de juez y el de rol desconocido
+pasan a claro fijo sobre el casco. El panel queda exento del barrido
+porque todo su texto vive sobre superficies opacas que no siguen al tema:
+cabecera con gradiente, barra inferior blanca y menu lateral blanco.
+
+## Rol desconocido como estado de caida, verificado sin navegacion
+
+Aclaracion del autor: a la vista de rol desconocido se cae, no se llega,
+porque el enrutador redirige fuera de ella a cualquier rol valido. Por
+tanto no se puede abrir a proposito para un gate de ojo.
+
+Verificacion por dos vias independientes: la prueba numerica de contraste
+del texto claro sobre la base oscura, y la paridad exacta con el marcador
+de juez, que si paso el gate de ojo del autor con la misma sustitucion y
+los mismos tokens. No se pide navegacion a un estado que por diseno no la
+permite.
+
+## Cierre del desplazamiento de linea base
+
+La lectura de cinco avisos y setecientas treinta y una informaciones era
+transitoria. Al remedir cayo a cuatro y seiscientas ochenta y cinco, los
+valores estables. Se confirma la regla ya escrita: una lectura que
+contradice se remide antes de teorizar, y el paquete de reglas que se
+re-resuelve tras cambios grandes de manifiesto puede desplazar la base
+sin que haya defecto nuestro.
+
+## Casco oscuro fijo como identidad de marca, cierre del frente
+
+Decision del autor tras ver la niebla clara: el casco vuelve a ser oscuro
+en ambos modos. El modo claro aclara tarjetas, campos y controles, nunca
+el casco. La variante clara del fondo queda retirada por completo, no
+oculta, porque un casco que apenas asoma entre tarjetas opacas no puede
+cargar atmosfera: se lee como mancha.
+
+Se conservan los lavados radiales que el autor aprobo en oscuro, que son
+vectoriales y no pagan raster ni desenfoque. La base es oscura fija y las
+fuerzas de lavado son las de oscuro en ambos modos.
+
+Tres instancias de la regla de acoplamiento. La barra de estado queda con
+iconos claros siempre en el ajuste global, porque toda parte superior es
+oscura o saturada. El texto del marcador de juez y el de rol desconocido
+pasan a claro fijo sobre el casco. El panel queda exento del barrido
+porque todo su texto vive sobre superficies opacas que no siguen al tema:
+cabecera con gradiente, barra inferior blanca y menu lateral blanco.
+
+## Rol desconocido como estado de caida, verificado sin navegacion
+
+Aclaracion del autor: a la vista de rol desconocido se cae, no se llega,
+porque el enrutador redirige fuera de ella a cualquier rol valido. Por
+tanto no se puede abrir a proposito para un gate de ojo.
+
+Verificacion por dos vias independientes: la prueba numerica de contraste
+del texto claro sobre la base oscura, y la paridad exacta con el marcador
+de juez, que si paso el gate de ojo del autor con la misma sustitucion y
+los mismos tokens. No se pide navegacion a un estado que por diseno no la
+permite.
+
+## Cierre del desplazamiento de linea base
+
+La lectura de cinco avisos y setecientas treinta y una informaciones era
+transitoria. Al remedir cayo a cuatro y seiscientas ochenta y cinco, los
+valores estables. Se confirma la regla ya escrita: una lectura que
+contradice se remide antes de teorizar, y el paquete de reglas que se
+re-resuelve tras cambios grandes de manifiesto puede desplazar la base
+sin que haya defecto nuestro.
+
+## Casco oscuro fijo como identidad de marca, cierre del frente
+
+Decision del autor tras ver la niebla clara: el casco vuelve a ser oscuro
+en ambos modos. El modo claro aclara tarjetas, campos y controles, nunca
+el casco. La variante clara del fondo queda retirada por completo, no
+oculta, porque un casco que apenas asoma entre tarjetas opacas no puede
+cargar atmosfera: se lee como mancha.
+
+Se conservan los lavados radiales que el autor aprobo en oscuro, que son
+vectoriales y no pagan raster ni desenfoque. La base es oscura fija y las
+fuerzas de lavado son las de oscuro en ambos modos.
+
+Tres instancias de la regla de acoplamiento. La barra de estado queda con
+iconos claros siempre en el ajuste global, porque toda parte superior es
+oscura o saturada. El texto del marcador de juez y el de rol desconocido
+pasan a claro fijo sobre el casco. El panel queda exento del barrido
+porque todo su texto vive sobre superficies opacas que no siguen al tema:
+cabecera con gradiente, barra inferior blanca y menu lateral blanco.
+
+## Rol desconocido como estado de caida, verificado sin navegacion
+
+Aclaracion del autor: a la vista de rol desconocido se cae, no se llega,
+porque el enrutador redirige fuera de ella a cualquier rol valido. Por
+tanto no se puede abrir a proposito para un gate de ojo.
+
+Verificacion por dos vias independientes: la prueba numerica de contraste
+del texto claro sobre la base oscura, y la paridad exacta con el marcador
+de juez, que si paso el gate de ojo del autor con la misma sustitucion y
+los mismos tokens. No se pide navegacion a un estado que por diseno no la
+permite.
+
+## Cierre del desplazamiento de linea base
+
+La lectura de cinco avisos y setecientas treinta y una informaciones era
+transitoria. Al remedir cayo a cuatro y seiscientas ochenta y cinco, los
+valores estables. Se confirma la regla ya escrita: una lectura que
+contradice se remide antes de teorizar, y el paquete de reglas que se
+re-resuelve tras cambios grandes de manifiesto puede desplazar la base
+sin que haya defecto nuestro.

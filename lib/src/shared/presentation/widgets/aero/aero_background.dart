@@ -2,12 +2,16 @@
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-/// Fondo decorativo con circulos de brillo para autenticacion y panel.
+/// Fondo decorativo de nivel trabajo, con lavados radiales de brillo.
 ///
-/// La base sigue el brillo del tema, oscura en oscuro y muy clara en
-/// claro, y los circulos se atenuan en claro para no competir con el
-/// contenido. Lo que vive encima, texto del logo y barra de estado,
-/// sigue tambien el brillo, segun la regla de acoplamiento.
+/// La base es oscura fija en ambos modos por decision de marca: el modo
+/// claro aclara tarjetas, campos y controles, nunca el casco. Los lavados
+/// son degradados radiales que se desvanecen a transparente, sin bordes
+/// duros ni raster que ampliar.
+///
+/// Regla de acoplamiento: como este fondo no sigue el brillo, todo lo
+/// que se pinta encima, texto y barra de estado, usa color claro fijo y
+/// no color de tema.
 class AeroBackground extends StatelessWidget {
   /// Crea el fondo con su contenido y su variante de panel.
   const AeroBackground({
@@ -24,86 +28,73 @@ class AeroBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       children: [
-        Container(
-          color: isDark ? AppColors.backgroundBase : AppColors.surfaceBase,
-        ),
-        ..._buildGlowCircles(context, isDark),
+        Container(color: AppColors.backgroundBase),
+        ..._buildGlowWashes(context),
         child,
       ],
     );
   }
 
-  List<Widget> _buildGlowCircles(BuildContext context, bool isDark) {
-    final circles = <Widget>[];
-    final opacity = isDashboard ? (isDark ? 0.2 : 0.10) : (isDark ? 0.3 : 0.14);
+  /// Lavados radiales que se desvanecen a transparente.
+  ///
+  /// Un degradado radial de color a transparente da el mismo aspecto de
+  /// brillo difuso que un circulo desenfocado, sin imagen ni filtro, y
+  /// por tanto sin costo de raster ni bordes duros.
+  List<Widget> _buildGlowWashes(BuildContext context) {
+    final strength = isDashboard ? 0.2 : 0.3;
 
-    circles
-      ..add(
+    return [
+      Positioned(
+        top: -160,
+        left: -160,
+        child: _wash(
+          size: 480,
+          strength: strength,
+          inner: AppColors.glowViolet,
+        ),
+      ),
+      Positioned(
+        bottom: -220,
+        right: -220,
+        child: _wash(
+          size: 640,
+          strength: strength,
+          inner: AppColors.glowFuchsia,
+        ),
+      ),
+      if (!isDashboard)
         Positioned(
-          top: -128,
-          left: -128,
-          child: Opacity(
-            opacity: opacity,
-            child: Container(
-              width: 256,
-              height: 256,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [AppColors.glowFuchsia, AppColors.glowViolet],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            ),
+          right: -140,
+          top: MediaQuery.of(context).size.height * 0.30,
+          child: _wash(
+            size: 420,
+            strength: strength * 0.7,
+            inner: AppColors.glowViolet,
           ),
         ),
-      )
-      ..add(
-        Positioned(
-          bottom: -192,
-          right: -192,
-          child: Opacity(
-            opacity: opacity,
-            child: Container(
-              width: 384,
-              height: 384,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [AppColors.glowFuchsia, AppColors.glowViolet],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
+    ];
+  }
 
-    if (!isDashboard) {
-      circles.add(
-        Positioned(
-          right: 0,
-          top: MediaQuery.of(context).size.height * 0.25,
-          child: Opacity(
-            opacity: isDark ? 0.2 : 0.10,
-            child: Container(
-              width: 192,
-              height: 192,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.glowViolet,
-              ),
-            ),
-          ),
+  /// Un lavado circular que va del color al transparente.
+  Widget _wash({
+    required double size,
+    required double strength,
+    required Color inner,
+  }) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            inner.withValues(alpha: strength),
+            inner.withValues(alpha: 0),
+          ],
         ),
-      );
-    }
-
-    return circles;
+      ),
+    );
   }
 }

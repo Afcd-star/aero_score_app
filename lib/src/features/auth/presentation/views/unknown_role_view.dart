@@ -23,8 +23,7 @@ class UnknownRoleView extends ConsumerStatefulWidget {
   const UnknownRoleView({super.key});
 
   @override
-  ConsumerState<UnknownRoleView> createState() =>
-      _UnknownRoleViewState();
+  ConsumerState<UnknownRoleView> createState() => _UnknownRoleViewState();
 }
 
 class _UnknownRoleViewState extends ConsumerState<UnknownRoleView> {
@@ -78,15 +77,19 @@ class _UnknownRoleViewState extends ConsumerState<UnknownRoleView> {
                   const SizedBox(height: 16),
                   Text(
                     'Rol no reconocido',
-                    style: AppTextStyles.baseTextTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w700),
+                    style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Tu cuenta no tiene un rol válido asignado. '
                     'Contacta al administrador del sistema.',
-                    style: AppTextStyles.baseTextTheme.bodyMedium,
+                    style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),

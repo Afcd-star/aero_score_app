@@ -38,13 +38,10 @@ class AeroScoreApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeModeProvider);
-    final brightness = themeMode == ThemeMode.system
-        ? MediaQuery.platformBrightnessOf(context)
-        : (themeMode == ThemeMode.dark ? Brightness.dark : Brightness.light);
+    // El casco es oscuro fijo por marca en ambos modos, asi que la
+    // barra de estado lleva iconos claros siempre.
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: brightness == Brightness.dark
-          ? SystemUiOverlayStyle.light
-          : SystemUiOverlayStyle.dark,
+      value: SystemUiOverlayStyle.light,
       child: MaterialApp.router(
         title: 'AeroScore',
         debugShowCheckedModeBanner: false,

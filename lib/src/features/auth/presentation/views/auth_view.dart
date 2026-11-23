@@ -7,13 +7,16 @@ import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/core/theme/theme_provider.dart';
 import 'package:aero_score_app/src/features/auth/data/di/auth_providers.dart';
 import 'package:aero_score_app/src/features/auth/presentation/providers/auth_notifier.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_background.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_card.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_form.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/// Fondo de marca del acceso, oscuro en ambos modos por decision de identidad.
+const String _kLoginBackgroundAsset = 'assets/images/login_glow.png';
 
 /// Vista de autenticación para iniciar sesión o registrarse.
 class AuthView extends ConsumerStatefulWidget {
@@ -195,44 +198,53 @@ class _AuthViewState extends ConsumerState<AuthView> {
     final authState = ref.watch(authProvider);
     final isLoading = authState is AuthLoading;
 
-    return AeroBackground(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            SafeArea(
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildLogo(),
-                      const SizedBox(height: 32),
-                      _buildAuthCard(
-                        isLoading,
-                        isDark,
-                      ),
-                    ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(_kLoginBackgroundAsset),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            children: [
+              SafeArea(
+                child: Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildLogo(),
+                        const SizedBox(height: 32),
+                        _buildAuthCard(
+                          isLoading,
+                          isDark,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const Positioned(
-              top: 0,
-              right: 12,
-              child: SafeArea(
-                bottom: false,
-                left: false,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 12),
-                  child: _ThemeModeSelector(),
+              const Positioned(
+                top: 0,
+                right: 12,
+                child: SafeArea(
+                  bottom: false,
+                  left: false,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 12),
+                    child: _ThemeModeSelector(),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -250,9 +262,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
         Text(
           'AeroScore',
           style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? AppColors.textPrimary
-                : AppColors.foregroundLight,
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.w600,
           ),
         ),

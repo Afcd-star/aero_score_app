@@ -2100,3 +2100,37 @@ cintas en variante clara como fondo. Mete un raster denso detras de un
 formulario, que es lo que el rol de fondo debe evitar; ese arte pertenece
 al frente de pantalla de arranque. Si se elige, el jpg crudo del generador
 no debe entrar nunca: artefacto con nombre opaco.
+
+## El acceso vuelve a fondo oscuro de marca, y la regla de color sobre fondo fijo
+
+Decision del autor tras ver el experimento: el fondo del acceso es oscuro
+en ambos modos como identidad de marca, con el arte de cintas, y se deja
+de intentar un fondo claro para esa pantalla. La variante clara del fondo
+decorado se conserva para el panel y demas pantallas que siguen el brillo.
+
+Defecto que lo demostro. Con fondo oscuro fijo y texto del logo siguiendo
+el tema, el modo claro pintaba gris oscuro sobre arte oscuro y el nombre
+de la app desaparecia. La barra de estado no fallo porque ya era clara
+fija.
+
+Regla general escrita. Lo que se pinta directo sobre un fondo que no
+sigue al tema hereda el color del fondo, no el del tema. El seguimiento
+del tema solo aplica a superficies que siguen al tema. El texto del logo
+del acceso vuelve a claro fijo y la constante del experimento pasa a
+llamarse por su papel real de fondo de marca.
+
+Poda de arte. De los dos png declarados solo uno se pinta; el sobrante y
+el jpg crudo del generador se retiran del manifiesto y del disco. Binarios
+sin consumidor son peso muerto.
+
+## El negro de arranque es el fondo de ventana de Android, no una splash
+
+Observacion del autor: al lanzar no se ve arte, se ve negro y luego el
+login. Causa: no existe pantalla de arranque construida; ese negro es el
+fondo de ventana por defecto de Android antes del primer fotograma de
+Flutter. El arte de arranque existe como archivo pero nunca se cableo.
+
+Frente pendiente con herramienta correcta: flutter_native_splash, que
+genera el drawable nativo y cubre el hueco anterior al motor. Una splash
+dentro de Flutter solo tapa despues del arranque del motor, no el negro
+nativo, asi que no sirve para este defecto.

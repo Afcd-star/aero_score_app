@@ -123,4 +123,17 @@ void main() {
       );
     });
   });
+
+  group('contraste WCAG del texto del logo sobre el fondo', () {
+    test('el logo es legible en claro y en oscuro', () {
+      expect(
+        _ratio(AppColors.surfaceBase, AppColors.foregroundLight),
+        greaterThanOrEqualTo(_kMinRatio),
+      );
+      expect(
+        _ratio(AppColors.backgroundBase, AppColors.textPrimary),
+        greaterThanOrEqualTo(_kMinRatio),
+      );
+    });
+  });
 }

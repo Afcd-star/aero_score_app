@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 
 /// Fondo decorativo con circulos de brillo para autenticacion y panel.
 ///
-/// Su base es un color fijo oscuro y no sigue el brillo del tema, asi que
-/// en modo claro se ve como marco alrededor del contenido. Es decision de
-/// diseno pendiente de confirmacion, no defecto corregido aqui.
+/// La base sigue el brillo del tema, oscura en oscuro y muy clara en
+/// claro, y los circulos se atenuan en claro para no competir con el
+/// contenido. Lo que vive encima, texto del logo y barra de estado,
+/// sigue tambien el brillo, segun la regla de acoplamiento.
 class AeroBackground extends StatelessWidget {
   /// Crea el fondo con su contenido y su variante de panel.
   const AeroBackground({
@@ -23,18 +24,21 @@ class AeroBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       children: [
-        Container(color: AppColors.backgroundBase),
-        ..._buildGlowCircles(context),
+        Container(
+          color: isDark ? AppColors.backgroundBase : AppColors.surfaceBase,
+        ),
+        ..._buildGlowCircles(context, isDark),
         child,
       ],
     );
   }
 
-  List<Widget> _buildGlowCircles(BuildContext context) {
+  List<Widget> _buildGlowCircles(BuildContext context, bool isDark) {
     final circles = <Widget>[];
-    final opacity = isDashboard ? 0.2 : 0.3;
+    final opacity = isDashboard ? (isDark ? 0.2 : 0.10) : (isDark ? 0.3 : 0.14);
 
     circles
       ..add(
@@ -86,7 +90,7 @@ class AeroBackground extends StatelessWidget {
           right: 0,
           top: MediaQuery.of(context).size.height * 0.25,
           child: Opacity(
-            opacity: 0.2,
+            opacity: isDark ? 0.2 : 0.10,
             child: Container(
               width: 192,
               height: 192,

@@ -2065,3 +2065,38 @@ volver a ella. Es fallo de proceso del lead. Se reabre como el frente
 inmediato siguiente: variante clara del fondo con circulos atenuados y
 desenfocados, texto del logo siguiendo el brillo, y barra de estado
 volviendo a seguir el brillo.
+
+## Frente de fondo claro cerrado, con acoplamiento cumplido
+
+Hecho aplicado y verificado. La base del fondo decorado sigue el brillo:
+lavanda muy clara en claro y oscura en oscuro. Los circulos se atenuan en
+claro para no competir con el contenido. El texto del logo sigue el brillo
+y la barra de estado vuelve al ajuste global, retirando la region anotada
+fija que se puso mientras el fondo ignoraba el brillo. Es la regla de
+acoplamiento registrada, aplicada al pie de la letra.
+
+Prueba numerica anadida: contraste del texto del logo sobre la base clara
+y sobre la base oscura, ambos por encima del umbral. Ochenta y una
+pruebas verdes.
+
+## Premisa falsa corregida: el login oscuro no usa imagen
+
+Peticion del autor: una imagen para el claro como las del oscuro. Con
+evidencia: el login oscuro pinta circulos procedurales, no imagen. Los
+tres archivos de imagen presentes en disco estan sin rastrear y sin
+cablear en ningun widget, y los dos png son de fondo oscuro, asi que
+usarlos en claro destruiria el modo claro. No se commitean: binarios sin
+referencia son peso muerto.
+
+## Decision pendiente sobre el claro demasiado lavado
+
+Via recomendada: profundizar el claro subiendo solo la opacidad de los
+circulos en modo claro, dentro del fondo decorado, sin tocar tokens
+compartidos ni anadir raster. Recupera presencia de color conservando el
+centro limpio para el formulario.
+
+Via alternativa, no recomendada para el login: cablear una imagen de
+cintas en variante clara como fondo. Mete un raster denso detras de un
+formulario, que es lo que el rol de fondo debe evitar; ese arte pertenece
+al frente de pantalla de arranque. Si se elige, el jpg crudo del generador
+no debe entrar nunca: artefacto con nombre opaco.

@@ -1998,3 +1998,23 @@ estado de la entrada de texto registrado como muerto.
 Prioridad decidida. Va detras del frente de tipografia, que bloquea el
 arranque sin conexion. Se commitea el arreglo del defecto gordo, ya
 aprobado por ojo, y el residual queda registrado con sus dos vias.
+
+## Cierre del frente de tipografia, verificado en telefono fisico
+
+Hecho medido. El formato de maquina da sesenta y tres errores, cuatro
+avisos y seiscientas ochenta y cinco informaciones, y el desglose por
+regla suma lo mismo. Las fuentes estaticas y sus licencias entran como
+recursos, el manifiesto declara las dos familias con sus cinco pesos y
+pierde la dependencia de la biblioteca. La tipografia pasa a tema
+constante con nombre de familia.
+
+Verificado en telefono fisico en claro y oscuro, con Sora en titulos y
+Manrope en cuerpo distinguibles. En Android las fuentes viven dentro del
+paquete, asi que el modo avion no puede afectarlas; la prueba sin red
+queda como confirmatoria y no como unica evidencia.
+
+Retiro de diez paquetes, incluida toda la cadena de proveedor de rutas
+que solo existia para servir a la biblioteca. Los dos registros de
+plugins de escritorio cambian como consecuencia mecanica y no se pueden
+verificar en esta maquina por falta de cadena de C++; no afectan a
+Android ni a web.

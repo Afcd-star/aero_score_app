@@ -1,82 +1,104 @@
 // lib/src/core/theme/text_styles.dart
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// Definicion centralizada de la tipografia de AeroScore.
 ///
-/// Sora para titulos y Manrope para cuerpo. Se declaran los quince
-/// roles de TextTheme: un rol ausente hace que cualquier
-/// `baseTextTheme.rol?.copyWith(...)` devuelva null y el texto pierda
-/// en silencio tamano, peso y color, heredando el estilo del Material.
+/// Sora para titulos y Manrope para cuerpo. Las familias se declaran en
+/// el manifiesto con sus pesos y se referencian por nombre, asi que
+/// cargan con el motor: sin peticion de red y sin paso asincrono.
+///
+/// Se declaran los quince roles de TextTheme: un rol ausente hace que
+/// cualquier `baseTextTheme.rol?.copyWith(...)` devuelva null y el texto
+/// pierda en silencio tamano, peso y color, heredando el estilo del
+/// Material.
 class AppTextStyles {
   const AppTextStyles._();
 
-  /// Precarga las familias para evitar parpadeo en el primer frame.
-  static void preload() {
-    GoogleFonts.sora();
-    GoogleFonts.manrope();
-  }
+  /// Familia tipografica de los titulos.
+  static const String titleFamily = 'Sora';
+
+  /// Familia tipografica del cuerpo y las etiquetas.
+  static const String bodyFamily = 'Manrope';
 
   /// Tema tipografico base, aplicado segun el brillo en AppTheme.
+  ///
+  /// Es constante y se construye una sola vez. Antes era un getter que
+  /// ejecutaba quince llamadas a la biblioteca de fuentes en cada
+  /// acceso, y se accede desde cada construccion de widget.
   static TextTheme get baseTextTheme {
-    return TextTheme(
-      displayLarge: GoogleFonts.sora(
+    return const TextTheme(
+      displayLarge: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 36,
         fontWeight: FontWeight.w700,
       ),
-      displayMedium: GoogleFonts.sora(
+      displayMedium: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 30,
         fontWeight: FontWeight.w700,
       ),
-      displaySmall: GoogleFonts.sora(
+      displaySmall: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 28,
         fontWeight: FontWeight.w600,
       ),
-      headlineLarge: GoogleFonts.sora(
+      headlineLarge: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 26,
         fontWeight: FontWeight.w600,
       ),
-      headlineMedium: GoogleFonts.sora(
+      headlineMedium: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 22,
         fontWeight: FontWeight.w600,
       ),
-      headlineSmall: GoogleFonts.sora(
+      headlineSmall: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       ),
-      titleLarge: GoogleFonts.sora(
+      titleLarge: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 24,
         fontWeight: FontWeight.w600,
       ),
-      titleMedium: GoogleFonts.sora(
+      titleMedium: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       ),
-      titleSmall: GoogleFonts.sora(
+      titleSmall: TextStyle(
+        fontFamily: titleFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       ),
-      bodyLarge: GoogleFonts.manrope(
+      bodyLarge: TextStyle(
+        fontFamily: bodyFamily,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ),
-      bodyMedium: GoogleFonts.manrope(
+      bodyMedium: TextStyle(
+        fontFamily: bodyFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
       ),
-      bodySmall: GoogleFonts.manrope(
+      bodySmall: TextStyle(
+        fontFamily: bodyFamily,
         fontSize: 12,
         fontWeight: FontWeight.w400,
       ),
-      labelLarge: GoogleFonts.manrope(
+      labelLarge: TextStyle(
+        fontFamily: bodyFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
       ),
-      labelMedium: GoogleFonts.manrope(
+      labelMedium: TextStyle(
+        fontFamily: bodyFamily,
         fontSize: 12,
         fontWeight: FontWeight.w600,
       ),
-      labelSmall: GoogleFonts.manrope(
+      labelSmall: TextStyle(
+        fontFamily: bodyFamily,
         fontSize: 11,
         fontWeight: FontWeight.w500,
       ),

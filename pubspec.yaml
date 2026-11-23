@@ -20,7 +20,6 @@ dependencies:
   flutter_riverpod: ^3.0.0 # Riverpod para Flutter
   freezed_annotation: ^3.0.0 # Anotaciones de modelos
   go_router: ^17.2.3 # Enrutamiento
-  google_fonts: ^8.1.0 # Tipografías
   intl: ^0.20.2 # Localización e formatos
   json_annotation: ^4.9.0 # Serialización JSON
   meta: ^1.18.0 # Anotaciones de inmutabilidad
@@ -48,6 +47,21 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Sora
+      fonts:
+        - asset: assets/fonts/Sora-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Sora-Bold.ttf
+          weight: 700
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Manrope-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Manrope-SemiBold.ttf
+          weight: 600
   assets:
     - assets/images/logo.png
     - assets/images/logo_sin_color.png

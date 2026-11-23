@@ -2,7 +2,6 @@
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
 import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   const AppTheme._();
@@ -38,7 +37,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: colorScheme.outline),
@@ -73,7 +75,11 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(color: AppColors.fuchsia.withValues(alpha: 0.3)),
           ),
-          textStyle: GoogleFonts.sora(fontWeight: FontWeight.w600, fontSize: 16),
+          textStyle: const TextStyle(
+            fontFamily: AppTextStyles.titleFamily,
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
         ),
       ),
       cardTheme: CardThemeData(
@@ -94,7 +100,8 @@ class AppTheme {
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.sora(
+        titleTextStyle: TextStyle(
+          fontFamily: AppTextStyles.titleFamily,
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: colorScheme.onSurface,

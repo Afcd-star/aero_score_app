@@ -121,6 +121,11 @@ presentacion, con cincuenta y dos errores concentrados en lecturas implicitas de
 
 ## 5. Metricas medidas al cierre 0.3.0
 
+Esta seccion es un retrato historico del cierre 0.3.0, no el estado
+actual. Sus cifras son las medidas en ese hito y se conservan como
+registro. El estado actual vive en el README, y cada hito futuro anade
+su propia seccion en lugar de mutar esta.
+
 - Pruebas: setenta y nueve, verdes.
 - Errores de analisis: sesenta y seis. Primera bajada de la linea base,
   que estaba en sesenta y siete.

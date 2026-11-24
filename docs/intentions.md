@@ -2238,3 +2238,70 @@ localizado detrás del conjunto, degradado vertical suave de transparente
 abajo a semioscuro arriba solo en esa franja, para lectura con contraste
 garantizado. No se implementa aquí para no romper la atomicidad del gesto
 de ruta.
+
+## Deuda diferida, latencia de la arranque y fotograma blanco previo
+
+Reporte del autor con video y fotos: del fundido al acceso pasan unos
+cuatro segundos. La animacion dura dos mil quinientos milisegundos, asi
+que sobran alrededor de mil quinientos. Hipotesis del lead, sin medir
+todavia: decodificacion del PNG de dos megas en un telefono modesto mas
+la transicion de ruta. Se difiere a peticion del autor para cuando la app
+este terminada o casi.
+
+Plan propuesto para ese gesto, no aplicado: precargar la imagen antes de
+arrancar el temporizador, medir el reparto real entre decodificacion y
+animacion, y decidir si se acorta la meseta o se navega al terminar la
+meseta en lugar de al completar la salida.
+
+Correccion de un hecho dicho antes. El fotograma previo al motor es
+blanco, no negro, como mostro la foto del autor. Es la ventana de
+lanzamiento por defecto de Android, y la capa nativa pendiente la tapara
+con el color de marca. El fotograma oscuro siguiente es el fundido Dart
+arrancando en opacidad cero sobre la base del andamio, esperado.
+
+## Prominencia del logo en la arranque, centrado con velo a sangre
+
+Decision del autor: centrar el conjunto de marca y anadir velo si ayuda a
+que el fondo no se lleve el contraste. Se revisa la recomendacion previa
+del lead de mantenerlo arriba, porque la capa nativa centra el logo y
+mantener la Dart arriba cambiaba el problema de contraste por un salto de
+posicion en el primer fotograma de marca, que es peor.
+
+Defecto de la propuesta anterior, cazado antes de codificar. Un velo
+rectangular ajustado al conjunto deja canto duro, porque el radio del
+degradado radial se mide contra el lado corto de la caja y no llega a
+cero antes del borde, asi que el rectangulo se recorta visible sobre el
+arte. La forma correcta es velo a sangre centrado, que se desvanece
+dentro de la pantalla y no tiene borde que recortar.
+
+Forma adoptada. Velo radial a sangre con meseta opaca hasta la mitad del
+radio y desvanecido completo antes del borde, radio como fraccion del
+lado corto para que escale en pantallas estrechas, conjunto centrado y
+logo en ciento cincuenta y seis.
+
+Verificacion numerica integrada en la suite de contraste existente,
+reutilizando su calculo de luminancia y de razon, sin duplicar nada. El
+autor entrego el archivo para evitar la deuda que habria creado un
+archivo autocontenido, y el lead retiro su propuesta de archivo suelto.
+Dos pruebas: el nombre se lee sobre el peor caso del arte bajo la meseta
+del velo, y sin velo ese mismo blanco se lleva el nombre, que es el
+patron que ya usa la suite para probar que el defecto existe sin el
+arreglo y que impide retirar el velo creyendo que sobra. Pruebas en
+ochenta y tres.
+
+Correccion de metodo, corregir sin verificar existencia. El bloque del
+lead intento corregir un parrafo de este registro sin comprobar antes
+que la seccion existiera, y el conteo de ocurrencias en cero probo que
+nunca se habia anexado. Contramedida: toda correccion de bitacora
+comprueba existencia de la seccion antes de sustituir, y toda anexion
+comprueba su titulo antes de escribir.
+
+Contramedida de conteos, el contador de texto no es fuente de puerta.
+Dos lecturas infladas distintas, setecientas treinta y una y ochocientas
+veintiuna informaciones con cinco avisos, contra la lectura de maquina
+que lista los cuatro avisos conocidos y cuyo desglose por regla suma
+seiscientas ochenta y cinco exactas. La causa del artefacto no esta
+probada y no se inventa. Los conteos de la puerta pasan a salir del
+formato de maquina con comprobacion de suma de severidades contra el
+total, y el conteo de pruebas se vuelve guarda dura y no solo codigo de
+salida.

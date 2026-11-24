@@ -17,10 +17,14 @@ documento.
 
 ## Inventario real, catorce archivos
 
-Este documento inventaria solo lo que vive en `shared`. Las piezas que
+Este documento inventaria solo los widgets reutilizables del catalogo,
+los que viven en `shared/presentation/widgets/aero`. Las piezas que
 salieron por pertenencia se buscan en su feature: la tarjeta de
 asignacion en auth, la accion rapida y la tarjeta de metrica del panel en
-admin, y la tarjeta y la hoja de puntuacion en scoring.
+admin, y la tarjeta y la hoja de puntuacion en scoring. Las vistas
+transversales que viven en `shared/presentation/views`, como la pantalla
+de arranque, no son piezas de catalogo reutilizables y se documentan en
+su propio frente.
 
 Catalogo Aero, catorce archivos:
 

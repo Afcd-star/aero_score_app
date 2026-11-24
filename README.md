@@ -50,12 +50,12 @@ errores concentrados en lecturas de datos sin tipar. Sus rutas ya no se alcanzan
 
 ## Metricas medidas
 
-- Pruebas automatizadas: setenta y nueve, verdes.
-- Errores de analisis estatico: sesenta y seis, repartidos en puntuacion
-cincuenta y dos, eventos once y catalogo compartido tres. Ademas cuatro
-advertencias y ochocientas ochenta informaciones del analizador. El
-editor suma cinco entradas mas porque sintetiza los comentarios por
-hacer, que no son diagnosticos.
+- Pruebas automatizadas: ochenta y una, verdes.
+- Errores de analisis estatico: sesenta y tres, repartidos en puntuacion
+cincuenta y dos y eventos once. El catalogo compartido quedo en cero tras
+arreglar sus tres errores. Ademas cuatro advertencias, todas marcadores
+por hacer con estilo Flutter, declarados aparte como deuda y no sumados,
+y seiscientas ochenta y cinco informaciones del analizador.
 - Modulos en cero avisos: solo equipos. Administracion recibio los dos
 widgets del panel con dieciseis informaciones, y la tarjeta de
 asignacion se movio a autenticacion, que suma veinte.

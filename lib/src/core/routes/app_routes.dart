@@ -18,6 +18,7 @@ import 'package:aero_score_app/src/'
 import 'package:aero_score_app/src/'
     'features/scoring/presentation/'
     'views/judge_principal_placeholder_view.dart';
+import 'package:aero_score_app/src/shared/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -27,18 +28,24 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
 
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/splash',
     debugLogDiagnostics: true,
     redirect: (_, state) {
       final location = state.matchedLocation;
 
+      // La pantalla de arranque se goberna sola con su
+      // temporizador, asi que el redireccionamiento no la
+      // interrumpe en ningun estado.
+      if (location == '/splash') {
+        return null;
+      }
+
       return switch (authState) {
-        AuthInitial() || AuthLoading() || AuthError() =>
-          location == '/login' ? null : '/login',
+        AuthInitial() ||
+        AuthLoading() ||
+        AuthError() => location == '/login' ? null : '/login',
         AuthPendingApproval() =>
-          location == '/pending-approval'
-              ? null
-              : '/pending-approval',
+          location == '/pending-approval' ? null : '/pending-approval',
         AuthSuccess(:final user) => _successRedirect(
           location: location,
           user: user,
@@ -46,6 +53,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       };
     },
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (_, _) => const SplashView(),
+      ),
       GoRoute(
         path: '/login',
         builder: (_, _) => const AuthView(),
@@ -197,8 +208,7 @@ String? _successRedirect({
   }
 
   if (isOrganizerRoute) {
-    if (user.role == UserRole.admin ||
-        user.role == UserRole.organizer) {
+    if (user.role == UserRole.admin || user.role == UserRole.organizer) {
       return null;
     }
     return _routeForRole(user.role);

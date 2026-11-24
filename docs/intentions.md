@@ -2254,3 +2254,131 @@ valores estables. Se confirma la regla ya escrita: una lectura que
 contradice se remide antes de teorizar, y el paquete de reglas que se
 re-resuelve tras cambios grandes de manifiesto puede desplazar la base
 sin que haya defecto nuestro.
+
+## Gesto de ruta de la splash, capa rica montada como ruta inicial
+
+Decisión de arquitectura en dos capas. La capa nativa no puede pintar una
+imagen a sangre, solo color y logo centrado, asi que el arte de cintas no
+vive ahí. La capa rica se monta como ruta inicial del enrutador, no como
+envoltorio en main, para aprovechar el enrutamiento ya limpio y no tocar
+el montaje raíz. La ruta se llama splash y gobierna su propia salida con
+un temporizador de entrada, meseta y salida de unos dos mil quinientos
+milisegundos.
+
+Guarda temprana del redireccionamiento. El redirect expulsaba toda
+ubicación no autenticada hacia login, asi que una ruta inicial splash
+moría instantáneamente en AuthInitial. Se añade una exclusión temprana
+que devuelve null cuando la ubicación es splash en cualquier estado, de
+modo que la splash decide cuándo ir a login y el redirect calcula el
+destino real al salir de ella.
+
+Consolidación de dos arreglos. El autor corrigió que context.go devuelve
+void en go_router diecisiete y se llama directo, no envuelto. El lead
+reescribió la vista de splash completa para codificar ese arreglo sin
+ambigüedad y para silenciar discarded_futures envolviendo forward, que sí
+devuelve TickerFuture. Reescribir el archivo propio en vez de anclar regex
+sobre un archivo editado a mano es la vía determinista.
+
+## Error de herramienta del lead, YAML pasado al formateador de Dart
+
+El lead incluyó pubspec.yaml en dart format. Ese comando solo lee código
+Dart, trató el YAML como fuente Dart, y de ahí los caracteres ilegales en
+las tildes y la pista de la línea uno sobre variables declaradas con
+const, final, var o nombre de tipo. No corrompió archivos, el formateador
+aborta al no parsear y no escribe, el pub get ya había validado el YAML, y
+el análisis y las pruebas volvieron limpios. Contramedida, formatear solo
+archivos Dart. Regla escrita, nunca pasar un manifiesto al formateador de
+código.
+
+## Atasco de pegado en consola, parser sucio no contenido
+
+El bloque grande de registro y commit no corrió porque el intérprete de
+PowerShell ya estaba en modo continuación antes de pegarlo, lo que prueban
+los signos de continuación al inicio del pegado. El pegado se acumuló sobre
+un parser abierto y nada ejecutó, ni registro ni puerta ni commit. Los
+here-strings de registro y de mensaje funcionan en terminal limpia, como
+demostraron los commits previos, asi que el fallo fue de método de pegado,
+no de contenido del bloque. Contramedida, terminal nueva y bloque grande
+con guarda auto-defensiva de la vista de splash, que lee el archivo y
+verifica las tres piezas canónicas antes de commitear, para no depender de
+que el autor haya conservado el import y el envoltorio del forward tras su
+edición a mano del void.
+
+## Deuda de perfeccionamiento, prominencia del logo en la splash
+
+Reporte del autor con foto, el logo se ve secundario por estar arriba y
+no integrado, en parte por el arte. Veredicto del lead, no centrar el
+conjunto de marca en el medio exacto, porque el cruce de cintas magenta y
+violeta está ahí y el logo tiene degradado rosa y magenta, magenta sobre
+magenta mata la separación, riesgo que el autor intuyó. Agrandar sin más
+tampoco salva. Vía correcta registrada para un gesto posterior, mantener
+el conjunto en la zona calma de arriba, subir el tamaño de forma moderada
+de ciento treinta y dos a unos ciento cincuenta y seis, y añadir un velo
+localizado detrás del conjunto, degradado vertical suave de transparente
+abajo a semioscuro arriba solo en esa franja, para lectura con contraste
+garantizado. No se implementa aquí para no romper la atomicidad del gesto
+de ruta.
+
+## Gesto de ruta de la splash, capa rica montada como ruta inicial
+
+Decisión de arquitectura en dos capas. La capa nativa no puede pintar una
+imagen a sangre, solo color y logo centrado, asi que el arte de cintas no
+vive ahí. La capa rica se monta como ruta inicial del enrutador, no como
+envoltorio en main, para aprovechar el enrutamiento ya limpio y no tocar
+el montaje raíz. La ruta se llama splash y gobierna su propia salida con
+un temporizador de entrada, meseta y salida de unos dos mil quinientos
+milisegundos.
+
+Guarda temprana del redireccionamiento. El redirect expulsaba toda
+ubicación no autenticada hacia login, asi que una ruta inicial splash
+moría instantáneamente en AuthInitial. Se añade una exclusión temprana
+que devuelve null cuando la ubicación es splash en cualquier estado, de
+modo que la splash decide cuándo ir a login y el redirect calcula el
+destino real al salir de ella.
+
+Consolidación de dos arreglos. El autor corrigió que context.go devuelve
+void en go_router diecisiete y se llama directo, no envuelto. El lead
+reescribió la vista de splash completa para codificar ese arreglo sin
+ambigüedad y para silenciar discarded_futures envolviendo forward, que sí
+devuelve TickerFuture. Reescribir el archivo propio en vez de anclar regex
+sobre un archivo editado a mano es la vía determinista.
+
+## Error de herramienta del lead, YAML pasado al formateador de Dart
+
+El lead incluyó pubspec.yaml en dart format. Ese comando solo lee código
+Dart, trató el YAML como fuente Dart, y de ahí los caracteres ilegales en
+las tildes y la pista de la línea uno sobre variables declaradas con
+const, final, var o nombre de tipo. No corrompió archivos, el formateador
+aborta al no parsear y no escribe, el pub get ya había validado el YAML, y
+el análisis y las pruebas volvieron limpios. Contramedida, formatear solo
+archivos Dart. Regla escrita, nunca pasar un manifiesto al formateador de
+código.
+
+## Atasco de pegado en consola, parser sucio no contenido
+
+El bloque grande de registro y commit no corrió porque el intérprete de
+PowerShell ya estaba en modo continuación antes de pegarlo, lo que prueban
+los signos de continuación al inicio del pegado. El pegado se acumuló sobre
+un parser abierto y nada ejecutó, ni registro ni puerta ni commit. Los
+here-strings de registro y de mensaje funcionan en terminal limpia, como
+demostraron los commits previos, asi que el fallo fue de método de pegado,
+no de contenido del bloque. Contramedida, terminal nueva y bloque grande
+con guarda auto-defensiva de la vista de splash, que lee el archivo y
+verifica las tres piezas canónicas antes de commitear, para no depender de
+que el autor haya conservado el import y el envoltorio del forward tras su
+edición a mano del void.
+
+## Deuda de perfeccionamiento, prominencia del logo en la splash
+
+Reporte del autor con foto, el logo se ve secundario por estar arriba y
+no integrado, en parte por el arte. Veredicto del lead, no centrar el
+conjunto de marca en el medio exacto, porque el cruce de cintas magenta y
+violeta está ahí y el logo tiene degradado rosa y magenta, magenta sobre
+magenta mata la separación, riesgo que el autor intuyó. Agrandar sin más
+tampoco salva. Vía correcta registrada para un gesto posterior, mantener
+el conjunto en la zona calma de arriba, subir el tamaño de forma moderada
+de ciento treinta y dos a unos ciento cincuenta y seis, y añadir un velo
+localizado detrás del conjunto, degradado vertical suave de transparente
+abajo a semioscuro arriba solo en esa franja, para lectura con contraste
+garantizado. No se implementa aquí para no romper la atomicidad del gesto
+de ruta.

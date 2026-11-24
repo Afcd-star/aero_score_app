@@ -1,101 +1,147 @@
-# Plan de frentes restantes
+# Plan de frentes restantes, con criterios de aceptacion
 
 Estado verificado al abrir este plan.
-- HEAD: 1437fdf (casco oscuro fijo con lavados radiales y acoplamiento).
-- Arbol de trabajo: limpio.
-- Base estable medida: 63 errores, 4 avisos, 685 informaciones, 81 pruebas verdes.
-- Cifras del README desactualizadas (declara 66, 79, 880). Se corrigen en F6,
-  no ahora, porque los frentes van a moverlas otra vez.
+- HEAD al redactar: 54ed035.
+- Base medida en la ultima puerta: 63 errores, 4 avisos, 685 informaciones, 81 pruebas verdes.
+- El README y el informe declaran 66 errores, 79 pruebas y 880 informaciones mas 5 del editor. Ese hueco de 3 errores y esas cifras caducas se reconcilian en F0.1 con el texto vivo en mano, no desde copias.
+- El intentions en disco trae bloques duplicados por el auxiliar de anexión del lead. Se deduplica en F0.1.
+- El widgets_usage en disco es la guia aspiracional vieja de unas 53 piezas. El plan no ancla contra el. La guia viva del catalogo es el inventario de 15 archivos en shared.
 
-## Principios de orden
-1. Cerrar lo abierto del frente de fondo ya commiteado.
-2. UX viva reportada por el autor, con el què (mensajes) antes del cuàndo
-   (hìbrido de validaciòn).
-3. Arranque (splash), que mata el negro nativo.
-4. Higiene de catàlogo (descableado y piezas muertas), divida en subfrentes.
-5. Documentaciòn del catàlogo final (cierre de shared con versiòn y etiqueta).
-6. Arquitectura no bloqueante (deuda de raìz del README).
-7. Lanzamiento bloqueante (frente de Android), el màs grande y con
-   precondiciones de backend.
+## Principios de orden, tomados del propio intentions
+1. Direccion de dependencia manda: shared final antes que las features que lo adoptan, para que eventos y demas adopten el catalogo una sola vez.
+2. Puntuacion se construye al final de su eje, porque consume identidad de juez, roster, categoria y evento. Construir al consumidor antes que sus dependencias obliga a reescribir su capa de consumo cada vez que algo de abajo se mueve.
+3. La vista de visitante consume la salida de puntuacion y va despues de ella.
+4. La fase inicial es CONSTRUIR puntuacion y visitante de verdad, no solo sanear gestion. Eso reencuadra el eje del plan.
+5. El reordenamiento de produccion (Android, sincronizacion, seguridad por rol) va al final, cuando exista juez que consuma el permiso y visitante que vea el resultado protegido.
+6. Cerrar lo abierto de identidad y arranque antes de abrir el eje de construccion.
 
-Regla transversal: ningùn frente se commitea sin su puerta. Los frentes de
-superficie exigen gate de ojo; los de forma se verifican por nùmero; los
-documentales no exigen ojo. Cada frente declara su precondiciòn de lectura:
-si el lead no ha leìdo el archivo, pide el archivo antes de anclar
-sustituciones. Prohibido anclar contra `widgets_usage.md`, que es corpus
-viejo con grupos movidos y deuda de contraste ya corregida.
+Regla transversal: ningun frente se commitea sin su puerta. Los frentes de superficie exigen gate de ojo previo al commit, con la lista de puntos de riesgo que el lead declara en la entrega. Los de forma se verifican por numero. Los documentales no exigen ojo. Cada frente declara su precondicion de lectura: si el lead no ha leido el archivo, pide el archivo antes de anclar sustituciones. Prohibido anclar contra widgets_usage. Prohibido el guion medio y la raya en cualquier literal, comentario o texto de este plan y del codigo. Prohibidas las formas verbales de mejora forzada de rendimiento; se emplean ajuste, afinamiento, mejora, rendimiento o eficiencia segun contexto.
 
-## Tabla de frentes en orden
+## Fase 0, higiene y reconciliacion, antes de construir nada
 
-| # | Frente | Naturaleza | Puerta | Precondiciòn de lectura |
-|---|--------|-----------|--------|------------------------|
-| F1 | Regla de dos niveles de fondo y correcciòn de la guìa de widgets | Documental | Sin ojo | Leer la guìa real del catàlogo (no el corpus viejo) |
-| F2 | Coherencia de mensajes: catàlogo con plantilla fija y punto ùnico de validaciòn | Forma y lògica | Ojo parcial (los textos se ven) | Leer las vistas con validadores y los diàlogos de alerta |
-| F3 | Hìbrido de validaciòn: callar hasta el primer desenfoque y validar en vivo al corregir | Superficie | Ojo propagado a todos los formularios | Leer `aero_select.dart` y el tàrea de màs de una lìnea |
-| F4 | Splash nativa con `flutter_native_splash` | Superficie y nativo | Parada completa en dispositivo | Decidir arte: procedural vectorial o raster regenerado a resoluciòn |
-| F5 | Descableado y piezas muertas, en tres subfrentes | Mixto | Ojo y prueba de render | Leer tema, input, botòn, selector, enrutador y formulario de equipo |
-| F6 | Cierre documental de shared con versiòn y etiqueta | Documental | Sin ojo | Estado final del catàlogo tras F5 |
-| F7 | Deuda de arquitectura no bloqueante | Forma | Sin ojo o nùmero | Leer entidad de usuario, modelo, enrutador, filtro y tarjeta |
-| F8 | Lanzamiento Android bloqueante | Nativo y backend | Dispositivo fìsico | Precondiciones de backend que hoy no existen |
+### F0.1 Reconciliacion de metricas y limpieza documental
+Naturaleza: documental y de medida. Puerta: sin ojo, se verifica por numero y por grep. Precondicion de lectura: texto vivo de README, informe, changelog e intentions desde disco, no desde copias.
+Criterios de aceptacion:
+- El total de errores del doc coincide con el medido por area, y el desglose por area cuadra con el total. Si shared tiene 3 errores, se registran y se arreglan o se declara que el doc estaba mal. Si shared tiene 0, se registra el frente que los bajo.
+- intentions sin bloques duplicados: cada titulo de frente aparece una sola vez.
+- README sin linea de guion suelto huérfano y sin contradiccion interna entre cero avisos y dieciseis informaciones por modulo.
+- Las cifras de pruebas, errores e informaciones del doc son las del analizador del CLI con el alcance del config, y los marcadores por hacer se declaran aparte como deuda, no sumados a la informacion.
+- El conteo de pruebas se remide al cerrar cada frente, no solo el de errores, porque ambos se mueven.
 
-## Desglose de subfrentes
+### F0.2 Cierre de splash, capa nativa y deuda del logo
+Naturaleza: superficie y nativo. Puerta: parada completa en dispositivo, gate de ojo. Precondicion de lectura: main.dart, app_colors.dart (hex de backgroundBase ya leido como 0A0515), y el enrutador ya completo.
+Criterios de aceptacion:
+- flutter_native_splash con color 0A0515 identico a la base oscura y el logo real centrado, android en verdadero, web en falso. El negro anterior al motor desaparece en parada completa.
+- El corte de la capa nativa a la capa Dart es invisible, porque el color de fondo es el mismo hex.
+- El conjunto de marca de la capa Dart sube el logo de 132 a unos 156 y añade un velo localizado detras, degradado vertical suave de transparente abajo a semioscuro arriba solo en esa franja, para que el nombre lea con contraste garantizado sobre el cruce de cintas. No se centra el conjunto en el medio exacto, porque el cruce magenta y violeta mata la separacion del logo de degradado rosa.
+- Puerta estatica en 63, 4, 685 y 81 antes del ojo, y el commit limitado por rutas con el recurso y los archivos nativos generados.
 
-### F5a Descableado de catàlogo
-- Colores cableados del tema fuera de la paleta (literales hex y blancos/negros
-  con alfa en `app_theme.dart`).
-- Borde fucsia a nivel de botòn elevado en el tema, causa del aspecto viejo de
-  botòn blanco con canto fucsia.
-- Relleno y radio de la decoraciòn de entrada que no coinciden con los de la
-  pieza del catàlogo (radio 12 contra 10, relleno de esquema contra token).
-- Blanco cableado y tipografìa cruda del selector de tema, y pares duplicados
-  de icono y etiqueta.
-- Modo solo icono del botòn en 44, con grep de consumidores y prueba de render.
+## Fase 1, catalogo final shared, eje por direccion de dependencia
 
-### F5b Descableado de vistas
-- Variante primaria indebida del formulario de equipo (agregar competidores
-  primary cuando debe ser contorno, como agregar equipos del evento).
-- Texto crudo del Material en las rutas de entrenador y organizador del
-  enrutador.
-- Botòn crudo con icono rojo fijo en el constructor de error del enrutador.
+### F1.1 Las cuatro piezas por crear
+Naturaleza: forma y superficie. Puerta: prueba de render a ancho estrecho y gate de ojo donde haya consumidor vivo. Precondicion de lectura: grep de la pieza y de sus tokens, y lectura de los sitios crudos que debe sustituir.
+Criterios de aceptacion:
+- Aviso temporal con su tema, marcador de modulo, indicador de progreso y hoja modal, cada una nace con documentacion publica completa, cero avisos de public_member_api_docs en su propio archivo.
+- Cada pieza lleva prueba de render a ancho estrecho, porque el analizador no detecta desbordes.
+- El marcador de modulo sustituye los destinos crudos de entrenador y organizador en el enrutador y evalua la vista temporal de juez principal. El aviso temporal limpia los avisos crudos repetidos. La hoja modal absorbe el encabezado con degradado y el boton de cierre duplicados en tres hojas. El indicador de progreso sustituye los CircularProgressIndicator crudos.
+- Toda eleccion de estilo que propague a muchos sitios va al autor antes de codificarse, porque el gate caza defectos en superficie viva pero no puede cazar una inconsistencia de estilo en un commit fundacional sin consumidor.
 
-### F5c Piezas muertas
-- Borde muerto del botòn primario (ya registrado).
-- Marcador sin efecto del botòn.
-- Imagen reservada del avatar.
-- Escape de filtro de competidores pendiente de adoptar (README).
-Cada pieza con grep de consumidores y prueba de render a ancho estrecho. Si el
-grep no da consumidores, se retira; si los da, se arregla el uso.
+### F1.2 Documentacion publica de las piezas heredadas
+Naturaleza: documental y de forma. Puerta: sin ojo, se verifica por numero. Precondicion de lectura: mapa medido de informaciones por archivo de shared.
+Criterios de aceptacion:
+- shared en cero errores y cero informaciones de documentacion publica. El mapa medido dice selector 36, area de texto 33, boton 26, interruptor retirado, entrada de texto 19, insignia 18, envoltorio de formulario 12, tarjeta 7, esqueleto 6, avatar 5, tarjeta de seccion 5, dialogo de alerta 4, fondo 3.
+- Las piezas nacidas documentadas mantienen cero avisos. Retrofitar cuesta dos ordenes de magnitud mas que documentar al nacer, regla adoptada.
 
-## Deuda del README clasificada (para no perderla)
+### F1.3 Piezas muertas
+Naturaleza: refactor. Puerta: grep de consumidores y prueba de render tras el retiro. Precondicion de lectura: grafo de consumidores de cada parametro.
+Criterios de aceptacion:
+- Borde muerto del boton primario, marcador isRequired sin efecto, imagen reservada del avatar, y simplificacion de la entrada de texto a sin estado. Cada retiro con grep de consumidores vacio antes de quitar, porque es API expuesta.
+- Si el grep da consumidores, se arregla el uso en lugar de retirar la pieza.
 
-No bloqueante, va en F7:
-- Enumerado de estado de cuenta, para retirar literales sueltos de entidad,
-  modelo, enrutador, filtro y tarjeta.
-- `AppEnvironment` como segunda fuente de verdad de entorno frente al define
-  de compilaciòn.
-- Notifiers de estado de interfaz alojados en data di, violaciòn de direcciòn
-  de dependencia.
-- Log de auditorìa inexistente en el backend; actividad reciente usa heurìstica
-  de marcas de tiempo.
-- Registro de rol desconocido solo de depuraciòn.
-- Prueba de widget del guard de alcance del lote, diferida.
-- Repositorios sin prueba por cliente no inyectable.
-- Aviso de build_runner clavado por la cadena de riverpod_lint.
+### F1.4 Descableado de catalogo
+Naturaleza: mixto. Puerta: grep y prueba de render, gate de ojo propagado. Precondicion de lectura: app_theme.dart, entrada de texto, boton, selector, enrutador y formulario de equipo.
+Criterios de aceptacion:
+- Cero literales hex en app_theme fuera de AppColors. Cero referencias a la paleta de Material (Colors.blue, green, grey shade) en shared. El borde fucsia de boton elevado a nivel de tema se retira. Relleno y radio de la decoracion de entrada coinciden con los de la pieza del catalogo. La tipografia cruda del selector de tema pasa al catalogo tipografico y los pares duplicados de icono y etiqueta se extraen a una lista constante.
 
-Bloqueante, va en F8:
-- Manifiesto principal de Android sin permiso de red.
-- URL de producciòn del entorno como marcador.
-- Rutas de puntuaciòn apuntando a pantalla sin construir.
-- Espectador sin destino propio, hoy acaba en cuenta pendiente, que le miente.
-- Guard de rutas por prefijo, no por permisos dinàmicos de la colecciòn Roles.
-- Sincronizaciòn sin conexiòn no iniciada, con precondiciòn de backend: una
-  colecciòn de cola o de estado que hoy no està en ninguna migraciòn.
+### F1.5 Regla de dos niveles de fondo en la guia viva
+Naturaleza: documental. Puerta: sin ojo. Precondicion de lectura: guia viva del catalogo, no widgets_usage.
+Criterios de aceptacion:
+- La guia inventaria solo lo vivo en shared, quince archivos, no cincuenta y tres. Anade una linea de contrato que diga que este documento solo inventaria lo vivo en shared y que las piezas reubicadas por pertenencia se buscan en su feature. Declara el sistema de dos niveles: marca con arte raster en entrada, trabajo con casco oscuro y lavados radiales en ambos modos, y prohibido arte a sangre en pantallas de datos.
+
+## Fase 2, UX viva transversal
+
+### F2.1 Coherencia de mensajes
+Naturaleza: dominio y presentacion. Puerta: grep y gate de ojo en los formularios. Precondicion de lectura: vistas con validadores y dialogos de alerta, y decision previa de si dominio devuelve codigos o cadenas.
+Criterios de aceptacion:
+- Catalogo de mensajes con plantilla fija y punto unico de validacion. Grep de cadenas de validacion y error manuscritas en dominio y datos vacio, porque esos mensajes salen del catalogo. Un solo punto de validacion por formulario. La estructura es igual en toda la app.
+
+### F2.2 Hibrido de validacion
+Naturaleza: superficie. Puerta: prueba de widget y gate de ojo propagado a todos los formularios. Precondicion de lectura: aero_select.dart y el area de texto multilinea, que no se han leido en este hilo.
+Criterios de aceptacion:
+- El campo calla hasta su primer desenfoque y desde ahi valida en vivo. Prueba de widget que afirma que el error aparece al desenfoque y desaparece al corregir sin tocar otro campo. Nodo de foco rastrea el primer desenfoque en entrada, selector simple y area, y el area pasa a tener estado.
+
+## Fase 3, features de gestion saneadas, shared ya final
+
+### F3.1 Eventos
+Naturaleza: forma y adopcion. Puerta: grep, prueba y gate de ojo. Precondicion de lectura: event_list_view, formulario de evento y EventStatusBadge.
+Criterios de aceptacion:
+- Los 11 errores de presentacion (5 lista y 6 formulario, mismas clases ya corregidas en equipos) desaparecen. El escape de filtro de core se adopta. EventStatusBadge migra a variantes semanticas del catalogo. Los chips de filtro crudos (GestureDetector mas Container con hex cableado, incluido 8B00FF que deberia ser glowViolet) pasan a AeroFilterBar. El CircularProgressIndicator crudo pasa al indicador del catalogo. El Divider crudo y el debugPrint con TODO y codigo comentado se retiran. La cabecera con ruta vieja se corrige.
+
+### F3.2 Competidores
+Naturaleza: forma y adopcion. Puerta: grep y prueba. Precondicion de lectura: repositorio y vista de lista de competidores.
+Criterios de aceptacion:
+- El escape de filtro se adopta, grep de interpolacion de filtro sin escapar vacio. Cabecera con ruta vieja corregida. Crudos migrados al catalogo.
+
+### F3.3 Autenticacion
+Naturaleza: forma y dominio. Puerta: prueba numerica de contraste y gate de ojo. Precondicion de lectura: entidad de usuario, modelo, enrutador, filtro y tarjeta de asignacion.
+Criterios de aceptacion:
+- Enumerado de estado de cuenta con conversion desde almacenamiento, que retira los literales sueltos Active, Inactive y Pending Approval de las siete rutas. Cero literales de estado en entidad, modelo, enrutador, filtro y tarjeta. Chip de rol O1 con pares de contenedor y texto por modo para los nueve roles, prueba numerica de contraste que afirma cada par por encima del umbral de 4.5 para texto pequeno. Pase unificado de la tarjeta con el dialogo y los avisos en una sola apertura.
+
+## Fase 4, toolchain
+
+### F4.1 Migracion coherente de la cadena riverpod
+Naturaleza: forma y generacion. Puerta: gate global, pub outdated y cero regresión en pruebas. Precondicion de lectura: versiones objetivo verificadas, no upgrade suelto.
+Criterios de aceptacion:
+- La cadena completa de riverpod (annotation, generator, lint, analyzer_utils y custom_lint_visitor) migra de forma coherente. El aviso de build_runner que compara el SDK con el analyzer desaparece. build_runner conserva la bandera de salidas en conflicto o se actualiza el ritual de gate. La capa cuatro de admin migra a anotaciones en el mismo gesto, sin mezcla de manual y generado en la misma funcionalidad.
+
+## Fase 5, construccion de la fase inicial, el corazon
+
+### F5.1 Puntuacion
+Naturaleza: construccion, no limpieza. Puerta: gate de pruebas y esquema real delante. Precondicion de lectura: esquema vivo de PocketBase, no migraciones viejas.
+Criterios de aceptacion:
+- Los 52 errores de lecturas implicitas de dinamico en los tres modelos desaparecen con conversiones estrictas contra el esquema vivo. Prueba de repositorio con cliente inyectable, precondicion de refactorizar el contrato de acceso. Las rutas de juez apuntan a la vista real construida, no al marcador provisional. Orden de capas fijo: dominio, datos, inyeccion, presentacion.
+
+### F5.2 Visitante y resultados
+Naturaleza: construccion. Puerta: gate de ojo con datos reales. Precondicion de lectura: salida de puntuacion ya construida.
+Criterios de aceptacion:
+- El rol espectador tiene destino propio, no la pantalla de cuenta pendiente que le miente. Tabla y paginacion del catalogo adoptadas. La vista consume la salida de puntuacion.
+
+### F5.3 Planilla de equipo, fase obligatoria
+Naturaleza: backend, datos y presentacion. Puerta: gate de ojo y prueba de subida. Precondicion de lectura: historial de migraciones de Teams reconciliado.
+Criterios de aceptacion:
+- Backend anade un campo de archivo a Teams y su migracion, reconciliando el historial que hoy no cuadra con el esquema vivo. Datos mapea el campo con lectura segura y decide si la entidad expone id de archivo o objeto de archivo. Presentacion restaura la subida real con validacion de extension y tamano y la llamada multipart de PocketBase, en lugar del selector muerto que se quito.
+
+## Fase 6, lanzamiento, reordenado al final
+
+### F6.1 Android
+Naturaleza: nativo y seguridad. Puerta: dispositivo fisico y build de release. Precondicion de lectura: manifiesto principal y de depuracion leidos.
+Criterios de aceptacion:
+- Permiso de red declarado en el manifiesto principal, porque sin el la release no tiene red. Texto claro solo en depuracion, no global, porque abrir HTTP sin cifrar en produccion seria cambio de postura de seguridad. URL de produccion real, no marcador. Guard de rutas por permisos dinamicos de la coleccion Roles, con datos sembrados y consumidor real, no por prefijo.
+
+### F6.2 Sincronizacion sin conexion
+Naturaleza: backend y dominio. Puerta: ciclo de punta a punta offline. Precondicion de lectura: coleccion de cola en migracion.
+Criterios de aceptacion:
+- La coleccion de cola o de estado existe en una migracion. El ciclo registro, equipos, competidores, entrenadores y jueces emitiendo puntuaciones se ejecuta de punta a punta offline y reconcilia al reconectar.
+
+## Fase 7, cierre documental
+
+### F7.1 Cierre de shared y version
+Naturaleza: documental. Puerta: sin ojo, se verifica por numero. Precondicion de lectura: estado final del catalogo tras F5 y F3.
+Criterios de aceptacion:
+- Un solo gesto ata version, changelog, informe, intentions y etiqueta anotada. Las cifras del doc son la medicion fresca, incluida la reconciliacion de F0.1. El changelog tiene entrada de los frentes de marca, tipografia y splash, y se decide con el autor si son minor 0.4.0 de identidad y arranque o patches 0.3.x. La guia del catalogo es el inventario vivo.
 
 ## Notas de riesgo del plan
-- F4 tiene un bloqueador real: no hay arte de arranque en disco. La decisiòn
-  procedural versus raster se toma con el autor antes de escribir còdigo.
-- F5 sin dividir es inauditable; los tres subfrentes commitean por separado.
-- F8 depende de backend que no existe en este repo; no se puede cerrar solo
-  desde el lado Flutter.
-- El cierre F6 documenta el catàlogo final; si F5 cambia despuès de F6, F6 se
-  reabre. Por eso F6 va al final del eje de catàlogo.
+- F0.2 y F1.1 a F1.4 tocan superficie y catalogo, asi que su gate de ojo es previo al commit y con lista de puntos de riesgo.
+- F5.1 y F5.2 son construccion con precondiciones de backend y de esquema que hoy no estan del todo; no se commitea sin el esquema real delante.
+- F6 depende de backend que no existe en este repo; no se cierra solo desde el lado Flutter.
+- F7 documenta el catalogo final; si F1 o F3 cambian despues de F7, F7 se reabre.

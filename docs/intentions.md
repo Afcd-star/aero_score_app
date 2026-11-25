@@ -2305,3 +2305,31 @@ probada y no se inventa. Los conteos de la puerta pasan a salir del
 formato de maquina con comprobacion de suma de severidades contra el
 total, y el conteo de pruebas se vuelve guarda dura y no solo codigo de
 salida.
+
+## Capa nativa de la arranque, cierre del frente de splash
+
+Hecho medido. La herramienta de arranque nativo entra como dependencia
+solo de desarrollo, con cinco transitivas, y el bloque de desarrollo
+conservo sus diez entradas en orden alfabetico. El color se derivo del
+literal de la base oscura en la paleta, no de memoria, y dio 0A0515. La
+generacion escribio recursos de Android en siete densidades en claro y
+en oscuro, los estilos de lanzamiento y los de la API 31 en adelante, y
+los recursos y el Info.plist de iOS.
+
+Puerta. Errores sesenta y tres, avisos cuatro, informaciones seiscientas
+ochenta y cinco, autoconsistencia por suma de severidades, pruebas en
+ochenta y tres, y lista blanca de rutas sin ninguna fuera de alcance.
+Pase visual del autor en frio, con fotograma de marca y logo centrado
+antes del motor y paso a la capa rica sin costura de color.
+
+Error de herramienta del lead, cerrado. El lead afirmo que en archivo
+de configuracion separado las claves van al nivel superior. La
+herramienta respondio con su contrato: exige la seccion raiz tambien en
+el archivo separado. La generacion aborto antes de escribir nada
+nativo, asi que no hubo dano. Contramedida: el contrato de una
+herramienta lo dicta su mensaje o su codigo, no la memoria del lead.
+
+Decision de generador. No se corre, porque el cambio de manifiesto es
+una dependencia solo de desarrollo y ninguna fuente anotada ni parte
+generada depende de ella. Es el refinamiento ya registrado de la regla
+de generacion, aplicado al caso de dependencia de herramienta.

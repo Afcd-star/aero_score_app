@@ -2362,3 +2362,65 @@ Cobertura. El arranque suena una sola vez por ejecucion fria. Acceso y
 cierre ya no pasan por el arranque. El marcador de juez queda verificado
 por el video del autor y por la prueba de ancho estrecho; entrenador y
 organizador por paridad si no hay cuentas de esos roles.
+
+## Deudas de competidores, detectadas en el pase visual
+
+Una, genero automatico. Verificar que la deteccion automatica del genero
+funcione durante la creacion de competidores, porque el pase visual no la
+ejercito y el dato de genero aparece en la tarjeta sin origen claro.
+
+Dos, formulario duplicado y fuera de linea. Existen dos formularios de
+competidor, uno con prefijo de catalogo dentro de la funcionalidad y otro
+en hoja, y la pantalla llama al que no corresponde, porque el resto de la
+app usa formulario en linea. Unificar en linea, retirar o reubicar el
+duplicado, y corregir el prefijo que usurpa el espacio de nombres del
+catalogo compartido, porque aero es de compartido y no de una feature.
+
+Tres, selectores fuera del catalogo. Revisar que todos los selectores
+provengan de la pieza compartida, porque el pase y el inventario sugieren
+uso crudo en al menos un formulario de competidor.
+
+Contexto del pase. El aviso visto en la captura, texto en ingles y texto
+oscuro ilegible sobre fondo granate, es el SnackBar crudo previo a la
+adopcion, no la pieza nueva, que pinta superficie inversa clara en oscuro
+con icono y barra de acento. Sirve como evidencia de por que la adopcion
+es obligatoria y no como fallo de la pieza, que aun no tenia consumidor.
+Por eso la pieza se valida con un piloto: se adopta un sitio primero, se
+pasa el ojo sobre ese, y se commitea pieza mas piloto juntos.
+
+Mapeo de errores. El mensaje en ingles viene del backend y la app no debe
+pasarlo por transparencia: debe mapearlo al catalogo en espanol. Eso
+pertenece al frente de coherencia de mensajes, no a la adopcion del
+aviso, y se declara aqui para no perderlo.
+
+## Base de pruebas recalibrada a noventa y una, y deudas vistas en las piezas nuevas
+
+Causa medida del salto de base. La expectativa de ochenta y nueve estaba
+mal descompuesta: el toast roto no sumaba sus dos pruebas porque fallaba
+la compilacion, asi que la cuenta real es ochenta y seis sin toast, mas
+dos del toast corregido, mas dos del indicador, mas una de la hoja, o sea
+noventa y uno. La base nueva es guarda dura en noventa y uno. Leccion
+escrita: el conteo de pruebas se descompone por archivo antes de fijar
+expectativa, no se suma a mano.
+
+Documentacion al nacer, violada y corregida en el propio gesto. Las
+piezas nuevas nacieron con siete miembros sin documentacion publica,
+cinco en la hoja y dos en el indicador, que es la regla que el lead
+acaba de adoptar. Contramedida: la puerta de cada gesto de catalogo
+exige perimetro vacio, y esa guarda ya cazaria el descuido.
+
+Doc que mentia sobre el codigo, corregida. El indicador afirmaba que el
+fondo lineal se adapta al brillo, y el codigo usa fondo secundario fijo.
+La doc fiel es fondo secundario fijo sin rama por brillo.
+
+Deudas de descableado vistas en las piezas nuevas, declaradas con
+consumidor. La hoja pinta blanco literal en claro y boton de cierre
+crudo de Material. No se arreglan en este gesto para no mezclar
+naturalezas: viajan al subfrente de descableado junto con la adopcion de
+sus consumidores, donde el ojo en app real las valida.
+
+Decision de gate de las piezas sin consumidor. El aviso, el indicador y
+la hoja se validan en el subfrente de piezas por prueba de render a
+ancho estrecho y puerta estatica. El ojo en app real viaja con el
+subfrente de presentacion de competidores, donde nacen los consumidores
+vivos, conforme a la estrategia de piloto acordada.

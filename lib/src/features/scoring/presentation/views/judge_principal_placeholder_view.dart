@@ -2,17 +2,11 @@
 import 'dart:async';
 
 import 'package:aero_score_app/src/'
-    'core/theme/app_colors.dart';
-import 'package:aero_score_app/src/'
-    'core/theme/text_styles.dart';
-import 'package:aero_score_app/src/'
     'features/auth/data/di/auth_providers.dart';
 import 'package:aero_score_app/src/'
     'features/auth/domain/entities/user_role.dart';
-import 'package:aero_score_app/src/'
-    'shared/presentation/widgets/aero/aero_background.dart';
-import 'package:aero_score_app/src/'
-    'shared/presentation/widgets/aero/aero_button.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
+    'aero_module_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -22,9 +16,9 @@ import 'package:go_router/go_router.dart';
 /// Sirve a los cuatro roles de juez mientras el módulo de puntuación no
 /// está construido. El título sale de la etiqueta en español del catálogo
 /// de identidad, para no duplicar copia. Conserva la palabra principal en
-/// su nombre por historia, y está destinada a ser absorbida por el
-/// marcador de módulo del catálogo cuando se audite shared, así que no se
-/// invierte en renombrarla ahora.
+/// su nombre por historia. Su casco y su contenido viven ahora en el
+/// marcador del catálogo, así que esta vista es solo el adaptador que
+/// aporta título, descripción y acción.
 class JudgePrincipalPlaceholderView extends ConsumerWidget {
   /// Crea la vista provisional para el rol de juez indicado.
   const JudgePrincipalPlaceholderView({required this.role, super.key});
@@ -34,56 +28,15 @@ class JudgePrincipalPlaceholderView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundBase,
-      body: AeroBackground(
-        child: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.verified_outlined,
-                    size: 64,
-                    color: AppColors.fuchsia,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    role.label,
-                    style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Este módulo está en desarrollo. '
-                    'Aún no permite $_pendingAction.',
-                    style: AppTextStyles.baseTextTheme.bodyMedium?.copyWith(
-                      color: AppColors.textPrimary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  AeroButton(
-                    label: 'Cerrar sesión',
-                    onPressed: () {
-                      unawaited(_signOut(context, ref));
-                    },
-                    icon: const Icon(
-                      Icons.logout_rounded,
-                      size: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+    return AeroModulePlaceholder(
+      title: role.label,
+      description:
+          'Este módulo está en desarrollo. '
+          'Aún no permite $_pendingAction.',
+      icon: Icons.verified_outlined,
+      actionLabel: 'Cerrar sesión',
+      actionIcon: Icons.logout_rounded,
+      onAction: () => unawaited(_signOut(context, ref)),
     );
   }
 

@@ -2333,3 +2333,32 @@ Decision de generador. No se corre, porque el cambio de manifiesto es
 una dependencia solo de desarrollo y ninguna fuente anotada ni parte
 generada depende de ella. Es el refinamiento ya registrado de la regla
 de generacion, aplicado al caso de dependencia de herramienta.
+
+## El enrutador deja de repetir el arranque y adopta el marcador
+
+Subparte uno, defecto de repeticion del arranque. El video del autor
+mostro que tras pulsar acceso o cierre la URL pasa por la ruta de
+arranque antes del destino. Causa medida: el enrutador se recrea en cada
+cambio de autenticacion, deuda registrada, y toda recreacion arranca en
+la ubicacion inicial, que era la ruta de arranque. Arreglo minimo: una
+marca de modulo que dice si el arranque ya se sirvio en esta ejecucion,
+puesta cuando la ruta de arranque se sirve por primera vez, y ubicacion
+inicial de acceso despues de esa primera vez. La marca sobrevive a las
+recreaciones por ser de modulo. El efecto secundario en el
+redireccionamiento va documentado porque es determinista e idempotente,
+y la alternativa limpia, dejar de recrear el enrutador, es un frente
+mayor que no se abre a mitad de catalogo.
+
+Subparte dos, adopcion del marcador en el enrutador. Los destinos de
+entrenador y organizador dejan de ser texto centrado sin salida y pasan
+al marcador del catalogo con cierre de sesion, que corrige el
+atrapamiento medido. El marcador no conoce la autenticacion: recibe la
+accion por parametro y el enrutador la aporta desde el proveedor que ya
+importa. Viaja en el mismo commit que la subparte uno porque ambos
+cambios son el contrato de servicio de pantallas del enrutador, y
+separarlos dejaria el enrutador a medio migrar con un defecto conocido.
+
+Cobertura. El arranque suena una sola vez por ejecucion fria. Acceso y
+cierre ya no pasan por el arranque. El marcador de juez queda verificado
+por el video del autor y por la prueba de ancho estrecho; entrenador y
+organizador por paridad si no hay cuentas de esos roles.

@@ -1,4 +1,5 @@
 // lib/src/core/routes/app_routes.dart
+import 'dart:async';
 import 'package:aero_score_app/src/'
     'features/admin/presentation/views/admin_dashboard_view.dart';
 import 'package:aero_score_app/src/'
@@ -19,16 +20,26 @@ import 'package:aero_score_app/src/'
     'features/scoring/presentation/'
     'views/judge_principal_placeholder_view.dart';
 import 'package:aero_score_app/src/shared/presentation/views/splash_view.dart';
+import 'package:aero_score_app/src/shared/presentation/widgets/aero/'
+    'aero_module_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+/// Marca si la pantalla de arranque ya se sirvio en esta ejecucion.
+///
+/// El enrutador se recrea en cada cambio de autenticacion, y sin esta
+/// marca toda recreacion volveria a la ubicacion inicial y repetiria el
+/// arranque tras cada acceso o cierre de sesion. La marca es de modulo y
+/// no de instancia, asi que sobrevive a las recreaciones.
+bool _splashShown = false;
 
 /// Proveedor global del enrutador de la aplicación.
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
 
   return GoRouter(
-    initialLocation: '/splash',
+    initialLocation: _splashShown ? '/login' : '/splash',
     debugLogDiagnostics: true,
     redirect: (_, state) {
       final location = state.matchedLocation;
@@ -37,6 +48,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // temporizador, asi que el redireccionamiento no la
       // interrumpe en ningun estado.
       if (location == '/splash') {
+        _splashShown = true;
         return null;
       }
 
@@ -129,14 +141,26 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/coach',
-        builder: (_, _) => const Center(
-          child: Text('Dashboard Entrenador'),
+        builder: (_, _) => AeroModulePlaceholder(
+          title: UserRole.coach.label,
+          description:
+              'Este módulo está en desarrollo. '
+              'Aún no permite gestionar tus equipos desde aquí.',
+          actionLabel: 'Cerrar sesión',
+          actionIcon: Icons.logout_rounded,
+          onAction: () => unawaited(ref.read(authProvider.notifier).logout()),
         ),
       ),
       GoRoute(
         path: '/organizer',
-        builder: (_, _) => const Center(
-          child: Text('Dashboard Organizador'),
+        builder: (_, _) => AeroModulePlaceholder(
+          title: UserRole.organizer.label,
+          description:
+              'Este módulo está en desarrollo. '
+              'Aún no permite organizar eventos desde aquí.',
+          actionLabel: 'Cerrar sesión',
+          actionIcon: Icons.logout_rounded,
+          onAction: () => unawaited(ref.read(authProvider.notifier).logout()),
         ),
       ),
     ],

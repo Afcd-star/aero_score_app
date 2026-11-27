@@ -14,6 +14,8 @@ import 'package:aero_score_app/src/features/'
 import 'package:aero_score_app/src/shared/'
     'presentation/widgets/aero/aero_button.dart';
 import 'package:aero_score_app/src/shared/'
+    'presentation/widgets/aero/aero_scroll_to_top.dart';
+import 'package:aero_score_app/src/shared/'
     'presentation/widgets/aero/aero_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +35,7 @@ class CompetitorsSection extends ConsumerStatefulWidget {
 
 class _CompetitorsSectionState extends ConsumerState<CompetitorsSection> {
   bool _showForm = false;
+  final ScrollController _listScroll = ScrollController();
 
   void _openCreate() {
     ref.read(competitorFormProvider.notifier).prepareForCreate();
@@ -50,6 +53,7 @@ class _CompetitorsSectionState extends ConsumerState<CompetitorsSection> {
     setState(() => _showForm = false);
   }
 
+  @override
   @override
   Widget build(BuildContext context) {
     if (_showForm) {
@@ -71,78 +75,88 @@ class _CompetitorsSectionState extends ConsumerState<CompetitorsSection> {
         ? AppColors.mutedForegroundDark
         : AppColors.mutedForegroundLight;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: AeroSectionCard(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          controller: _listScroll,
+          // Colchón inferior de cuarenta y ocho de control, veinticuatro
+          // de margen y dieciséis de respiro, para que la última tarjeta
+          // quede por encima del control y su menú siga alcanzable.
+          padding: const EdgeInsets.all(16),
+          child: AeroSectionCard(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
+                Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        gradient: AppColors.getGlowGradient(),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.people_outline,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Competidores',
+                            style: AppTextStyles.baseTextTheme.titleLarge
+                                ?.copyWith(
+                                  color: textPrimary,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          listState.when(
+                            data: (list) => Text(
+                              '${list.length} competidor(es) '
+                              'registrado(s)',
+                              style: AppTextStyles.baseTextTheme.bodySmall
+                                  ?.copyWith(color: textSecondary),
+                            ),
+                            loading: () => Text(
+                              'Cargando...',
+                              style: TextStyle(
+                                color: textSecondary.withValues(alpha: 0.7),
+                              ),
+                            ),
+                            error: (_, _) => const SizedBox.shrink(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: AeroButton(
+                    label: 'Crear Nuevo Competidor',
+                    onPressed: _openCreate,
+                    icon: const Icon(Icons.add, size: 20),
                     gradient: AppColors.getGlowGradient(),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(
-                    Icons.people_outline,
-                    color: Colors.white,
-                    size: 24,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Competidores',
-                        style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
-                          color: textPrimary,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      listState.when(
-                        data: (list) => Text(
-                          '${list.length} competidor(es) '
-                          'registrado(s)',
-                          style: AppTextStyles.baseTextTheme.bodySmall
-                              ?.copyWith(color: textSecondary),
-                        ),
-                        loading: () => Text(
-                          'Cargando...',
-                          style: TextStyle(
-                            color: textSecondary.withValues(alpha: 0.7),
-                          ),
-                        ),
-                        error: (_, _) => const SizedBox.shrink(),
-                      ),
-                    ],
-                  ),
+                const SizedBox(height: 24),
+                CompetitorListView(
+                  onEdit: _openEdit,
+                  onDelete: (id) => _showDeleteConfirmation(context, ref, id),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: AeroButton(
-                label: 'Crear Nuevo Competidor',
-                onPressed: _openCreate,
-                icon: const Icon(Icons.add, size: 20),
-                gradient: AppColors.getGlowGradient(),
-              ),
-            ),
-            const SizedBox(height: 24),
-            CompetitorListView(
-              onEdit: _openEdit,
-              onDelete: (id) => _showDeleteConfirmation(context, ref, id),
-            ),
-          ],
+          ),
         ),
-      ),
+        AeroScrollToTop(controller: _listScroll),
+      ],
     );
   }
 

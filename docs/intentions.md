@@ -2543,3 +2543,22 @@ con el menu queda vigilado por el ojo del autor, no por el analizador.
 
 Validacion. Errores sesenta y tres, avisos cuatro, informaciones
 seiscientas ochenta y cinco, perimetro vacio y pruebas ciento uno.
+
+## Piloto del control de retorno en la lista de competidores
+
+Que se hace. La seccion de competidores crea y libera su controlador de
+desplazamiento, monta la lista y el control en una pila, y devuelve el
+relleno de la lista a su valor normal en todos los lados. El control
+queda apoyado sobre el relleno inferior de la tarjeta y asoma por la
+derecha segun el criterio del autor.
+
+Adopcion acotada. Solo la lista de competidores, como piloto. Equipos,
+eventos y usuarios quedan para su propio gesto, porque cada seccion debe
+crear y liberar su controlador y eso no se hace en lote sin medir.
+
+Que NO se toca. El formulario de competidores, que ya usa el andamiaje.
+El dialogo de borrado, que sigue crudo y va al subfrente de descableado.
+
+Validacion. Errores sesenta y tres, avisos cuatro, informaciones
+seiscientas ochenta y cinco, perimetro vacio, pruebas ciento uno y cinco
+rutas. Pase visual del autor aprobado con el margen que el mismo fijo.

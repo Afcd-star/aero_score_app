@@ -1,4 +1,4 @@
-// lib/src/features/competitors/presentation/views/competitors_section.dart
+﻿// lib/src/features/competitors/presentation/views/competitors_section.dart
 import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
@@ -6,25 +6,62 @@ import 'package:aero_score_app/src/core/theme/text_styles.dart';
 import 'package:aero_score_app/src/features/'
     'competitors/data/di/competitors_providers.dart';
 import 'package:aero_score_app/src/features/'
-    'competitors/presentation/providers/'
-    'competitor_form_notifier.dart';
+    'competitors/domain/entities/competitor_entity.dart';
 import 'package:aero_score_app/src/features/'
-    'competitors/presentation/widgets/competitor_form_sheet.dart';
+    'competitors/presentation/widgets/competitor_form.dart';
 import 'package:aero_score_app/src/features/'
     'competitors/presentation/widgets/competitor_list_view.dart';
 import 'package:aero_score_app/src/shared/'
     'presentation/widgets/aero/aero_button.dart';
-import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_section_card.dart';
+import 'package:aero_score_app/src/shared/'
+    'presentation/widgets/aero/aero_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Vista de sección para gestionar competidores.
-class CompetitorsSection extends ConsumerWidget {
+///
+/// Alterna entre la lista y el formulario en línea. El formulario monta
+/// su propio botón de volver y gestiona su scroll interno, así que la
+/// sección lo devuelve directo, sin envolverlo en otro scroll.
+class CompetitorsSection extends ConsumerStatefulWidget {
   /// Crea la sección de competidores.
   const CompetitorsSection({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CompetitorsSection> createState() => _CompetitorsSectionState();
+}
+
+class _CompetitorsSectionState extends ConsumerState<CompetitorsSection> {
+  bool _showForm = false;
+
+  void _openCreate() {
+    ref.read(competitorFormProvider.notifier).prepareForCreate();
+    setState(() => _showForm = true);
+  }
+
+  void _openEdit(CompetitorEntity competitor) {
+    ref.read(competitorFormProvider.notifier).prepareForEdit(competitor);
+    setState(() => _showForm = true);
+  }
+
+  void _onSaved() {
+    unawaited(ref.read(competitorListProvider.notifier).refresh());
+    ref.read(competitorFormProvider.notifier).clearSuccess();
+    setState(() => _showForm = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_showForm) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: CompetitorForm(
+          onSuccess: _onSaved,
+          onCancel: () => setState(() => _showForm = false),
+        ),
+      );
+    }
+
     final listState = ref.watch(competitorListProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textPrimary = isDark
@@ -34,48 +71,13 @@ class CompetitorsSection extends ConsumerWidget {
         ? AppColors.mutedForegroundDark
         : AppColors.mutedForegroundLight;
 
-    // Escuchar cambios del formulario para reacciones.
-    ref.listen<CompetitorFormState>(
-      competitorFormProvider,
-      (previous, next) {
-        if (previous?.isLoading == true && !next.isLoading) {
-          // Si hay draft y no hay error, hubo éxito.
-          if (next.draft != null && next.error == null) {
-            unawaited(
-              ref.read(competitorListProvider.notifier).refresh(),
-            );
-            ref.read(competitorFormProvider.notifier).clearSuccess();
-
-            if (context.mounted) {
-              Navigator.pop(context);
-            }
-          }
-
-          // Mostrar error si existe.
-          if (next.error != null && context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(next.error!),
-                backgroundColor: isDark
-                    ? AppColors.destructiveDark
-                    : AppColors.destructiveLight,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-        }
-      },
-    );
-
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: AeroSectionCard(
-        // SectionCard envuelve encabezado, botón y lista.
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Encabezado dentro de la card.
             Row(
               children: [
                 Container(
@@ -98,8 +100,7 @@ class CompetitorsSection extends ConsumerWidget {
                     children: [
                       Text(
                         'Competidores',
-                        style: AppTextStyles.baseTextTheme.titleLarge
-                            ?.copyWith(
+                        style: AppTextStyles.baseTextTheme.titleLarge?.copyWith(
                           color: textPrimary,
                           fontWeight: FontWeight.w700,
                         ),
@@ -108,18 +109,13 @@ class CompetitorsSection extends ConsumerWidget {
                         data: (list) => Text(
                           '${list.length} competidor(es) '
                           'registrado(s)',
-                          style: AppTextStyles
-                              .baseTextTheme.bodySmall
-                              ?.copyWith(
-                            color: textSecondary,
-                          ),
+                          style: AppTextStyles.baseTextTheme.bodySmall
+                              ?.copyWith(color: textSecondary),
                         ),
                         loading: () => Text(
                           'Cargando...',
                           style: TextStyle(
-                            color: textSecondary.withValues(
-                              alpha: 0.7,
-                            ),
+                            color: textSecondary.withValues(alpha: 0.7),
                           ),
                         ),
                         error: (_, _) => const SizedBox.shrink(),
@@ -129,56 +125,20 @@ class CompetitorsSection extends ConsumerWidget {
                 ),
               ],
             ),
-
             const SizedBox(height: 24),
-
-            // Botón debajo del encabezado.
             SizedBox(
               width: double.infinity,
               child: AeroButton(
                 label: 'Crear Nuevo Competidor',
-                onPressed: () {
-                  ref
-                      .read(competitorFormProvider.notifier)
-                      .prepareForCreate();
-                  unawaited(
-                    showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return const CompetitorFormSheet();
-                      },
-                    ),
-                  );
-                },
+                onPressed: _openCreate,
                 icon: const Icon(Icons.add, size: 20),
                 gradient: AppColors.getGlowGradient(),
               ),
             ),
-
             const SizedBox(height: 24),
-
-            // Lista de competidores.
             CompetitorListView(
-              onEdit: (competitor) {
-                ref
-                    .read(competitorFormProvider.notifier)
-                    .prepareForEdit(competitor);
-                unawaited(
-                  showModalBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) {
-                      return const CompetitorFormSheet();
-                    },
-                  ),
-                );
-              },
-              onDelete: (id) {
-                _showDeleteConfirmation(context, ref, id);
-              },
+              onEdit: _openEdit,
+              onDelete: (id) => _showDeleteConfirmation(context, ref, id),
             ),
           ],
         ),
@@ -186,7 +146,6 @@ class CompetitorsSection extends ConsumerWidget {
     );
   }
 
-  // Diálogo de confirmación simplificado.
   void _showDeleteConfirmation(
     BuildContext context,
     WidgetRef ref,

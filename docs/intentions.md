@@ -2466,3 +2466,39 @@ mas el relleno, sin numero magico.
 Alcance del gesto. Errores 63, avisos 4, informaciones 685, perimetro
 vacio y pruebas 97. Las 74 informaciones de la paleta son heredadas de
 tokens sin documentacion y van al subfrente de documentacion, no aqui.
+
+## Presentacion de competidores en linea y retiro de duplicados
+
+Que se hace. El formulario de competidores deja la hoja modal y pasa a
+pantalla en linea sobre el andamiaje del catalogo. Se retira el formulario
+huerfano que usurpaba el prefijo del catalogo dentro de la funcionalidad
+y la hoja que ya no se usa. Se adopta el aviso del catalogo con variantes
+de exito, error y atencion en espanol, el selector del catalogo en el ano
+academico y el indicador lineal en la carga.
+
+Deteccion de sexo. Se activa con once digitos validos del carne y un
+indicador distingue la seleccion automatica de la manual, de modo que la
+eleccion del usuario no se sobrescribe al corregir el carne.
+
+Geometria. Relleno exterior 16 arriba e igual que la lista, cero abajo
+porque el hueco lo aporta el andamiaje dentro del desplazamiento. El pie
+muestra solo crear y limpiar a ancho completo, sin cancelar duplicado,
+porque el retorno anclado ya cubre esa devolucion.
+
+Que NO se toca. El dialogo de confirmacion de borrado sigue crudo con
+botones de Material, porque adoptarlo es descableado y no presentacion.
+El mapeo del error del backend al catalogo en espanol sigue en el frente
+de mensajes, asi que un fallo tecnico puede verse en ingles y queda
+declarado.
+
+Propuesta del autor aceptada para su subfrente. El retorno al principio
+pertenece a las listas, no a los formularios, porque en las listas la
+accion de crear y el encabezado viven arriba del contenido desplazable.
+La pieza recibira el controlador que posee la seccion, aparecera pasado
+un umbral sin tapar la barra inferior ni las acciones de la ultima
+tarjeta, y reutilizara la variante de marca suave, porque un flotante con
+degradado y el icono en blanco reprueba componente en el extremo violeta
+con 2.02 medido.
+
+Validacion. Errores 63, avisos 4, informaciones 685, perimetro vacio,
+pruebas 97 y nueve rutas. Pase visual del autor aprobado.

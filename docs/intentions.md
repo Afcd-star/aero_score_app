@@ -2619,3 +2619,36 @@ bloquearia por deuda ajena al gesto.
 Validacion. Errores sesenta y tres, avisos cuatro, informaciones
 seiscientas sesenta y tres, pruebas ciento uno, y pase visual del autor
 aprobado en claro y oscuro con retorno fijo y cuerpo desplazable.
+
+## Subfrente de retorno, equipos migra al andamiaje
+
+Cierra el subfrente de retorno en sus dos secciones, eventos y equipos.
+La vista de acceso queda fuera porque no tiene lista a la que volver.
+
+Que se hace en equipos. El formulario devuelve el andamiaje con el
+retorno conectado a su cancelacion, que estaba declarada y sin uso. La
+seccion borra su cabecera cruda, deja de envolver el modo formulario y
+separa las dos ramas.
+
+Correcciones de higiene cazadas al leer. La cabecera de ruta mentia,
+decia views de sections y el archivo vive en views, vicio ya registrado,
+corregido en el mismo gesto. El relleno de la lista usaba vertical ocho
+mientras el formulario quedaria en dieciseis, el mismo salto de ocho
+pixeles corregido en competidores, unificado a dieciseis. La clave de
+valor ligada al modo existia para reiniciar el desplazamiento al cambiar
+de rama, y con las ramas separadas el desmontaje ya lo hace, retirada
+por redundante.
+
+Reflujo medido en cero. A diferencia de eventos, el formulario de equipos
+no arrastraba informaciones heredadas, la medicion previa y actual dan
+cero en las dos rutas, delta cero. No hay reflujo que declarar porque no
+habia lineas heredadas sin formatear que tocar.
+
+Que NO se toca. Los dos avisos crudos del formulario, el indicador lineal
+crudo y el gris cableado de la Universidad y la Facultad se conservan
+porque adoptarlos es descableado. La tarjeta de seccion de equipos ya
+usa relleno veinticuatro, coherente con competidores.
+
+Validacion. Errores sesenta y tres, avisos cuatro, informaciones
+seiscientas sesenta y tres, pruebas ciento uno, y pase visual del autor
+aprobado en claro y oscuro.

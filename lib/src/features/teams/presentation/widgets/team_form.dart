@@ -13,6 +13,8 @@ import 'package:aero_score_app/src/features/teams/presentation/widgets/competito
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_avatar.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_form.dart';
+import 'package:aero_score_app/src/shared/'
+    'presentation/widgets/aero/aero_form_scaffold.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_input.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_skeleton.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +36,13 @@ class AeroTeamForm extends ConsumerStatefulWidget {
     this.onSuccess,
     this.onCancel,
   });
+
   /// Equipo en edición, nulo cuando el formulario crea uno nuevo.
   final TeamEntity? initialTeam;
+
   /// Función que se invoca al completarse un guardado exitoso.
   final VoidCallback? onSuccess;
+
   /// Función que se invoca al cancelar la edición.
   final VoidCallback? onCancel;
 
@@ -249,7 +254,7 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
       }
     });
 
-    return AeroForm(
+    final form = AeroForm(
       formKey: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -526,6 +531,8 @@ class _AeroTeamFormState extends ConsumerState<AeroTeamForm> {
         ],
       ),
     );
+
+    return AeroFormScaffold(onBack: widget.onCancel, body: form);
   }
 
   Widget _buildCompetitorChip(CompetitorSelectionInfo competitor) {

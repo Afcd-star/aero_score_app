@@ -1,4 +1,4 @@
-// lib/src/features/teams/presentation/views/sections/teams_section.dart
+// lib/src/features/teams/presentation/views/teams_section.dart
 import 'dart:async';
 
 import 'package:aero_score_app/src/core/theme/app_colors.dart';
@@ -17,6 +17,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Sección del panel que alterna entre la lista de equipos y el
 /// formulario de creación o edición, según el modo del notificador
 /// de formulario.
+///
+/// El formulario monta su propio retorno con el andamiaje del catálogo,
+/// así que la sección no pinta navegación y lo devuelve sin envolverlo
+/// en tarjeta ni en desplazamiento propio. El relleno exterior coincide
+/// con el de las demás secciones para que el cambio de vista no salte.
 class TeamsSection extends ConsumerWidget {
   /// Crea la sección sin parámetros propios.
   const TeamsSection({super.key});
@@ -24,6 +29,37 @@ class TeamsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formState = ref.watch(teamFormProvider);
+    final showForm = formState.mode != TeamFormMode.idle;
+
+    if (showForm) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: AeroTeamForm(
+          initialTeam: formState.draft,
+          onSuccess: () {
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  formState.isEditing
+                      ? 'Equipo actualizado ✓'
+                      : 'Equipo creado ✓',
+                ),
+                backgroundColor: isDark
+                    ? AppColors.successDark
+                    : AppColors.successLight,
+                behavior: SnackBarBehavior.floating,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+            ref.read(teamFormProvider.notifier).cancelEditing();
+            ref.invalidate(teamListProvider);
+          },
+          onCancel: () => ref.read(teamFormProvider.notifier).cancelEditing(),
+        ),
+      );
+    }
+
     final listState = ref.watch(teamListProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textPrimary = isDark
@@ -33,88 +69,47 @@ class TeamsSection extends ConsumerWidget {
         ? AppColors.mutedForegroundDark
         : AppColors.mutedForegroundLight;
 
-    // ✅ Lógica unificada: mostrar formulario si mode != idle
-    final showForm = formState.mode != TeamFormMode.idle;
-
     return SingleChildScrollView(
-      key: ValueKey<TeamFormMode>(formState.mode),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(16),
       child: AeroSectionCard(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (showForm) ...[
-              // ✅ MODO FORMULARIO: Header de navegación + formulario
-              _buildFormHeader(
-                title: formState.mode == TeamFormMode.edit
-                    ? 'Editar Equipo'
-                    : 'Nuevo Equipo',
-                onBack: () =>
-                    ref.read(teamFormProvider.notifier).cancelEditing(),
+            _buildSectionHeader(listState, textPrimary, textSecondary),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: AeroButton(
+                label: 'Crear Nuevo Equipo',
+                onPressed: () =>
+                    ref.read(teamFormProvider.notifier).prepareForCreate(),
+                icon: const Icon(Icons.add, size: 20),
+                gradient: AppColors.getGlowGradient(),
               ),
-              const SizedBox(height: 16),
-              AeroTeamForm(
-                initialTeam: formState.draft,
-                onSuccess: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        formState.isEditing
-                            ? 'Equipo actualizado ✓'
-                            : 'Equipo creado ✓',
-                      ),
-                      backgroundColor: isDark
-                          ? AppColors.successDark
-                          : AppColors.successLight,
-                      behavior: SnackBarBehavior.floating,
-                      duration: const Duration(seconds: 3),
-                    ),
-                  );
-                  ref.read(teamFormProvider.notifier).cancelEditing();
-                  ref.invalidate(teamListProvider);
-                },
-                onCancel: () =>
-                    ref.read(teamFormProvider.notifier).cancelEditing(),
-              ),
-            ] else ...[
-              // ✅ MODO LISTA: Header original + botón crear + lista
-              _buildSectionHeader(listState, textPrimary, textSecondary),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: AeroButton(
-                  label: 'Crear Nuevo Equipo',
-                  onPressed: () =>
-                      ref.read(teamFormProvider.notifier).prepareForCreate(),
-                  icon: const Icon(Icons.add, size: 20),
-                  gradient: AppColors.getGlowGradient(),
-                ),
-              ),
-              const SizedBox(height: 24),
-              TeamListView(
-                onEdit: (team) =>
-                    ref.read(teamFormProvider.notifier).prepareForEdit(team),
-                onDelete: (id) => _showDeleteConfirmation(context, ref, id),
-                onViewCompetitors: (team) {
-                  unawaited(
-                    showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => TeamCompetitorsSheet(team: team),
-                    ),
-                  );
-                },
-              ),
-            ],
+            ),
+            const SizedBox(height: 24),
+            TeamListView(
+              onEdit: (team) =>
+                  ref.read(teamFormProvider.notifier).prepareForEdit(team),
+              onDelete: (id) => _showDeleteConfirmation(context, ref, id),
+              onViewCompetitors: (team) {
+                unawaited(
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => TeamCompetitorsSheet(team: team),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  // ✅ HEADER ORIGINAL restaurado (con ícono, título y contador)
   Widget _buildSectionHeader(
     AsyncValue<List<TeamEntity>> listState,
     Color textPrimary,
@@ -129,11 +124,7 @@ class TeamsSection extends ConsumerWidget {
             gradient: AppColors.getGlowGradient(),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(
-            Icons.groups,
-            color: Colors.white,
-            size: 24,
-          ),
+          child: const Icon(Icons.groups, color: Colors.white, size: 24),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -207,38 +198,6 @@ class TeamsSection extends ConsumerWidget {
                 ),
               ),
               child: const Text('Eliminar'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ✅ Header de navegación para el modo formulario
-  Widget _buildFormHeader({
-    required String title,
-    required VoidCallback onBack,
-  }) {
-    return GestureDetector(
-      onTap: onBack,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: AppColors.fuchsia.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.fuchsia.withValues(alpha: 0.3)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.arrow_back, size: 18, color: AppColors.fuchsia),
-            const SizedBox(width: 6),
-            Text(
-              'Volver a la lista',
-              style: AppTextStyles.baseTextTheme.labelLarge?.copyWith(
-                color: AppColors.fuchsia,
-                fontSize: 13,
-              ),
             ),
           ],
         ),

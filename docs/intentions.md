@@ -2502,3 +2502,44 @@ con 2.02 medido.
 
 Validacion. Errores 63, avisos 4, informaciones 685, perimetro vacio,
 pruebas 97 y nueve rutas. Pase visual del autor aprobado.
+
+## Control de retorno al principio y radio parametrizado del boton
+
+Regreso al subfrente de piezas por retroalimentacion de la presentacion
+de competidores. El inventario no tenia control de retorno al principio y
+las listas lo necesitan, porque la accion de crear y el encabezado viven
+arriba del contenido desplazable.
+
+Que nace. El boton del catalogo parametriza su radio, que estaba escrito
+a mano en tres sitios, con valor por defecto igual al historico para no
+alterar consumidores. El control de retorno al principio recibe el
+controlador que posee el consumidor, no lo crea ni lo libera, aparece
+pasado un umbral, se oculta al volver arriba y bloquea el puntero
+mientras esta oculto. Reutiliza la variante de marca suave ya verificada,
+sin tokens nuevos, y fuerza el area de toque desde la dimension del
+catalogo. Nace con prueba de ancho estrecho, de aparicion por umbral y de
+vuelta al principio. El boton estrena suite propia con circulo a ancho
+estrecho y etiqueta larga que salta de linea sin truncarse.
+
+Criterio del autor sobre la posicion, que sustituye el tope del lead. La
+tarjeta contiene el control por abajo, dentro del rango vertical que
+alcanza, y por la derecha hay libertad: el control facilita la navegacion
+y no compite con el contenido, asi que puede asomar fuera del borde
+lateral. El lead habia inventado un tope de ocho pixeles desde una
+suposicion estetica que el autor nunca declaro, y lo retira. La
+documentacion del margen se escribe con el criterio y sin numeros, porque
+un valor en la prosa miente en cuanto alguien lo mueve.
+
+Deuda del catalogo declarada. El modo de solo icono del boton fija su
+area minima en cuarenta y cuatro escrito a mano, por debajo del minimo
+accesible de la casa. El control lo compensa pasando la dimension
+explicita; el arreglo del boton toca todos los botones de solo icono y va
+al subfrente de piezas muertas y descableado.
+
+Costo retirado. El colchon inferior de ochenta y ocho que se puso para
+que el control no tapara el menu de la ultima tarjeta se retiro por
+decision del autor, que prefiere la lista con su relleno normal. El roce
+con el menu queda vigilado por el ojo del autor, no por el analizador.
+
+Validacion. Errores sesenta y tres, avisos cuatro, informaciones
+seiscientas ochenta y cinco, perimetro vacio y pruebas ciento uno.

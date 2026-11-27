@@ -63,7 +63,8 @@ class AeroButton extends StatelessWidget {
     this.padding,
     this.trailingIcon,
     this.isRequired = false,
-    this.iconOnly = false, // ✅ Default false
+    this.iconOnly = false,
+    this.borderRadius = 10,
   }) : assert(
          label != null || iconOnly || icon != null,
          'Debe proporcionar label, iconOnly=true, o un icon',
@@ -108,6 +109,13 @@ class AeroButton extends StatelessWidget {
   /// Si es verdadero, muestra solo el icono centrado.
   final bool iconOnly;
 
+  /// Radio de las esquinas del botón.
+  ///
+  /// Por defecto diez, el valor histórico de la casa. Pasar la mitad del
+  /// alto produce un círculo, que es lo que usa el control de retorno al
+  /// principio de las listas.
+  final double borderRadius;
+
   /// Marcador heredado sin efecto en el render actual.
   final bool isRequired;
 
@@ -142,7 +150,7 @@ class AeroButton extends StatelessWidget {
         elevation: 0,
         padding: effectivePadding,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(borderRadius),
           side: hasGradient ? BorderSide.none : border,
         ),
         textStyle: AppTextStyles.baseTextTheme.labelLarge!.copyWith(
@@ -166,7 +174,7 @@ class AeroButton extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             gradient: effectiveGradient,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(borderRadius),
             boxShadow: [
               BoxShadow(
                 color: effectiveGradient.colors.first.withValues(alpha: 0.3),

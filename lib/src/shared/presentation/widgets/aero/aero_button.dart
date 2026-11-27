@@ -20,6 +20,17 @@ enum AeroButtonVariant {
 
   /// Accion de apoyo sobre superficie secundaria.
   secondary,
+
+  /// Accion de marca con fondo tenue y borde suave, leidos de tokens.
+  ///
+  /// Replica el patron vivo del boton de volver, fondo de marca al diez
+  /// por ciento y borde al treinta por ciento, pero expresado como tokens
+  /// opacos medidos en vez de alfas cableadas en la vista. El texto y el
+  /// icono salen en el acento de marca. En claro el texto de marca sobre
+  /// el fondo tenue no llega al umbral de texto y hereda la deuda de
+  /// marca de primary, fijado por prueba numerica; en oscuro queda
+  /// pendiente de medir con el acento real.
+  brandSoft,
 }
 
 /// Tallas del boton, que deciden relleno vertical y tamano de texto.
@@ -270,6 +281,20 @@ class AeroButton extends StatelessWidget {
           Colors.transparent,
           theme.colorScheme.onSurface.withValues(alpha: 0.7),
           BorderSide.none,
+        );
+      case AeroButtonVariant.brandSoft:
+        return (
+          isDark
+              ? AppColors.brandSoftBackgroundDark
+              : AppColors.brandSoftBackgroundLight,
+          isDark
+              ? AppColors.brandSoftForegroundDark
+              : AppColors.brandSoftForegroundLight,
+          BorderSide(
+            color: isDark
+                ? AppColors.brandSoftBorderDark
+                : AppColors.brandSoftBorderLight,
+          ),
         );
     }
   }

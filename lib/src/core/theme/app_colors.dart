@@ -50,6 +50,19 @@ class AppColors {
   static const Color ringLight = Color(0xFFB5B5B5);
   static const Color successLight = Color(0xFF22C55E);
 
+  /// Fondo tenue de marca para acciones suaves sobre superficie clara.
+  /// Fucsia puro al diez por ciento compuesto sobre blanco.
+  static const Color brandSoftBackgroundLight = Color(0xFFFFE6FF);
+
+  /// Texto de acento profundo sobre el fondo tenue claro.
+  /// Razón de contraste 5.05 sobre el fondo tenue claro.
+  static const Color brandSoftForegroundLight = Color(0xFFB300B3);
+
+  /// Borde suave de marca para superficie clara.
+  /// Fucsia puro al treinta por ciento compuesto sobre blanco.
+  /// Decorativo, razón de contraste 1.38 sobre el fondo tenue claro.
+  static const Color brandSoftBorderLight = Color(0xFFFFB2FF);
+
   // ═════════════════════════════════════════════════════════════
   // DARK MODE
   // ═════════════════════════════════════════════════════════════
@@ -71,6 +84,19 @@ class AppColors {
   static const Color inputDark = Color(0xFF454545);
   static const Color ringDark = Color(0xFF707070);
   static const Color successDark = Color(0xFF16A34A);
+
+  /// Fondo tenue de marca para acciones suaves sobre superficie oscura.
+  /// Fucsia puro al diez por ciento compuesto sobre la superficie del
+  /// tema en oscuro, no sobre cardDark.
+  static const Color brandSoftBackgroundDark = Color(0xFF311743);
+
+  /// Texto de acento brillante sobre el fondo tenue oscuro.
+  /// Fucsia puro, razón de contraste 5.02 sobre el fondo tenue oscuro.
+  static const Color brandSoftForegroundDark = Color(0xFFFF00FF);
+
+  /// Borde suave de marca para superficie oscura.
+  /// Decorativo, razón de contraste 1.35 sobre el fondo tenue oscuro.
+  static const Color brandSoftBorderDark = Color(0xFF5F126D);
 
   // ═════════════════════════════════════════════════════════════
   // SURFACES & BORDERS

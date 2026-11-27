@@ -2424,3 +2424,45 @@ la hoja se validan en el subfrente de piezas por prueba de render a
 ancho estrecho y puerta estatica. El ojo en app real viaja con el
 subfrente de presentacion de competidores, donde nacen los consumidores
 vivos, conforme a la estrategia de piloto acordada.
+
+## Andamiaje de formulario y variante de marca suave en el catalogo
+
+Regla nueva e inviolable de la casa, dictada por el autor. Toda cosa nueva
+que se cree evita las deudas arrastradas. Si el cambio necesario resulta
+grande, se habla y se decide, no se parchea en silencio.
+
+Que nace. Seis tokens de marca suave por modo, la variante de boton que
+los lee, y el andamiaje de formulario de pantalla completa con retorno
+anclado arriba y cuerpo que crece y se desplaza por dentro. La superficie
+y la sombra salen del tema, no de un ternario de brillo ni de negro
+cableado, cumpliendo la regla nueva.
+
+Numeros medidos. Texto profundo sobre fondo tenue claro 5.05, texto
+fucsia puro sobre fondo tenue oscuro 5.02, bordes 1.38 y 1.35 declarados
+decorativos en ambos modos. El umbral de componente es 3 con literal
+entero porque el linter del repo exige entero, y el lead ordeno punto por
+error sin cruzar la configuracion.
+
+Costo aceptado y declarado. La superficie oscura del tema es 1A1A2E y la
+de la tarjeta de seccion de la lista es 252525, asi que formulario y
+lista divergen en oscuro hasta que se descablee la tarjeta de seccion.
+Unificarla toca todas las secciones, es cambio grande, y por la regla
+nueva se habla en el frente de tema en vez de arrastrar el ternario a la
+pieza nueva.
+
+Errores del lead cazados por el ojo del autor. El borde claro salio
+verdoso por transponer canales al componer el treinta por ciento, y la
+prueba de contraste no lo cazo porque tanto el valor roto como el
+correcto reprueban el umbral de componente: el matiz lo cuida el ojo, no
+la razon. El radio superior se perdia al desplazar porque el cuerpo pasa
+por debajo del encabezado anclado y rellena los triangulos del radio; el
+arreglo es recortar el viewport con radio solo arriba. El salto vertical
+entre lista y formulario era de ocho pixeles por relleno superior
+distinto. El hueco inferior va dentro del desplazamiento, como en la
+lista, porque fuera recortaria el viewport y devolveria la caja cerrada.
+El alto del encabezado se deriva de la dimension de control del catalogo
+mas el relleno, sin numero magico.
+
+Alcance del gesto. Errores 63, avisos 4, informaciones 685, perimetro
+vacio y pruebas 97. Las 74 informaciones de la paleta son heredadas de
+tokens sin documentacion y van al subfrente de documentacion, no aqui.

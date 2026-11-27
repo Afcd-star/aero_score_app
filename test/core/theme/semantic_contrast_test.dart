@@ -9,6 +9,10 @@ import 'package:flutter_test/flutter_test.dart';
 /// badge (diez, doce y catorce puntos).
 const double _kMinRatio = 4.5;
 
+/// Umbral de contraste para componentes no textuales, como el icono y la
+/// flecha del boton de volver, segun WCAG 1.4.11.
+const double _kMinComponentRatio = 3;
+
 double _channel(double c) =>
     c <= 0.03928 ? c / 12.92 : math.pow((c + 0.055) / 1.055, 2.4).toDouble();
 
@@ -121,6 +125,48 @@ void main() {
       expect(
         _ratio(AppColors.mutedDark, AppColors.mutedForegroundDark),
         greaterThanOrEqualTo(_kMinRatio),
+      );
+    });
+  });
+
+  group('contraste WCAG del boton de volver de marca', () {
+    test('el texto profundo pasa umbral de texto sobre el fondo claro', () {
+      expect(
+        _ratio(
+          AppColors.brandSoftForegroundLight,
+          AppColors.brandSoftBackgroundLight,
+        ),
+        greaterThanOrEqualTo(_kMinRatio),
+      );
+    });
+
+    test('el texto puro pasa umbral de texto sobre el fondo oscuro', () {
+      expect(
+        _ratio(
+          AppColors.brandSoftForegroundDark,
+          AppColors.brandSoftBackgroundDark,
+        ),
+        greaterThanOrEqualTo(_kMinRatio),
+      );
+    });
+
+    test('el borde claro es decorativo, no cumple componente', () {
+      expect(
+        _ratio(
+          AppColors.brandSoftBorderLight,
+          AppColors.brandSoftBackgroundLight,
+        ),
+        lessThan(_kMinComponentRatio),
+      );
+    });
+
+    test('el borde oscuro es decorativo, no cumple componente', () {
+      expect(
+        _ratio(
+          AppColors.brandSoftBorderDark,
+          AppColors.brandSoftBackgroundDark,
+        ),
+        lessThan(_kMinComponentRatio),
       );
     });
   });

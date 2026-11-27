@@ -14,6 +14,8 @@ import 'package:aero_score_app/src/features/teams/domain/entities/team_entity.da
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_avatar.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_button.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_form.dart';
+import 'package:aero_score_app/src/shared/'
+    'presentation/widgets/aero/aero_form_scaffold.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_input.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_select.dart';
 import 'package:aero_score_app/src/shared/presentation/widgets/aero/aero_textarea.dart';
@@ -23,7 +25,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class AeroEventForm extends ConsumerStatefulWidget {
-
   const AeroEventForm({
     super.key,
     this.initialEvent,
@@ -81,7 +82,9 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
     _ubicacionCtrl = TextEditingController(text: initialDraft?.location ?? '');
     _ubicacionFocus = FocusNode();
 
-    _descripcionCtrl = TextEditingController(text: initialDraft?.description ?? '');
+    _descripcionCtrl = TextEditingController(
+      text: initialDraft?.description ?? '',
+    );
     _descripcionFocus = FocusNode();
 
     _time = initialDraft?.time;
@@ -166,7 +169,9 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
       lastDate: DateTime(2030),
       builder: (ctx, child) => Theme(
         data: Theme.of(ctx).copyWith(
-          colorScheme: Theme.of(ctx).colorScheme.copyWith(primary: AppColors.fuchsia),
+          colorScheme: Theme.of(
+            ctx,
+          ).colorScheme.copyWith(primary: AppColors.fuchsia),
         ),
         child: child!,
       ),
@@ -175,13 +180,13 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
   }
 
   Future<void> _pickTime() async {
-    final currentTime = _time != null 
+    final currentTime = _time != null
         ? TimeOfDay(
             hour: int.parse(_time!.split(':')[0]),
             minute: int.parse(_time!.split(':')[1]),
           )
         : TimeOfDay.now();
-    
+
     final picked = await showTimePicker(
       context: context,
       initialTime: currentTime,
@@ -194,10 +199,11 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
         child: child!,
       ),
     );
-    
+
     if (picked != null) {
       setState(() {
-        _time = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+        _time =
+            '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
       });
     }
   }
@@ -293,13 +299,17 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
       data: (allJudges) {
         // ✅ Calcular IDs excluidos: todos los jueces seleccionados EXCEPTO el actual de este rol
         final excludedIds = {
-          if (_principalJudgeId != null && roleFilter != JudgeRoleFilter.principal)
+          if (_principalJudgeId != null &&
+              roleFilter != JudgeRoleFilter.principal)
             _principalJudgeId!,
-          if (_artistryJudgeId != null && roleFilter != JudgeRoleFilter.artistry)
+          if (_artistryJudgeId != null &&
+              roleFilter != JudgeRoleFilter.artistry)
             _artistryJudgeId!,
-          if (_difficultyJudgeId != null && roleFilter != JudgeRoleFilter.difficulty)
+          if (_difficultyJudgeId != null &&
+              roleFilter != JudgeRoleFilter.difficulty)
             _difficultyJudgeId!,
-          if (_executionJudgeId != null && roleFilter != JudgeRoleFilter.execution)
+          if (_executionJudgeId != null &&
+              roleFilter != JudgeRoleFilter.execution)
             _executionJudgeId!,
           ..._additionalJudgeIds,
         };
@@ -352,12 +362,15 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
           label: selectedJudge != null
               ? '${selectedJudge.firstName} ${selectedJudge.lastName}'
               : label,
-          onPressed: () => _showJudgeSelector(roleFilter, selectedId, onChanged),
+          onPressed: () =>
+              _showJudgeSelector(roleFilter, selectedId, onChanged),
           variant: selectedId != null
               ? AeroButtonVariant.primary
               : AeroButtonVariant.outline,
           fullWidth: true,
-          trailingIcon: selectedId != null ? Icons.edit : Icons.arrow_forward_ios,
+          trailingIcon: selectedId != null
+              ? Icons.edit
+              : Icons.arrow_forward_ios,
         );
       },
     );
@@ -459,7 +472,7 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
       }
     });
 
-    return AeroForm(
+    final form = AeroForm(
       formKey: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,7 +494,8 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
             field: AeroInput(
               controller: _nombreCtrl,
               hintText: 'Ej: Campeonato Regional',
-              validator: (v) => v == null || v.trim().isEmpty ? 'Requerido' : null,
+              validator: (v) =>
+                  v == null || v.trim().isEmpty ? 'Requerido' : null,
               textCapitalization: TextCapitalization.words,
             ),
           ),
@@ -493,11 +507,18 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
             field: InkWell(
               onTap: _pickDate,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Theme.of(context).colorScheme.outline),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -525,11 +546,18 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
             field: InkWell(
               onTap: _pickTime,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Theme.of(context).colorScheme.outline),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -558,7 +586,8 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
             field: AeroInput(
               controller: _ubicacionCtrl,
               hintText: 'Ej: Polideportivo Central',
-              validator: (v) => v == null || v.trim().isEmpty ? 'Requerido' : null,
+              validator: (v) =>
+                  v == null || v.trim().isEmpty ? 'Requerido' : null,
               textCapitalization: TextCapitalization.words,
             ),
           ),
@@ -571,9 +600,18 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
               value: _category,
               hint: 'Seleccione la categoría del evento',
               items: const [
-                AeroSelectItem(value: EventCategory.universitario, label: 'Universitario'),
-                AeroSelectItem(value: EventCategory.regional, label: 'Regional'),
-                AeroSelectItem(value: EventCategory.nacional, label: 'Nacional'),
+                AeroSelectItem(
+                  value: EventCategory.universitario,
+                  label: 'Universitario',
+                ),
+                AeroSelectItem(
+                  value: EventCategory.regional,
+                  label: 'Regional',
+                ),
+                AeroSelectItem(
+                  value: EventCategory.nacional,
+                  label: 'Nacional',
+                ),
                 AeroSelectItem(value: EventCategory.torneo, label: 'Torneo'),
               ],
               onChanged: (v) => setState(() => _category = v),
@@ -763,9 +801,13 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
                     IconButton(
                       icon: const Icon(Icons.close, size: 18),
                       onPressed: () => setState(
-                        () => _selectedTeams.removeWhere((t) => t.id == team.id),
+                        () =>
+                            _selectedTeams.removeWhere((t) => t.id == team.id),
                       ),
-                      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      constraints: const BoxConstraints(
+                        minWidth: 36,
+                        minHeight: 36,
+                      ),
                       padding: EdgeInsets.zero,
                     ),
                   ],
@@ -805,5 +847,7 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
         ],
       ),
     );
+
+    return AeroFormScaffold(onBack: widget.onCancel, body: form);
   }
 }

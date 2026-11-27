@@ -2562,3 +2562,60 @@ El dialogo de borrado, que sigue crudo y va al subfrente de descableado.
 Validacion. Errores sesenta y tres, avisos cuatro, informaciones
 seiscientas ochenta y cinco, perimetro vacio, pruebas ciento uno y cinco
 rutas. Pase visual del autor aprobado con el margen que el mismo fijo.
+
+## Subfrente de retorno, eventos migra al andamiaje
+
+Alcance corregido con medicion. El conteo de tres botones crudos estaba
+inflado porque una coincidencia era la etiqueta por defecto del propio
+andamiaje. Los sitios crudos reales eran dos, equipos y eventos. La vista
+de acceso queda fuera porque no tiene lista a la que volver.
+
+Que se hace en eventos. El formulario devuelve el andamiaje con el
+retorno conectado a su parametro de cancelacion, y la seccion deja de
+envolver el modo formulario y borra su cabecera cruda. El modo lista
+queda intacto.
+
+Parametro muerto resucitado. La cancelacion estaba declarada en los dos
+formularios y no se usaba dentro de ninguno. Conectarla al retorno del
+andamiaje le da consumidor real y adelanta trabajo del subfrente de
+piezas muertas.
+
+Que NO se toca. El aviso crudo de exito de la seccion y el indicador
+lineal crudo del formulario se conservan porque adoptarlos es
+descableado. La tarjeta de seccion de eventos usa relleno por defecto de
+veinte mientras equipos y competidores usan veinticuatro, diferencia
+declarada para el frente de tema.
+
+Deuda heredada medida, no introducida. En HEAD el formulario ya tenia
+seis errores y cero avisos, y tras el gesto sigue igual. Sus reglas son
+capturas sin tipo, futuros descartados e inferencia de la hoja modal,
+todas en codigo no tocado. Son reglas de lint escaladas de severidad en
+la configuracion del analizador, no errores del compilador, y por eso la
+app compila y las pruebas pasan con ese tablero.
+
+Reflujo del formateador declarado con magnitud. Las informaciones bajan
+de seiscientas ochenta y cinco a seiscientas sesenta y tres, veintidos
+menos: veintiuno en el formulario por reflujo del formateador sobre un
+archivo heredado sin formatear, y uno en la seccion por la cabecera
+cruda borrada.
+
+Instrumento corregido tres veces. El campo de regla del JSON es una
+cadena y no un objeto, y por eso las agrupaciones por regla salieron
+vacias varios turnos. Una corrida devolvio el conteo duplicado, con cada
+diagnostico dos veces y los totales al doble exacto, mientras la
+medicion de HEAD en el mismo bloque salio simple; la corrida siguiente
+dio crudo igual a únicos y una sola ruta, asi que fue transitorio y se
+conserva la deduplicacion como seguro. Y una funcion que imprimia y
+devolvia a la vez hizo que PowerShell fundiera el texto impreso en la
+variable de retorno, de modo que la guarda comparo una cadena contra
+cero y bloqueo sin causa. Regla nueva del instrumento: ninguna funcion
+de medida imprime y devuelve a la vez; el reparto se calcula en linea
+con variables escalares.
+
+Guarda corregida. Para archivos heredados la guarda compara por archivo
+contra HEAD en errores y avisos, no exige cero absoluto, porque eso
+bloquearia por deuda ajena al gesto.
+
+Validacion. Errores sesenta y tres, avisos cuatro, informaciones
+seiscientas sesenta y tres, pruebas ciento uno, y pase visual del autor
+aprobado en claro y oscuro con retorno fijo y cuerpo desplazable.

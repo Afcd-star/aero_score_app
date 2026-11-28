@@ -36,37 +36,138 @@ Criterios de aceptacion:
 - El conjunto de marca de la capa Dart sube el logo de 132 a unos 156 y añade un velo localizado detras, degradado vertical suave de transparente abajo a semioscuro arriba solo en esa franja, para que el nombre lea con contraste garantizado sobre el cruce de cintas. No se centra el conjunto en el medio exacto, porque el cruce magenta y violeta mata la separacion del logo de degradado rosa.
 - Puerta estatica en 63, 4, 685 y 81 antes del ojo, y el commit limitado por rutas con el recurso y los archivos nativos generados.
 
-## Fase 1, catalogo final shared, eje por direccion de dependencia
+## Fase 1, catálogo final shared, eje por dirección de dependencia
 
-### F1.1 Las cuatro piezas por crear
-Naturaleza: forma y superficie. Puerta: prueba de render a ancho estrecho y gate de ojo donde haya consumidor vivo. Precondicion de lectura: grep de la pieza y de sus tokens, y lectura de los sitios crudos que debe sustituir.
-Criterios de aceptacion:
-- Aviso temporal con su tema, marcador de modulo, indicador de progreso y hoja modal, cada una nace con documentacion publica completa, cero avisos de public_member_api_docs en su propio archivo.
-- Cada pieza lleva prueba de render a ancho estrecho, porque el analizador no detecta desbordes.
-- El marcador de modulo sustituye los destinos crudos de entrenador y organizador en el enrutador y evalua la vista temporal de juez principal. El aviso temporal limpia los avisos crudos repetidos. La hoja modal absorbe el encabezado con degradado y el boton de cierre duplicados en tres hojas. El indicador de progreso sustituye los CircularProgressIndicator crudos.
-- Toda eleccion de estilo que propague a muchos sitios va al autor antes de codificarse, porque el gate caza defectos en superficie viva pero no puede cazar una inconsistencia de estilo en un commit fundacional sin consumidor.
+Regla de frontera de la fase. Fase 1 es shared puro más el primer
+consumidor de cada pieza, porque crear la pieza y darle un consumidor vivo
+que la pruebe son la misma unidad, como ya bundea F1.1 al pedir que el
+marcador sustituya destinos y la hoja absorba encabezados. Todo consumidor
+más allá del primero, y todo descableado de código de funcionalidad, sale
+de fase 1 y va a los frentes funcionales y de seguridad del final.
 
-### F1.2 Documentacion publica de las piezas heredadas
-Naturaleza: documental y de forma. Puerta: sin ojo, se verifica por numero. Precondicion de lectura: mapa medido de informaciones por archivo de shared.
-Criterios de aceptacion:
-- shared en cero errores y cero informaciones de documentacion publica. El mapa medido dice selector 36, area de texto 33, boton 26, interruptor retirado, entrada de texto 19, insignia 18, envoltorio de formulario 12, tarjeta 7, esqueleto 6, avatar 5, tarjeta de seccion 5, dialogo de alerta 4, fondo 3.
-- Las piezas nacidas documentadas mantienen cero avisos. Retrofitar cuesta dos ordenes de magnitud mas que documentar al nacer, regla adoptada.
+### F1.1 Las piezas por crear y su gate de ojo
+Naturaleza: forma y superficie, con piloto de primer consumidor.
+Puerta: prueba de render a ancho estrecho y gate de ojo sobre un
+consumidor vivo. Precondición de lectura: grep de la pieza excluyendo su
+propia línea de definición, y lectura de los sitios crudos que debe
+sustituir.
+Estado medido en la auditoría de inventario. Veinte piezas reales en el
+catálogo. Seis nuevas creadas, documentadas y con prueba de render: aviso
+temporal, marcador de módulo, indicador de progreso, hoja modal,
+andamiaje de formulario y retorno al principio, más la variante de marca
+suave y sus seis tokens. Cinco cumplen los tres criterios con consumidores
+vivos, aviso tres, marcador cuatro, progreso uno, andamiaje tres y retorno
+uno. La hoja falla el tercero con cero consumidores vivos, víctima de que
+la práctica de probar al nacer se adoptó tarde.
+Criterios de aceptación.
+* Cerrar el residual único: dar a la hoja un consumidor vivo y su gate de
+  ojo, pilotándola en un sitio crudo de showModalBottomSheet, por ejemplo
+  el más simple de teams_section o event_form, envolviendo su constructor
+  de contenido con la pieza. Sin esto F1.1 no cierra, porque el criterio
+  de gate donde haya consumidor vivo es estructuralmente imposible para
+  una pieza huérfana.
+* Verificar que los cuatro consumidores del marcador cubren los destinos
+  crudos de entrenador, organizador y la vista temporal de juez principal,
+  con lectura dirigida y no con regex, subpunto de baja prioridad.
+* Registrar como hallazgo de proceso que la prueba de render y el gate de
+  ojo al nacer se adoptaron a mitad de camino, y que la hoja es la única
+  casualty de ese retraso, pues las demás recibieron su piloto en la
+  presentación de competidores.
+
+### F1.2 Documentación pública y normalización de idioma
+Naturaleza: documental. Puerta: sin ojo, se verifica por número.
+Precondición de lectura: mapa medido de informaciones de documentación
+pública por archivo, ampliado a shared y a core y theme.
+Estado medido en la auditoría de inventario. Shared widgets en cero
+documentación faltante, así que el mapa viejo del plan, selector treinta
+y seis y demás, está vencido. La deuda real son setenta y cuatro
+informaciones en app_colors, más la violación de Idioma de la App.md en
+comentarios y documentación escritos en ASCII sin tildes, incluidos los
+bloques que el lead autoró en la bitácora y el cuerpo del propio plan.
+Criterios de aceptación.
+* Documentar los setenta y cuatro tokens de app_colors con documentación
+  pública en español con tildes, cero informaciones de
+  public_member_api_docs en ese archivo.
+* Normalizar tildes y eñe conforme a Idioma de la App.md en
+  docs/intentions.md, en el plan frentes y en los comentarios heredados y
+  en los del lead, y unificar los marcadores de lista a asteriscos.
+* Mantener en cero la documentación de las piezas nacidas documentadas,
+  que ya lo están, y no tocarlas salvo por tildes.
 
 ### F1.3 Piezas muertas
-Naturaleza: refactor. Puerta: grep de consumidores y prueba de render tras el retiro. Precondicion de lectura: grafo de consumidores de cada parametro.
-Criterios de aceptacion:
-- Borde muerto del boton primario, marcador isRequired sin efecto, imagen reservada del avatar, y simplificacion de la entrada de texto a sin estado. Cada retiro con grep de consumidores vacio antes de quitar, porque es API expuesta.
-- Si el grep da consumidores, se arregla el uso en lugar de retirar la pieza.
+Naturaleza: refactor. Puerta: grep de consumidores y prueba de render tras
+el retiro. Precondición de lectura: grafo de consumidores de cada
+parámetro.
+Estado medido en la auditoría de inventario. La lista del plan sigue
+vigente. Las discrepancias de conteo de andamiaje cuatro y retorno dos NO
+son piezas muertas, eran ruido de instrumento por no excluir la línea de
+definición, y se excluyen de este frente.
+Criterios de aceptación.
+* Borde muerto del botón primario, marcador isRequired sin efecto, imagen
+  reservada del avatar y simplificación de la entrada de texto a sin
+  estado, cada retiro con grep de consumidores vacío antes de quitar,
+  porque es API expuesta.
+* Si el grep da consumidores, se arregla el uso en lugar de retirar la
+  pieza.
 
-### F1.4 Descableado de catalogo
-Naturaleza: mixto. Puerta: grep y prueba de render, gate de ojo propagado. Precondicion de lectura: app_theme.dart, entrada de texto, boton, selector, enrutador y formulario de equipo.
-Criterios de aceptacion:
-- Cero literales hex en app_theme fuera de AppColors. Cero referencias a la paleta de Material (Colors.blue, green, grey shade) en shared. El borde fucsia de boton elevado a nivel de tema se retira. Relleno y radio de la decoracion de entrada coinciden con los de la pieza del catalogo. La tipografia cruda del selector de tema pasa al catalogo tipografico y los pares duplicados de icono y etiqueta se extraen a una lista constante.
+### F1.4 Descableado interno de shared y tema
+Naturaleza: mixto, forma y color. Puerta: grep de literales y prueba de
+render, gate de ojo propagado. Precondición de lectura: app_theme.dart,
+entrada de texto, botón, selector, aero_section_card y app_dimens.
+Estado medido en la auditoría de inventario. Frente que la numeración
+previa del lead omitió. Incluye el cuarenta y cuatro cableado del modo
+solo icono, por debajo del mínimo accesible de la casa, y el ternario de
+brillo de aero_section_card que causa la divergencia de superficie en
+oscuro aceptada como costo al migrar competidores.
+Criterios de aceptación.
+* Cero literales hex en app_theme fuera de AppColors. Cero referencias a
+  la paleta de Material, Colors.blue, green y grey shade, en shared.
+* Retirar el borde fucsia del botón elevado a nivel de tema. Alinear
+  relleno y radio de la decoración de entrada con los de la pieza del
+  catálogo. Tipografía cruda del selector de tema al catálogo
+  tipográfico, y pares duplicados de icono y etiqueta a una lista
+  constante.
+* Subir el cuarenta y cuatro del modo solo icono a AppDimens.controlHeight
+  para respetar el mínimo accesible sin tocar consumidores.
+* Bajar el ternario de brillo de aero_section_card a colorScheme.surface,
+  lo que unifica la superficie de lista y formulario en oscuro y cierra la
+  divergencia declarada como costo.
 
-### F1.5 Regla de dos niveles de fondo en la guia viva
-Naturaleza: documental. Puerta: sin ojo. Precondicion de lectura: guia viva del catalogo, no widgets_usage.
-Criterios de aceptacion:
-- La guia inventaria solo lo vivo en shared, quince archivos, no cincuenta y tres. Anade una linea de contrato que diga que este documento solo inventaria lo vivo en shared y que las piezas reubicadas por pertenencia se buscan en su feature. Declara el sistema de dos niveles: marca con arte raster en entrada, trabajo con casco oscuro y lavados radiales en ambos modos, y prohibido arte a sangre en pantallas de datos.
+### F1.5 Guía viva de dos niveles
+Naturaleza: documental. Puerta: sin ojo. Precondición de lectura: la guía
+viva del catálogo, no widgets_usage como estaba.
+Estado medido en la auditoría de inventario. La guía inventaría catorce
+piezas contra veinte reales, y tres hojas contra seis reales, y anuncia
+cuatro por crear que ya existen, más dos que nunca anticipó, andamiaje y
+retorno al principio. Vencida en dos direcciones.
+Criterios de aceptación.
+* La guía inventaria solo lo vivo en shared, veinte archivos, y añade una
+  línea de contrato que diga que este documento solo inventaria lo vivo en
+  shared y que las piezas reubicadas por pertenencia se buscan en su
+  feature.
+* Corregir los conteos vencidos, piezas catorce a veinte y hojas tres a
+  seis, y marcar como creadas las cuatro que anunciaba por crear.
+* Declarar el sistema de dos niveles, marca con arte raster en entrada,
+  trabajo con casco oscuro y lavados radiales en ambos modos, y prohibido
+  arte a sangre en pantallas de datos.
+* Normalizar tildes de la guía, cruzado con F1.2.
+
+### Fuera de fase 1, frentes que la auditoría destapó
+* Descableado funcional masivo, en las fases de funcionalidad. Los
+  dieciocho avisos restantes, los nueve indicadores circulares y dos
+  lineales restantes, las cinco hojas restantes tras el piloto de F1.1,
+  los cinco diálogos de alerta, los dos avatares, los seis contenedores
+  fucsia al diez por ciento y los cuarenta grises de funcionalidad, más
+  los sitios de estado y rol de la insignia, que hay que leer con objetivo
+  en competitor_list_view, team_list_view, role_assignment_card,
+  role_management_section, judge_selection_sheet y home_section, y no con
+  el regex de doscientos trece que tragó código generado y enumeraciones.
+* Seguridad de filtros de backend, frente propio. Los nueve escapes de
+  team_repository_impl, user_repository_impl y pocketbase_filter son
+  saneamiento de consultas, no descableado de piezas, y no entran en
+  shared.
+* Frente de idioma y mensajes, donde vive el mapeo del error del backend
+  al catálogo en español, deuda declarada desde competidores.
 
 ## Fase 2, UX viva transversal
 

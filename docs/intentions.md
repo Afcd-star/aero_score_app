@@ -2713,3 +2713,47 @@ Superficie unificada. El cuerpo de la hoja en oscuro pasa de 252525 a
 1A1A2E, coincidiendo con la superficie de los formularios del andamiaje. La
 divergencia de superficie en oscuro queda cerrada tambien para las hojas, no
 solo para los formularios.
+
+## F1.2 a, app colors documentado con los doce candidatos conservados
+
+Naturaleza documental, verificada por número sin ojo, conforme a la regla
+del plan de que los frentes de forma se cierran por conteo.
+
+Qué se hace. app_colors pasa a cero informaciones de documentación pública.
+Los setenta y cuatro tokens reciben docstring público en español con tildes,
+sin guion medio ni raya y líneas de máximo ochenta columnas, conforme a
+Idioma de la App. La cabecera de clase declara la verdad estructural:
+convivencia de dos sistemas de color, duplicación de valor, colisión de rol
+de 0xFF252525 y desalineación de superficie heredada frente al esquema, y
+manda la realineación al frente de descableado interno de tema, no a
+documentar. glowFuchsia y glowViolet declaran el consumo interno vía
+getGlowGradient que el conteo de referencias externas subestima.
+
+Corrección de justificación del retiro. La afirmación previa de que el tema
+no cablea los doce no equivale a que la app no pueda usarlos. La verdad
+medida es doble: el esquema de Material 3 ya cubre los diez roles
+(accent sobre surfaceContainerHighest, accentForeground sobre
+onSurfaceVariant, cardForeground sobre onSurface, destructiveForeground
+sobre onError, ring sobre outline y la marca fucsia del foco), y los dos
+restantes son duplicados de marca sin uso real (glowPink repite el hex de
+coral y getGlowGradient no lo lee, midnight repite backgroundSecondary).
+Sumado a la norma de la guía de que superficies y textos salen del esquema
+y no de constantes cableadas, los doce son redundantes por diseño, no por
+descuido del tema.
+
+Decisión de no borrar en este gesto. El autor ya pegó la documentación, así
+que borrar los doce ahora eliminaría doce docstrings recién escritos,
+trabajo desperdiciado que la regla de costo de la casa condena. Los doce
+quedan en disco con su docstring fiel de candidato a retiro, y el retiro
+ordenado con grep de consumidores vacío viaja al frente de piezas muertas,
+donde se trata con contexto de catálogo y no a golpe de micro gesto.
+
+Contramedida de instrumento aplicada. La consola se configura en UTF-8
+dentro del bloque antes de emitir tildes, lo que retira la deuda de proceso
+de ASCII: mensajes de commit y anexos de bitácora viajan con tildes. Regla
+adoptada: todo bloque que emita o lea tildes establece encoding primero,
+para ser autocontenido en terminal nueva.
+
+Validación. Errores sesenta y tres, avisos cuatro, informaciones
+quinientas ochenta y nueve, app_colors en cero documentación pública,
+shared en cero, pruebas ciento una, lista blanca de dos rutas.

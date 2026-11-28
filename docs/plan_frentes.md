@@ -103,10 +103,16 @@ vigente. Las discrepancias de conteo de andamiaje cuatro y retorno dos NO
 son piezas muertas, eran ruido de instrumento por no excluir la línea de
 definición, y se excluyen de este frente.
 Criterios de aceptación.
-* Borde muerto del botón primario, marcador isRequired sin efecto, imagen
-  reservada del avatar y simplificación de la entrada de texto a sin
-  estado, cada retiro con grep de consumidores vacío antes de quitar,
-  porque es API expuesta.
+* Cerrados con grafo vacio y prueba de render: el borde muerto del
+  boton primario, el marcador isRequired y la imagen reservada del
+  avatar, mas los doce tokens de la paleta sin consumidor. La
+  capacidad de imagen del avatar se extiende con el consumidor
+  delante cuando el perfil la requiera, decision del autor.
+* Aplazada a F2.2 con razon de costo: la simplificacion de la entrada
+  de texto a sin estado. Su estado esta muerto hoy, pero F2.2 le
+  anade nodo de foco y rastreo del primer desenfoque, asi que
+  convertirla ahora y devolverle estado despues es trabajo doble y
+  decidir la API dos veces.
 * Si el grep da consumidores, se arregla el uso en lugar de retirar la
   pieza.
 
@@ -120,8 +126,17 @@ solo icono, por debajo del mínimo accesible de la casa, y el ternario de
 brillo de aero_section_card que causa la divergencia de superficie en
 oscuro aceptada como costo al migrar competidores.
 Criterios de aceptación.
-* Cero literales hex en app_theme fuera de AppColors. Cero referencias a
-  la paleta de Material, Colors.blue, green y grey shade, en shared.
+* Cero literales hex en app_theme fuera de AppColors, y cero
+  referencias a la paleta de Material en app_theme, en core y theme y
+  en shared. Enmienda medida: la clausula original solo prohibia
+  Material en shared, lo que perdonaba al tema, donde viven cuatro
+  literales hex y cinco referencias de Material. Inventario medido en
+  shared: doce deudas cromaticas, rojo y verde semanticos del dialogo
+  de alerta, seis grises de insignia, selector y esqueleto, y cuatro
+  sombras con negro, mas dos ternarios de superficie con blanco
+  literal en tarjeta de seccion y selector. El resto de coincidencias
+  son primitivas legitimas, transparente y blanco sobre degradado
+  fijo de marca.
 * Retirar el borde fucsia del botón elevado a nivel de tema. Alinear
   relleno y radio de la decoración de entrada con los de la pieza del
   catálogo. Tipografía cruda del selector de tema al catálogo
@@ -246,3 +261,42 @@ Criterios de aceptacion:
 - F5.1 y F5.2 son construccion con precondiciones de backend y de esquema que hoy no estan del todo; no se commitea sin el esquema real delante.
 - F6 depende de backend que no existe en este repo; no se cierra solo desde el lado Flutter.
 - F7 documenta el catalogo final; si F1 o F3 cambian despues de F7, F7 se reabre.
+
+## Estado medido al cierre de F1.3
+
+Base medida con analizador de CLI, alcance del config, conteo deduplicado y
+autoconsistente por suma de severidades: sesenta y tres errores, cuatro
+avisos, quinientas ochenta y nueve informaciones y ciento una pruebas
+verdes. HEAD al redactar este anexo: 3db2ae6.
+
+Frentes cerrados. F1.1, las piezas por crear con su piloto, incluida la
+hoja modal con primer consumidor vivo. F1.2 a, la paleta documentada en
+español con tildes y en cero documentacion publica faltante. F1.3, API
+muerta del boton y del avatar y los doce tokens sin consumidor, con sus
+citas reconciliadas.
+
+Frentes pendientes de fase 1. F1.2 b, normalizacion de tildes de las piezas
+del catalogo que siguen en ASCII y de los archivos de core y theme sin
+documentacion faltante. F1.4, descableado interno de shared y tema, con la
+clausula de Material ya enmendada. F1.5, guia viva contra el arbol.
+
+Decisiones del autor ya fijadas para F1.4. El contenedor de superficie en
+claro pasa a un token propio con valor ECECF0, documentado al nacer, porque
+reutilizar el token de superficie tenue como contenedor seria desajuste de
+rol; con eso la separacion contra el fondo sube de 1.044 a 1.178 y la
+colision de hex con el texto primario oscuro desaparece. El texto de
+superficie en oscuro se realinea al token de texto primario oscuro del
+catalogo, con contraste 16.34 verificado, frente a 17.06 del blanco puro,
+diferencia imperceptible que unifica catalogo y esquema en un solo token.
+
+Deuda medida pendiente de clasificar. El texto blanco del boton primario
+sobre el extremo fucsia del degradado da 3.14, y sobre el violeta 5.93. El
+umbral aplicable depende del peso real de la etiqueta en el archivo de
+tipografia, que no se ha leido, asi que la deuda esta medida pero no
+clasificada y no se afirma ilegibilidad sin ese dato.
+
+Documentos vencidos, con correccion en F1.5 y F7.1. La guia del catalogo
+declara catorce piezas y tres hojas frente a veinte y seis reales, y el
+README declara setenta y nueve pruebas, sesenta y seis errores y
+ochocientas ochenta informaciones frente a las reales. La autoridad es el
+arbol, no el documento.

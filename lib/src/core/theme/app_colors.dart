@@ -13,15 +13,30 @@ import 'package:flutter/material.dart';
 /// grey shade50 y shade300). Por eso hay tres defectos que esta
 /// documentación registra sin corregir, porque corregirlos es mutar la
 /// paleta y pertenece al frente de descableado interno de tema, no a
-/// documentar. Uno, duplicación de valor con nombres distintos, por
-/// ejemplo 0xFF252525 en cinco tokens y 0xFF454545 en cinco más el
-/// literal outline del tema. Dos, colisión de rol: 0xFF252525 sirve como
-/// texto sobre blanco en claro y como superficie en oscuro, dos papeles
-/// opuestos bajo un hex. Tres, desalineación de superficie: la superficie
-/// real del tema en oscuro es 0xFF1A1A2E, que este catálogo no nombra,
-/// mientras backgroundDark y cardDark valen 0xFF252525 y theme_helpers
-/// los devuelve como si fueran la superficie de la tarjeta, lo que
-/// produjo la divergencia de superficie entre lista y formulario.
+/// documentar.
+///
+/// Uno, duplicación de valor con nombres distintos: 0xFF252525 sirve a
+/// textOnWhite, foregroundLight, backgroundDark y cardDark; 0xFF454545
+/// sirve a secondaryDark, mutedDark, inputDark, borderDark y
+/// borderSubtle, más el literal outline del tema.
+///
+/// Dos, colisión de rol: 0xFF252525 sirve como texto sobre blanco en
+/// claro y como superficie en oscuro, dos papeles opuestos bajo un hex.
+///
+/// Tres, desalineación de superficie: la superficie real del tema en
+/// oscuro es 0xFF1A1A2E, que este catálogo no nombra, mientras
+/// backgroundDark y cardDark valen 0xFF252525 y theme_helpers los
+/// devuelve como si fueran la superficie de la tarjeta, lo que produjo
+/// la divergencia de superficie entre lista y formulario.
+///
+/// Retiro registrado, para que no se reañadan sin consumidor delante.
+/// Los doce espejos de shadcn/ui que el esquema nunca cableó se retiraron
+/// con grafo de consumidores vacío en todo el árbol: accentLight,
+/// accentDark, accentForegroundLight, accentForegroundDark,
+/// cardForegroundLight, cardForegroundDark, destructiveForegroundLight,
+/// destructiveForegroundDark, ringLight, ringDark, glowPink y midnight.
+/// Sus roles los cubre el esquema de Material 3, y los dos últimos
+/// duplicaban el hex de coral y de backgroundSecondary.
 ///
 /// Regla de nacimiento adoptada: toda pieza nueva nace con documentación
 /// pública completa, porque retrofitar cuesta dos órdenes de magnitud
@@ -34,18 +49,16 @@ class AppColors {
   // ═════════════════════════════════════════════════════════════
   // Duplicación de valor declarada: fuchsia, glowFuchsia y
   // brandSoftForegroundDark comparten 0xFFFF00FF con roles distintos
-  // (marca, extremo de degradado, texto de fondo tenue oscuro). coral y
-  // glowPink comparten 0xFFFF006A. midnight y backgroundSecondary
-  // comparten 0xFF0B0D17. backgroundBase (0xFF0A0515) es fondo de marca
-  // a sangre para splash y casco, NO es colorScheme.surface, que en
-  // oscuro el tema fija en 0xFF1A1A2E.
+  // (marca, extremo de degradado, texto de fondo tenue oscuro).
+  // backgroundBase (0xFF0A0515) es fondo de marca a sangre para splash y
+  // casco, NO es colorScheme.surface, que en oscuro el tema fija en
+  // 0xFF1A1A2E.
 
   /// Rosa eléctrico de marca, semilla del esquema y acento de foco.
   /// Comparte hex con glowFuchsia y brandSoftForegroundDark.
   static const Color fuchsia = Color(0xFFFF00FF);
 
   /// Coral de marca, extremo cálido del degradado y acento secundario.
-  /// Comparte hex con glowPink.
   static const Color coral = Color(0xFFFF006A);
 
   /// Verde menta de marca, terciario del esquema en ambos modos.
@@ -55,33 +68,33 @@ class AppColors {
   /// superficie del esquema, que en oscuro vale 0xFF1A1A2E.
   static const Color backgroundBase = Color(0xFF0A0515);
 
-  /// Segundo fondo de marca. Comparte hex con midnight.
+  /// Segundo fondo de marca, azul noche. Valor único del catálogo tras
+  /// el retiro de su duplicado sin uso.
   static const Color backgroundSecondary = Color(0xFF0B0D17);
 
   /// Extremo fucsia del degradado de marca. Comparte hex con fuchsia y
   /// brandSoftForegroundDark. Se consume por dentro desde getGlowGradient,
-  /// sin prefijo, asi que su numero de referencias directas externas no
+  /// sin prefijo, así que su número de referencias directas externas no
   /// refleja su utilidad real: getGlowGradient lo usa en cada llamada.
   static const Color glowFuchsia = Color(0xFFFF00FF);
 
-  /// Extremo violeta del degradado de marca, valor unico del catalogo. Se
+  /// Extremo violeta del degradado de marca, valor único del catálogo. Se
   /// consume por dentro desde getGlowGradient, sin prefijo, igual que
-  /// glowFuchsia, por lo que sus referencias directas externas lo subestiman.
+  /// glowFuchsia, por lo que sus referencias externas lo subestiman.
   static const Color glowViolet = Color(0xFF8B00FF);
 
   // ═════════════════════════════════════════════════════════════
   // COLORES DE TEXTO
   // ═════════════════════════════════════════════════════════════
   // Colisión de rol declarada: 0xFF252525 aparece aquí como texto sobre
-  // blanco (textOnWhite, y en claro foregroundLight y cardForegroundLight)
-  // y también como superficie en oscuro (backgroundDark y cardDark). Un
-  // mismo hex con dos papeles opuestos según modo. 0xFFFAFAFA aparece
-  // como textPrimary y, en oscuro, como foregroundDark, cardForegroundDark
-  // y primaryDark. 0xFF343434 aparece como textSecondary y como
-  // primaryForegroundDark.
+  // blanco, en textOnWhite y foregroundLight, y también como superficie
+  // en oscuro, en backgroundDark y cardDark. Un mismo hex con dos papeles
+  // opuestos según modo. 0xFFFAFAFA aparece como textPrimary y, en oscuro,
+  // como foregroundDark, primaryDark y secondaryForegroundDark.
+  // 0xFF343434 aparece como textSecondary y como primaryForegroundDark.
 
   /// Texto primario sobre superficie oscura. Comparte hex con
-  /// foregroundDark, cardForegroundDark y primaryDark.
+  /// foregroundDark, primaryDark y secondaryForegroundDark.
   static const Color textPrimary = Color(0xFFFAFAFA);
 
   /// Texto secundario, gris profundo. Comparte hex con
@@ -89,8 +102,8 @@ class AppColors {
   static const Color textSecondary = Color.fromARGB(255, 52, 52, 54);
 
   /// Texto oscuro sobre blanco en claro. Comparte hex con foregroundLight,
-  /// cardForegroundLight, backgroundDark y cardDark, que es la colisión
-  /// de rol declarada en la cabecera de sección.
+  /// backgroundDark y cardDark, que es la colisión de rol declarada en la
+  /// cabecera de sección.
   static const Color textOnWhite = Color(0xFF252525);
 
   // ═════════════════════════════════════════════════════════════
@@ -99,27 +112,25 @@ class AppColors {
   // Desalineación de fuente declarada: el esquema en claro fija surface
   // en Colors.white (paleta de Material), mismo valor que backgroundLight
   // y cardLight del catálogo pero de fuente distinta. 0xFFFFFFFF se
-  /// repite en backgroundLight, cardLight, primaryForegroundLight y
-  /// destructiveForegroundLight. 0xFF030213 se repite en primaryLight,
-  /// secondaryForegroundLight y accentForegroundLight. 0xFF252525 se
-  /// repite en foregroundLight y cardForegroundLight (colisión de rol con
-  /// la superficie oscura). ringLight comparte 0xFFB5B5B5 con
-  /// mutedForegroundDark, duplicación entre modos. successLight comparte
-  /// 0xFF22C55E con roleOrganizerLight y facultyFTL.
+  // repite en backgroundLight, cardLight y primaryForegroundLight.
+  // 0xFF030213 se repite en primaryLight y secondaryForegroundLight.
+  // 0xFF252525 lo usa foregroundLight, con la colisión de rol contra la
+  // superficie oscura ya declarada. successLight comparte 0xFF22C55E con
+  // roleOrganizerLight y facultyFTL.
 
   /// Fondo de pantalla en claro. Comparte hex con cardLight y con el
   /// surface del esquema, que el tema fija en Colors.white.
   static const Color backgroundLight = Color(0xFFFFFFFF);
 
-  /// Texto primario en claro. Comparte hex con cardForegroundLight,
-  /// textOnWhite, backgroundDark y cardDark.
+  /// Texto primario en claro. Comparte hex con textOnWhite, backgroundDark
+  /// y cardDark.
   static const Color foregroundLight = Color(0xFF252525);
 
   /// Superficie de tarjeta en claro. Comparte hex con backgroundLight.
   static const Color cardLight = Color(0xFFFFFFFF);
 
   /// Primario de acción en claro, tinta profunda. Comparte hex con
-  /// secondaryForegroundLight y accentForegroundLight.
+  /// secondaryForegroundLight.
   static const Color primaryLight = Color(0xFF030213);
 
   /// Texto sobre primario en claro. Comparte hex con backgroundLight.
@@ -167,29 +178,29 @@ class AppColors {
   // ═════════════════════════════════════════════════════════════
   // DARK MODE
   // ═════════════════════════════════════════════════════════════
-  // Desalineación de superficie declarada, la que la purga de AeroSheet
-  // expuso: el esquema en oscuro fija surface en 0xFF1A1A2E y onSurface
-  // en Colors.white (paleta de Material), mientras este catálogo declara
-  // backgroundDark y cardDark en 0xFF252525 y foregroundDark,
-  // cardForegroundDark y primaryDark en 0xFFFAFAFA. theme_helpers
-  // .getCard y getBackground devuelven 0xFF252525 como si fuera la
-  // superficie de la tarjeta, y por eso lista y formulario divergían en
-  // oscuro. Estos cuatro tokens de superficie y texto de superficie son
-  // candidatos a realineación con el esquema o a retiro en el frente de
-  // descableado interno de tema, según el conteo de consumidores.
+  // Desalineación de superficie declarada, la que la purga de la hoja
+  // modal expuso: el esquema en oscuro fija surface en 0xFF1A1A2E y
+  // onSurface en Colors.white (paleta de Material), mientras este
+  // catálogo declara backgroundDark y cardDark en 0xFF252525 y
+  // foregroundDark en 0xFFFAFAFA. theme_helpers.getCard y getBackground
+  // devuelven 0xFF252525 como si fuera la superficie de la tarjeta, y por
+  // eso lista y formulario divergían en oscuro. backgroundDark, cardDark
+  // y foregroundDark son candidatos a realineación con el esquema o a
+  // retiro en el frente de descableado interno de tema, según el conteo
+  // de consumidores.
   // Redundancia declarada: 0xFF454545 vive en secondaryDark, mutedDark,
-  /// accentDark, inputDark y borderDark, más el literal outline del tema.
-  /// 0xFFFAFAFA vive en foregroundDark, cardForegroundDark y primaryDark.
-  /// 0xFF343434 vive en primaryForegroundDark. successDark comparte
-  /// 0xFF16A34A con roleOrganizerDark.
+  // inputDark y borderDark, más el literal outline del tema. 0xFFFAFAFA
+  // vive en foregroundDark, primaryDark y secondaryForegroundDark.
+  // 0xFF343434 vive en primaryForegroundDark. successDark comparte
+  // 0xFF16A34A con roleOrganizerDark.
 
   /// Superficie oscura heredada de 0xFF252525. NO coincide con
   /// colorScheme.surface en oscuro, que el tema fija en 0xFF1A1A2E.
   /// Candidata a realineación o retiro en descableado interno de tema.
   static const Color backgroundDark = Color(0xFF252525);
 
-  /// Texto primario en oscuro. Comparte hex con cardForegroundDark,
-  /// primaryDark y textPrimary. El esquema fija onSurface en
+  /// Texto primario en oscuro. Comparte hex con primaryDark,
+  /// secondaryForegroundDark y textPrimary. El esquema fija onSurface en
   /// Colors.white, fuente distinta del mismo rol.
   static const Color foregroundDark = Color(0xFFFAFAFA);
 
@@ -205,7 +216,7 @@ class AppColors {
   static const Color primaryForegroundDark = Color(0xFF343434);
 
   /// Secundario de superficie en oscuro. Comparte hex con mutedDark,
-  /// accentDark, inputDark y borderDark.
+  /// inputDark y borderDark.
   static const Color secondaryDark = Color(0xFF454545);
 
   /// Texto sobre secundario en oscuro. Comparte hex con foregroundDark.
@@ -214,15 +225,15 @@ class AppColors {
   /// Superficie tenue en oscuro. Comparte hex con secondaryDark.
   static const Color mutedDark = Color(0xFF454545);
 
-  /// Texto tenue en oscuro, gris claro. Comparte hex con ringLight,
-  /// duplicación entre modos.
+  /// Texto tenue en oscuro, gris claro. Valor único del catálogo tras el
+  /// retiro de su duplicado entre modos.
   static const Color mutedForegroundDark = Color(0xFFB5B5B5);
 
   /// Destructivo de marca en oscuro, granate profundo. Valor único.
   static const Color destructiveDark = Color(0xFF8B2340);
 
-  /// Borde en oscuro. Comparte hex con secondaryDark, mutedDark,
-  /// accentDark e inputDark, más el literal outline del tema.
+  /// Borde en oscuro. Comparte hex con secondaryDark, mutedDark e
+  /// inputDark, más el literal outline del tema.
   static const Color borderDark = Color(0xFF454545);
 
   /// Fondo de campo de entrada en oscuro. Comparte hex con secondaryDark.
@@ -248,33 +259,33 @@ class AppColors {
   // ═════════════════════════════════════════════════════════════
   // SURFACES & BORDERS
   // ═════════════════════════════════════════════════════════════
-  // Duplicación declarada: borderSubtle comparte 0xFF454545 con los
-  // cinco tokens de borde y tenue en oscuro y con el literal outline del
-  // tema. surfaceBase y surfaceElevated son valores únicos del catálogo,
-  // lavados fríos para superficies decorativas, y no se corresponden con
-  // ningún rol del esquema.
+  // Duplicación declarada: borderSubtle comparte 0xFF454545 con
+  // secondaryDark, mutedDark, inputDark y borderDark, y con el literal
+  // outline del tema. surfaceBase y surfaceElevated son valores únicos
+  // del catálogo, lavados fríos para superficies decorativas, y no se
+  // corresponden con ningún rol del esquema.
 
   /// Superficie base fría, lavado claro azulado para decorado.
-  static const Color surfaceBase = Color.fromARGB(255, 240, 240, 248);
+  static const surfaceBase = Color.fromARGB(255, 240, 240, 248);
 
   /// Superficie elevada fría, lavado azulado más intenso para decorado.
-  static const Color surfaceElevated = Color.fromARGB(255, 220, 220, 243);
+  static const surfaceElevated = Color.fromARGB(255, 220, 220, 243);
 
-  /// Borde sutil oscuro. Comparte hex con borderDark y los cuatro
-  /// tokens de 0xFF454545, más el literal outline del tema.
+  /// Borde sutil oscuro. Comparte hex con borderDark, secondaryDark,
+  /// mutedDark e inputDark, más el literal outline del tema.
   static const Color borderSubtle = Color(0xFF454545);
 
   // ═════════════════════════════════════════════════════════════
   // ROLES (9 tipos)
   // ═════════════════════════════════════════════════════════════
-  // Duplicación de valor declarada entre roles y facultades: roleJudgeALight
-  // comparte 0xFF3B82F6 con facultyFIO, roleJudgeDLight comparte 0xFFA855F7
-  // con facultyFTI, roleOrganizerLight comparte 0xFF22C55E con successLight
-  // y facultyFTL, roleOrganizerDark comparte 0xFF16A34A con successDark.
-  // roleUnknown escala slate para separarse del gris de espectador y
-  // señalar anomalía de datos: en claro se oscurece y en oscuro se aclara,
-  // que es la dirección correcta para texto sobre la superficie de cada
-  // modo.
+  // Duplicación de valor declarada entre roles y facultades:
+  // roleJudgeALight comparte 0xFF3B82F6 con facultyFIO, roleJudgeDLight
+  // comparte 0xFFA855F7 con facultyFTI, roleOrganizerLight comparte
+  // 0xFF22C55E con successLight y facultyFTL, roleOrganizerDark comparte
+  // 0xFF16A34A con successDark. roleUnknown escala slate para separarse
+  // del gris de espectador y señalar anomalía de datos: en claro se
+  // oscurece y en oscuro se aclara, que es la dirección correcta para
+  // texto sobre la superficie de cada modo.
 
   /// Identidad de administrador en claro, rojo.
   static const Color roleAdminLight = Color(0xFFEF4444);
@@ -417,66 +428,6 @@ class AppColors {
 
   /// Texto saturado destructivo sobre su contenedor en oscuro.
   static const Color destructiveOnContainerDark = Color(0xFFFCA5A5);
-
-  // Los doce tokens siguientes no tienen consumidor medido en lib ni en
-  // test segun el grep, y no estan envueltos por theme_helpers. Son espejo
-  // de shadcn/ui que AppTheme nunca cableo, porque el ColorScheme se arma
-  // con primario, secundario, terciario, surface, onSurface y outline, y no
-  // con accent, ring, cardForeground ni destructiveForeground; o duplicados
-  // de marca sin uso. Se documentan con su verdad y se retiran o realinean
-  // en el frente de piezas muertas, con grep de consumidores vacio antes de
-  // quitar, porque son API expuesta. No se les inventa un rol que el codigo
-  // no cumple.
-
-  /// Acento de superficie en oscuro. Espejo de shadcn sin cablear en el
-  /// tema. Sin consumidor medido en lib ni test. Candidato a retiro en el
-  /// frente de piezas muertas.
-  static const Color accentDark = Color(0xFF454545);
-
-  /// Texto sobre acento en oscuro. Espejo de shadcn sin cablear. Sin
-  /// consumidor medido en lib ni test. Candidato a retiro.
-  static const Color accentForegroundDark = Color(0xFFFAFAFA);
-
-  /// Texto sobre acento en claro. Espejo de shadcn sin cablear. Sin
-  /// consumidor medido en lib ni test. Candidato a retiro.
-  static const Color accentForegroundLight = Color(0xFF030213);
-
-  /// Acento de superficie en claro. Espejo de shadcn sin cablear. Sin
-  /// consumidor medido en lib ni test. Candidato a retiro.
-  static const Color accentLight = Color(0xFFE9EBEF);
-
-  /// Texto sobre tarjeta en oscuro. Espejo de shadcn sin cablear. Sin
-  /// consumidor medido en lib ni test. Candidato a retiro.
-  static const Color cardForegroundDark = Color(0xFFFAFAFA);
-
-  /// Texto sobre tarjeta en claro. Espejo de shadcn sin cablear. Sin
-  /// consumidor medido en lib ni test. Candidato a retiro.
-  static const Color cardForegroundLight = Color(0xFF252525);
-
-  /// Texto sobre destructivo en oscuro. Espejo de shadcn sin cablear. Sin
-  /// consumidor medido en lib ni test. Candidato a retiro.
-  static const Color destructiveForegroundDark = Color(0xFFA85665);
-
-  /// Texto sobre destructivo en claro. Espejo de shadcn sin cablear. Sin
-  /// consumidor medido en lib ni test. Candidato a retiro.
-  static const Color destructiveForegroundLight = Color(0xFFFFFFFF);
-
-  /// Extremo rosa del degradado de marca. Duplicado del hex de coral sin
-  /// uso. Sin consumidor medido en lib ni test. Candidato a retiro.
-  static const Color glowPink = Color(0xFFFF006A);
-
-  /// Azul noche de marca. Duplicado del hex de backgroundSecondary sin
-  /// uso. Sin consumidor medido en lib ni test. Candidato a retiro.
-  static const Color midnight = Color(0xFF0B0D17);
-
-  /// Anillo de foco en oscuro. Espejo de shadcn sin cablear. Sin consumidor
-  /// medido en lib ni test. Candidato a retiro.
-  static const Color ringDark = Color(0xFF707070);
-
-  /// Anillo de foco en claro. Espejo de shadcn sin cablear. Comparte hex
-  /// con mutedForegroundDark. Sin consumidor medido en lib ni test.
-  /// Candidato a retiro.
-  static const Color ringLight = Color(0xFFB5B5B5);
 
   // ═════════════════════════════════════════════════════════════
   // GRADIENTES

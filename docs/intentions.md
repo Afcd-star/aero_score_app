@@ -2818,3 +2818,62 @@ shared y al tema, no se mueve, porque moverla habría borrado un frente real.
 Validación. Errores sesenta y tres, avisos cuatro, informaciones quinientas
 ochenta y nueve, pruebas ciento uno, grafos de isRequired e imageUrl en cero
 en todo el árbol, y lista blanca de cuatro rutas.
+
+## F1.3 gesto B, los doce tokens sin consumidor retirados y sus citas reconciliadas
+
+Qué se retira. Los doce espejos de shadcn/ui que el esquema nunca cableó,
+más los dos duplicados de marca sin uso. Grafo vacío medido en cuatro
+dimensiones: referencias directas en lib, referencias en test, imports con
+show o as que cambiarían el prefijo, y uso interno real del catálogo
+descontando declaración y comentario. El control positivo del filtro fueron
+los dos extremos del degradado, que sí se consumen por dentro.
+
+Por qué son redundantes por diseño y no por descuido. El esquema de
+Material 3 ya cubre sus roles: acento sobre surfaceContainerHighest, texto
+de acento sobre onSurfaceVariant, texto de tarjeta sobre onSurface, texto
+destructivo sobre onError, y anillo de foco sobre outline más la marca del
+borde enfocado. Y la norma de la guía manda que superficies y textos salgan
+del esquema, no de constantes cableadas, así que cablearlos en una vista
+estaría prohibido. Los dos de marca duplicaban hex de coral y de
+backgroundSecondary y el degradado no los lee.
+
+Reconciliación, que era el trabajo real. El retiro no era borrar doce
+líneas: los doce estaban citados por nombre en la cabecera de clase, en los
+comentarios de sección y en los docstrings de tokens supervivientes. Borrar
+sin reconciliar habría dejado el catálogo afirmando que comparte hex con
+tokens inexistentes, el mismo vicio de documentación que miente que ya
+pagamos con la guía vieja. La evidencia de que no quedó ninguna cita
+huérfana es la guarda en cero, no un conteo escrito a mano.
+
+Correcciones de fidelidad aprovechando la edición. El inventario de
+0xFFFAFAFA omitía secondaryForegroundDark, así que la documentación ya era
+inexacta antes del retiro. Los comentarios de sección de claro y oscuro
+mezclaban doble y triple barra a mitad de bloque, dejando documentación
+colgante que no pertenece a ningún miembro, normalizados a doble barra. Los
+conteos escritos como cifra en la prosa se sustituyen por los nombres,
+porque un conteo en prosa miente en cuanto alguien mueve un token, la misma
+lección que aplicamos al margen del control de retorno.
+
+Registro histórico conservado a propósito. La cabecera de clase nombra los
+doce retirados para que no se reañadan sin consumidor delante. Esa mención
+es legítima y la guarda la permite.
+
+Undécima corrección de instrumento. La guarda de citas huérfanas
+contradecía la regla que yo mismo había declarado en el mismo mensaje: dije
+que las menciones en prosa del registro histórico se permiten, y luego
+implementé el filtro como cualquier línea de documentación que nombre a los
+doce, sin distinguir el docstring de clase del docstring de miembro. Bloqueó
+mi propio registro intencional. La guarda correcta distingue por posición:
+lo que precede a la declaración de clase es docstring de clase y se permite,
+lo posterior son docstrings de miembro y comentarios de sección y ahí una
+mención sí es cita huérfana.
+
+Aritmética declarada. Las informaciones se quedan en quinientas ochenta y
+nueve y no bajan, porque los doce ya estaban documentados y retirar miembros
+documentados no quita diagnósticos. Quien espere una bajada de doce está
+repitiendo el cálculo que hice antes de que el autor pegara la documentación.
+
+Validación. Errores sesenta y tres, avisos cuatro, informaciones quinientas
+ochenta y nueve, documentación pública de la paleta en cero, declaraciones y
+referencias de los doce en cero, citas huérfanas en cero, pruebas ciento uno
+y lista blanca de dos rutas.

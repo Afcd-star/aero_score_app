@@ -12,13 +12,9 @@ class AeroAvatar extends StatelessWidget {
   const AeroAvatar({
     required this.fallbackText,
     super.key,
-    this.imageUrl,
     this.radius = 20,
     this.onTap,
   });
-
-  /// Imagen reservada, sin efecto en el render actual.
-  final String? imageUrl;
 
   /// Texto del que se toma la inicial. Vacio pinta un icono de persona.
   final String fallbackText;

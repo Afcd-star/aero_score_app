@@ -2757,3 +2757,64 @@ para ser autocontenido en terminal nueva.
 Validación. Errores sesenta y tres, avisos cuatro, informaciones
 quinientas ochenta y nueve, app_colors en cero documentación pública,
 shared en cero, pruebas ciento una, lista blanca de dos rutas.
+
+## F1.3 gesto A, API muerta del botón y del avatar retirada
+
+Dos falsos positivos del instrumento, cazados por sitio y no por conteo. El
+conteo de un consumidor de isRequired eran dos líneas comentadas del
+formulario de evento, y las dos de imagen eran DecorationImage y AssetImage
+del fondo del acceso, una API ajena que mi patrón tragó. Los grafos externos
+estaban vacíos de verdad y el retiro era limpio. Regla reforzada: el conteo
+sin sitio no decide nada, el sitio decide.
+
+Qué se retira. El marcador isRequired del botón y la imagen reservada del
+avatar, ambos declarados y sin efecto en el render, con grafo vacío en todo
+el árbol tras el retiro. El borde fucsia de la variante primaria, que se
+calculaba y nunca se pintaba porque la primaria siempre lleva degradado y
+el render fija el lado en ninguno. Las dos líneas comentadas del formulario
+de evento que apuntaban a la API retirada.
+
+Decisión del autor sobre la imagen. Se retira ahora y la capacidad se
+extiende con el consumidor delante cuando el perfil la requiera, porque la
+forma real vendrá de un campo de archivo de PocketBase con resolución,
+carga, reserva y caché. Conservar un String que nunca se renderizó es la
+misma conjetura nacida en el vacío que obligó a reescribir el caparazón de
+la hoja modal.
+
+Errores del lead corregidos en el propio gesto. El recorte de la rama con
+degradado quedó cableado en diez cuando parametrice el radio, bomba latente
+para cualquier botón circular con degradado, corregido. El docstring de la
+variante de marca suave afirmaba que en claro no llegaba al umbral y que
+oscuro estaba por medir, cuando ya se midieron cinco coma cero cinco y
+cinco coma cero dos y ambos pasan, corregido.
+
+Décima corrección de instrumento, regresión de regla propia. Había escrito
+que ninguna función de medida imprime y devuelve a la vez, y en el bloque
+siguiente metí la impresión del crudo contra único dentro de la función de
+medición, de modo que la cadena se fundió en el arreglo, el lector de rutas
+reventó con nulo y la autoconsistencia dio falso. La medición vuelve a ir en
+línea y se filtra todo diagnóstico sin ubicación.
+
+Aplazamiento con costo declarado. La simplificación de la entrada a sin
+estado se aplaza a F2.2, porque ese frente le añade nodo de foco y rastreo
+del primer desenfoque con mecanismo ya conocido, y convertirla ahora y
+devolverle estado después es trabajo doble y decidir la API dos veces.
+
+Hallazgo para el frente de tema. En la variante primaria no solo se
+descarta el borde, también el fondo y el texto, porque con degradado el
+fondo se fuerza a transparente y el texto a blanco. Retirarlos dejaría
+huérfanos a los tokens de texto sobre primario, y eso es realineación de
+paleta, no pieza muerta.
+
+Enmienda del plan corregida con dato. El inventario mide treinta y una
+coincidencias de paleta de Material en shared: doce de deuda cromática
+real, rojo y verde semánticos del diálogo, seis grises de insignia, selector
+y esqueleto, y cuatro sombras con negro, más dos ternarios de superficie con
+blanco literal, y diecisiete primitivas legítimas de transparente y blanco
+sobre degradado fijo de marca. La afirmación previa del lead de que shared
+estaba limpio era falsa, y la cláusula de Material del plan se amplía a
+shared y al tema, no se mueve, porque moverla habría borrado un frente real.
+
+Validación. Errores sesenta y tres, avisos cuatro, informaciones quinientas
+ochenta y nueve, pruebas ciento uno, grafos de isRequired e imageUrl en cero
+en todo el árbol, y lista blanca de cuatro rutas.

@@ -21,15 +21,15 @@ enum AeroButtonVariant {
   /// Accion de apoyo sobre superficie secundaria.
   secondary,
 
-  /// Accion de marca con fondo tenue y borde suave, leidos de tokens.
+  /// Acción de marca con fondo tenue y borde suave, leídos de tokens.
   ///
-  /// Replica el patron vivo del boton de volver, fondo de marca al diez
-  /// por ciento y borde al treinta por ciento, pero expresado como tokens
+  /// Replica el patrón del botón de volver, fondo de marca al diez por
+  /// ciento y borde al treinta por ciento, pero expresado como tokens
   /// opacos medidos en vez de alfas cableadas en la vista. El texto y el
-  /// icono salen en el acento de marca. En claro el texto de marca sobre
-  /// el fondo tenue no llega al umbral de texto y hereda la deuda de
-  /// marca de primary, fijado por prueba numerica; en oscuro queda
-  /// pendiente de medir con el acento real.
+  /// icono salen en el acento de marca. Contraste verificado por prueba
+  /// numérica: cinco coma cero cinco en claro y cinco coma cero dos en
+  /// oscuro, ambos por encima del umbral de texto. El borde es decorativo
+  /// en los dos modos y no cumple el umbral de componente.
   brandSoft,
 }
 
@@ -62,7 +62,6 @@ class AeroButton extends StatelessWidget {
     this.width,
     this.padding,
     this.trailingIcon,
-    this.isRequired = false,
     this.iconOnly = false,
     this.borderRadius = 10,
   }) : assert(
@@ -115,9 +114,6 @@ class AeroButton extends StatelessWidget {
   /// alto produce un círculo, que es lo que usa el control de retorno al
   /// principio de las listas.
   final double borderRadius;
-
-  /// Marcador heredado sin efecto en el render actual.
-  final bool isRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +180,7 @@ class AeroButton extends StatelessWidget {
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(borderRadius),
             child: buttonChild,
           ),
         ),
@@ -254,12 +250,22 @@ class AeroButton extends StatelessWidget {
   (Color, Color, BorderSide) _getColors(ThemeData theme, bool isDark) {
     switch (variant) {
       case AeroButtonVariant.primary:
+        // El borde de esta variante nunca se pinta: la primaria siempre
+        // lleva degradado, propio o recibido, y el render fija el lado en
+        // ninguno cuando hay degradado. Se devuelve ninguno para que el
+        // código no mienta sobre lo que dibuja.
+        //
+        // Hallazgo registrado para el frente de descableado de tema: el
+        // fondo y el texto de esta variante también se descartan, porque
+        // con degradado el fondo se fuerza a transparente y el texto a
+        // blanco. Retirarlos dejaría huérfanos a los tokens de texto sobre
+        // primario, y eso es realineación de paleta, no pieza muerta.
         return (
           isDark ? AppColors.primaryDark : AppColors.primaryLight,
           isDark
               ? AppColors.primaryForegroundDark
               : AppColors.primaryForegroundLight,
-          const BorderSide(color: AppColors.fuchsia, width: 2),
+          BorderSide.none,
         );
       case AeroButtonVariant.destructive:
         return (

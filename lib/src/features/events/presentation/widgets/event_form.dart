@@ -337,7 +337,6 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
     String label,
     JudgeRoleFilter roleFilter,
     String? selectedId,
-    //bool isRequired,
     ValueChanged<String?> onChanged,
   ) {
     final judgesAsync = ref.watch(eventJudgesProvider);
@@ -654,7 +653,6 @@ class _AeroEventFormState extends ConsumerState<AeroEventForm> {
             'Juez Principal',
             JudgeRoleFilter.principal,
             _principalJudgeId,
-            //isRequired: true,
             (id) => setState(() => _principalJudgeId = id),
           ),
           const SizedBox(height: 12),

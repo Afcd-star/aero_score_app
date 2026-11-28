@@ -2685,3 +2685,31 @@ commit y los anexos a esta bitacora viajan en ASCII porque el pegado en
 consola PowerShell corrompe UTF-8 sin BOM. El codigo Dart, editado en VS
 Code, si lleva tildes. La normalizacion de tildes en esta bitacora, en el
 plan y en los comentarios heredados es F1.2.
+
+## Piloto de la hoja modal como primer consumidor vivo, cierra F1.1
+
+Hallazgo de proceso. AeroSheet se construyo en el vacio en 1.1 y su
+caparazon (radio 20, Flexible suelto, relleno de raiz, sin degradado ni
+subtitulo) no coincidia con ninguna de las seis hojas vivas que el criterio
+del plan decia que absorberia. La practica de probar al nacer se adopto
+tarde, justo al chocar con el boton de regresar, y la hoja es la unica pieza
+que quedo sin piloto por ese retraso. El piloto en team_competitors_sheet es
+lo que por fin valida el caparazon y cierra el residual unico de F1.1.
+
+Deuda del consumidor NO introducida. team_competitors_sheet arrastra
+ternario de brillo en el helper (cardDark frente a grey shade50),
+CircularProgressIndicator crudo e icono Colors.grey. Nada de eso se toca en
+este gesto; va a descableado funcional. La pieza ya esta purgada; el
+consumidor no.
+
+Retraccion con dato. La alarma de base inestable del intento anterior (807
+informaciones y 5 avisos en HEAD) era artefacto de un stash con una linea de
+espacio al final, no deuda real. Con stash limpio, HEAD mide 63, 4 y 663,
+identico a DESPUES. El instrumento (stash mas top por archivo) lo resolvió
+con numero, no con suposicion. Regla del instrumento reforzada: no afirmar
+estabilidad de base sin medirla con stash limpio y top por archivo.
+
+Superficie unificada. El cuerpo de la hoja en oscuro pasa de 252525 a
+1A1A2E, coincidiendo con la superficie de los formularios del andamiaje. La
+divergencia de superficie en oscuro queda cerrada tambien para las hojas, no
+solo para los formularios.

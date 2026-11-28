@@ -2652,3 +2652,36 @@ usa relleno veinticuatro, coherente con competidores.
 Validacion. Errores sesenta y tres, avisos cuatro, informaciones
 seiscientas sesenta y tres, pruebas ciento uno, y pase visual del autor
 aprobado en claro y oscuro.
+
+## Extension y purga de la hoja modal en el catalogo
+
+Regla inviolable del autor aplicada. Lo nuevo no arrastra deudas. El fondo
+ternario de brillo de AeroSheet se purga a colorScheme.surface en el mismo
+gesto que le da capacidad, no se pospone a descableado. El docstring previo
+declaraba ese fondo como deuda a adoptar en descableado, lo cual violaba la
+regla porque el fondo sale del esquema de tema y es purgable en el gesto.
+
+Distincion registrada entre deuda purgable y primitiva necesaria. Deuda
+purgable: fondo y textos ambientales, salen del esquema de tema. Primitiva
+necesaria conservada a proposito: blanco del titulo, subtitulo y cierre en
+modo degradado, porque es texto sobre superficie fija de marca y
+descablearlo lo vuelve ilegible, e IconButton de cierre en modo plano,
+porque el catalogo no provee pieza de cierre y es primitiva de Material sin
+equivalente.
+
+Correcciones de caparazon dictadas por el codigo de las seis hojas vivas,
+no por gusto: radio superior 20 a 24, cuerpo suelto Flexible a Expanded
+cenido, relleno de raiz eliminado para que cada seccion se auto rellene. La
+pieza nacio con cero consumidores y por eso su caparazon nunca se valido
+contra las hojas que prometia absorber.
+
+Parametros nuevos opcionales con default que preservan la ruta plana:
+subtitulo, bandera de degradado, alto maximo. La prueba propia de la pieza
+sigue verde, lo que demuestra que las correcciones de caparazon no rompen
+el contrato.
+
+Limitacion del instrumento declarada como deuda de proceso: los mensajes de
+commit y los anexos a esta bitacora viajan en ASCII porque el pegado en
+consola PowerShell corrompe UTF-8 sin BOM. El codigo Dart, editado en VS
+Code, si lleva tildes. La normalizacion de tildes en esta bitacora, en el
+plan y en los comentarios heredados es F1.2.
